@@ -1,0 +1,49 @@
+package com.msg.customs.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.msg.customs.domain.UiCustomsData;
+import com.msg.customs.service.CustomsService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequiredArgsConstructor
+@Controller	
+public class CustomsController {
+	
+	private final CustomsService customsService;
+	
+	
+	@GetMapping("/customs")
+	public String listCustoms(Model model) {
+		model.addAttribute("name", "Thomas");
+		
+		model.addAttribute("customsList", customsService.getCustoms());
+		
+		return "customs";
+	}
+	
+	@GetMapping("/customs/doStartCreate")
+	public String createCustoms(Model model) {
+		UiCustomsData customs = new UiCustomsData();
+		model.addAttribute("customs", customs);
+		
+		return "customsCreate";
+	}
+
+	@PostMapping("/customs/create")
+	public String createCustoms(Model model, UiCustomsData customs) {
+		
+		log.info(customs.toString());
+		customsService.saveCustoms(customs);
+		
+		return "redirect:/customs";
+	}
+
+
+}

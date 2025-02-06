@@ -1,0 +1,6 @@
+server:
+  port: 9090
+
+customs:
+  backend:
+    uri: http://localhost:8080

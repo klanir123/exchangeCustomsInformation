@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+	<h1 th:text="#{overview_header}">Parts Customs Data</h1>
+	
+	<button onclick="location.href='/customs/doStartCreate'">Create New Customs Data</button>
+	
+	<table>
+        <thead>
+            <tr>
+                <th th:text="#{overview_catenax_id}">Catena-X Id</th>
+                <th th:text="#{overview_customer_part_number}">Customer Part Number</th>
+                <th th:text="#{overview_customer_part_name}">Customer Part Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="custom : ${customsList}">
+                <td th:text="${custom.catenaxId}"></td>
+                <td th:text="${custom.customerPartNumber}"></td>
+                <td th:text="${custom.customerPartName}"></td>
+            </tr>
+        </tbody>
+	</table>
+		
+</body>
+</html>

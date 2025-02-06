@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+	<h1 th:text="#{customs_header}">Parts Customs Data</h1>
+	
+	<form action="#" th:action="@{/customs/create}" th:object="${customs}" method="post">
+	
+		<label for="catenaxId" th:text="#{customs_catenax_id}">Catena-X Id</label>
+		<input type="text" id="catenaxId" th:field="*{catenaxId}" />
+		<label for="customerPartNumber" th:text="#{customs_customer_part_number}">Teilenummer beim Kunden</label>
+		<input type="text" id="customerPartNumber" th:field="*{customerPartNumber}" />
+		<label for="customerPartName" th:text="#{customs_customer_part_name}">Teilename beim Kunden</label>
+		<input type="text" id="customerPartName" th:field="*{customerPartName}" />
+		<label for="manufacturerPartNumber" th:text="#{customs_manufacturer_part_number}">Teilenummer beim Hersteller</label>
+		<input type="text" id="manufacturerPartNumber" th:field="*{manufacturerPartNumber}" />
+		<label for="manufacturerPartName" th:text="#{customs_manufacturer_part_name}">Teilename beim Hersteller</label>
+		<input type="text" id="manufacturerPartName" th:field="*{manufacturerPartName}" />
+		<label for="type" th:text="#{customs_type}">Type</label>
+		<input type="text" id="type" th:field="*{type}" />
+		<label for="validFrom" th:text="#{customs_valid_from}">Valid From</label>
+		<input type="text" id="validFrom" th:field="*{validFrom}" />
+		<label for="contactName" th:text="#{customs_contact_name}">Contact Name</label>
+		<input type="text" id="contactName" th:field="*{contactName}" />
+		<label for="contactEmail" th:text="#{customs_contact_email}">Contact Email</label>
+		<input type="text" id="contactEmail" th:field="*{contactEmail}" />
+		<label for="contactPhone" th:text="#{customs_contact_phone}">Contact Phone</label>
+		<input type="text" id="contactPhone" th:field="*{contactPhone}" />
+		<label for="contactJobTitle" th:text="#{customs_contact_jobtitle}">Contact Job Title</label>
+		<input type="text" id="contactJobTitle" th:field="*{contactJobTitle}" />
+		<label for="country" th:text="#{customs_country}">Country</label>
+		<input type="text" id="country" th:field="*{country}" />
+		<label for="federalState" th:text="#{customs_federal_state}">State</label>
+		<input type="text" id="federalState" th:field="*{federalState}" />
+		<label for="originInformation" th:text="#{customs_origin_information}">Origin Information</label>
+		<input type="text" id="originInformation" th:field="*{originInformation}" />
+		<label for="prefferedStatus" th:text="#{customs_preffered_status}">Preffered Status</label>
+		<input type="text" id="prefferedStatus" th:field="*{prefferedStatus}" />
+		<label for="tradeWorthValue" th:text="#{customs_tradeworth_value}">Trade Worth Value</label>
+		<input type="text" id="tradeWorthValue" th:field="*{tradeWorthValue}" />
+		<label for="tradeWorthCurrency" th:text="#{customs_tradeworth_currency}">Trade Worth Currency</label>
+		<input type="text" id="tradeWorthCurrency" th:field="*{tradeWorthCurrency}" />		
+		
+		<button type="submit">Create</button>
+	
+	</form>
+		
+</body>
+</html>
