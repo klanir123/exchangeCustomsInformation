@@ -8,4 +8,6 @@ import com.msg.customs.adapter.out.storage.model.CustomsEntity;
 @Repository
 public interface CustomsRepository extends JpaRepository<CustomsEntity, Long> {
 
+	CustomsEntity findByCatenaxId(String catenaxId);
+
 }

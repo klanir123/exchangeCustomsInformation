@@ -3,6 +3,8 @@ package com.msg.customs.application.domain.model;
 import java.util.Date;
 import java.util.List;
 
+import com.msg.customs.adapter.in.web.model.CustomsTypeEnum;
+
 import lombok.Data;
 
 @Data
@@ -15,7 +17,7 @@ public class CustomsData {
 	private Part manufacturePart;
 	
 	// required
-	private String type;
+	private CustomsTypeEnum type;
 	
 	// internal date to store the date of the creation 
 	private Date confirmationDate;

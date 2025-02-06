@@ -34,4 +34,11 @@ public class CustomsJpaStorageAdapter implements CustomsDataStorageAdapter {
 		return allCustoms.stream().map(CustomsDataEntityMapper::toDomain).toList();
 	}
 
+	@Override
+	public CustomsData loadCustomsDataByCatenaxId(String catenaxId) {
+		return CustomsDataEntityMapper.toDomain(customsRepository.findByCatenaxId(catenaxId));
+	}
+	
+	
+
 }

@@ -3,8 +3,10 @@ package com.msg.customs.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.msg.customs.adapter.in.web.model.CustomsTypeEnum;
 import com.msg.customs.domain.UiCustomsData;
 import com.msg.customs.service.CustomsService;
 
@@ -28,10 +30,21 @@ public class CustomsController {
 		return "customs";
 	}
 	
+	@GetMapping("/customs/edit/{id}")
+	public String editCustoms(@PathVariable String id, Model model) {				
+		// TODO Load
+		UiCustomsData customs = customsService.getCustomsData(id);
+		model.addAttribute("customs", customs);
+		model.addAttribute("types", CustomsTypeEnum.values());
+		
+		return "customsCreate";
+	}	
+	
 	@GetMapping("/customs/doStartCreate")
 	public String createCustoms(Model model) {
 		UiCustomsData customs = new UiCustomsData();
 		model.addAttribute("customs", customs);
+		model.addAttribute("types", CustomsTypeEnum.values());
 		
 		return "customsCreate";
 	}

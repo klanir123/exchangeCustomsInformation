@@ -12,7 +12,7 @@
 	
 	<table>
         <thead>
-            <tr>
+            <tr>            
                 <th th:text="#{overview_catenax_id}">Catena-X Id</th>
                 <th th:text="#{overview_customer_part_number}">Customer Part Number</th>
                 <th th:text="#{overview_customer_part_name}">Customer Part Name</th>
@@ -20,7 +20,9 @@
         </thead>
         <tbody>
             <tr th:each="custom : ${customsList}">
-                <td th:text="${custom.catenaxId}"></td>
+				<td>
+            		<a th:href="@{/customs/edit/{id}(id=${custom.catenaxId})}" th:text="${custom.catenaxId}">Edit</a>
+        		</td>            
                 <td th:text="${custom.customerPartNumber}"></td>
                 <td th:text="${custom.customerPartName}"></td>
             </tr>

@@ -3,6 +3,8 @@ package com.msg.customs.adapter.out.storage.model;
 import java.util.Date;
 import java.util.List;
 
+import com.msg.customs.adapter.in.web.model.CustomsTypeEnum;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CollectionTable;
@@ -10,6 +12,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -48,9 +52,10 @@ public class CustomsEntity {
         @AttributeOverride(name = "name", column = @Column(name = "manufacturer_part_name"))
     })
     private PartEntity manufacturePart;
-
+    
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private String type;
+    private CustomsTypeEnum type;
 
     @Column(name = "confirmation_date")
     @Temporal(TemporalType.TIMESTAMP)

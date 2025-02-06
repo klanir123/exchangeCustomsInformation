@@ -1,6 +1,7 @@
 package com.msg.customs.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -36,10 +37,13 @@ public class CustomsService {
 		return customsEntities.getBody().stream().map(UiCustomsReducedMapper::toUiData).toList();		
 	}
 	
-	public void saveCustoms(UiCustomsData uiCustoms) {
-		
-		CustomsDataValue customsData = UiCustomsMapper.toValue(uiCustoms);
-		
+	public UiCustomsData getCustomsData(String catenaxId) {
+		ResponseEntity<CustomsDataValue> entity = restTemplate.getForEntity("http://localhost:8080/customs/{id}", CustomsDataValue.class, Map.of("id", catenaxId));
+		return UiCustomsMapper.toUiData(entity.getBody());
+	}
+	
+	public void saveCustoms(UiCustomsData uiCustoms) {		
+		CustomsDataValue customsData = UiCustomsMapper.toValue(uiCustoms);		
 		restTemplate.postForEntity("http://localhost:8080/customs", customsData, Void.class);
 	}
 			

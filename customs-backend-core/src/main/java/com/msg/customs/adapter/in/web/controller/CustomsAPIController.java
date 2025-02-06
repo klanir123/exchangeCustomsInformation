@@ -10,8 +10,9 @@ import com.msg.customs.adapter.in.web.CustomsAPI;
 import com.msg.customs.adapter.in.web.mapper.CustomsDataValueMapper;
 import com.msg.customs.adapter.in.web.model.CustomsDataValue;
 import com.msg.customs.application.domain.model.CustomsData;
-import com.msg.customs.application.port.in.LoadCustomsDataQuery;
-import com.msg.customs.application.port.in.LoadCustomsDataUseCase;
+import com.msg.customs.application.port.in.LoadCustomsDataByCatenaxIdUseCase;
+import com.msg.customs.application.port.in.LoadCustomsDataListQuery;
+import com.msg.customs.application.port.in.LoadCustomsDataListUseCase;
 import com.msg.customs.application.port.in.SaveCustomsDataCommand;
 import com.msg.customs.application.port.in.SaveCustomsDataUseCase;
 
@@ -23,19 +24,20 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class CustomsAPIController implements CustomsAPI {
 
-	private final LoadCustomsDataUseCase loadCustomsDataUseCase;
+	private final LoadCustomsDataListUseCase loadCustomsDataUseCase;
 	private final SaveCustomsDataUseCase saveCustomsDataUseCase;
+	private final LoadCustomsDataByCatenaxIdUseCase loadCustomsDataByCatenaxIdUseCase;
 	
 	@Override
 	public ResponseEntity<List<CustomsDataValue>> getCustomsData() {
-		List<CustomsData> customsData = loadCustomsDataUseCase.loadCustomsData(LoadCustomsDataQuery.queryAll());
+		List<CustomsData> customsData = loadCustomsDataUseCase.loadCustomsData(LoadCustomsDataListQuery.queryAll());
 		return ResponseEntity.ok(customsData.stream().map(CustomsDataValueMapper::toValue).toList());
 	}
 
 	@Override
-	public ResponseEntity<CustomsDataValue> getCustomsData(String catenaxId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<CustomsDataValue> getCustomsData(String id) {
+		CustomsData customsData = loadCustomsDataByCatenaxIdUseCase.loadCustomsData(id);
+		return ResponseEntity.ok(CustomsDataValueMapper.toValue(customsData));
 	}
 
 	@Override

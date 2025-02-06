@@ -9,4 +9,6 @@ public interface CustomsDataStorageAdapter {
 	List<CustomsData> loadCustomsData();
 	
 	void saveCustomsData(CustomsData customsData);
+
+	CustomsData loadCustomsDataByCatenaxId(String catenaxId);
 }

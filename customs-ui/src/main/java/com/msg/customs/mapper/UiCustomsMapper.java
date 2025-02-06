@@ -21,6 +21,7 @@ public class UiCustomsMapper {
 		// TODO setConfirmationDate
 				
 		data.setValidFrom(null);
+		// TODO use enum instead
 		data.setType(value.getType());
 		
 		data.setContactName(value.getContactName());

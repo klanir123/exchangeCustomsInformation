@@ -11,7 +11,7 @@
 	<form action="#" th:action="@{/customs/create}" th:object="${customs}" method="post">
 	
 		<label for="catenaxId" th:text="#{customs_catenax_id}">Catena-X Id</label>
-		<input type="text" id="catenaxId" th:field="*{catenaxId}" />
+		<input type="text" id="catenaxId" th:field="*{catenaxId}" th:disabled="${customs.catenaxId} != null" />
 		<label for="customerPartNumber" th:text="#{customs_customer_part_number}">Teilenummer beim Kunden</label>
 		<input type="text" id="customerPartNumber" th:field="*{customerPartNumber}" />
 		<label for="customerPartName" th:text="#{customs_customer_part_name}">Teilename beim Kunden</label>
@@ -19,9 +19,12 @@
 		<label for="manufacturerPartNumber" th:text="#{customs_manufacturer_part_number}">Teilenummer beim Hersteller</label>
 		<input type="text" id="manufacturerPartNumber" th:field="*{manufacturerPartNumber}" />
 		<label for="manufacturerPartName" th:text="#{customs_manufacturer_part_name}">Teilename beim Hersteller</label>
-		<input type="text" id="manufacturerPartName" th:field="*{manufacturerPartName}" />
+		<input type="text" id="manufacturerPartName" th:field="*{manufacturerPartName}" />		
 		<label for="type" th:text="#{customs_type}">Type</label>
-		<input type="text" id="type" th:field="*{type}" />
+		<select id="type" th:field="*{type}">
+			<option value="" th:text="#{customs_type_notset}">Select Type</option>
+		    <option th:each="type : ${types}" th:value="${type}" th:text="${type.name}"></option>
+		</select>				
 		<label for="validFrom" th:text="#{customs_valid_from}">Valid From</label>
 		<input type="text" id="validFrom" th:field="*{validFrom}" />
 		<label for="contactName" th:text="#{customs_contact_name}">Contact Name</label>
@@ -45,7 +48,7 @@
 		<label for="tradeWorthCurrency" th:text="#{customs_tradeworth_currency}">Trade Worth Currency</label>
 		<input type="text" id="tradeWorthCurrency" th:field="*{tradeWorthCurrency}" />		
 		
-		<button type="submit">Create</button>
+		<button type="submit" th:text="${customs.catenaxId} == null ? #{customs_action_create} : #{customs_action_update}">Save</button>
 	
 	</form>
 		

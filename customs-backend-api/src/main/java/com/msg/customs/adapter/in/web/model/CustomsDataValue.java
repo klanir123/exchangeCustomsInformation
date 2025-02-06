@@ -16,7 +16,7 @@ public class CustomsDataValue {
     private String manufacturerPartNumber;
     private String manufacturerPartName;
 
-    private String type;
+    private CustomsTypeEnum type;
 
     private Date confirmationDate;
 
