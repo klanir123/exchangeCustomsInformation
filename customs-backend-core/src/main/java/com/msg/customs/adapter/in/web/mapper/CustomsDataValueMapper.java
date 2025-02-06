@@ -1,6 +1,6 @@
 package com.msg.customs.adapter.in.web.mapper;
 
-import com.msg.customs.adapter.in.web.model.CustomsDataValue;
+import com.msg.customs.adapter.in.web.model.CustomsDataDto;
 import com.msg.customs.application.domain.model.ContactData;
 import com.msg.customs.application.domain.model.CustomsData;
 import com.msg.customs.application.domain.model.Part;
@@ -8,61 +8,64 @@ import com.msg.customs.application.domain.model.TradeWorth;
 
 public class CustomsDataValueMapper {
 
-    public static CustomsDataValue toValue(CustomsData data) {
-        CustomsDataValue value = new CustomsDataValue();
-        value.setCatenaxId(data.getCatenaxId());
-        value.setCustomerPartNumber(data.getCustomerPart().getNumber());
-        value.setCustomerPartName(data.getCustomerPart().getName());
-        value.setManufacturerPartNumber(data.getManufacturePart().getNumber());
-        value.setManufacturerPartName(data.getManufacturePart().getName());
-        value.setType(data.getType());
-        value.setConfirmationDate(data.getConfirmationDate());
-        value.setValidFrom(data.getValidFrom());
-        value.setContactName(data.getContact().getName());
-        value.setContactEmail(data.getContact().getEmail());
-        value.setContactPhone(data.getContact().getPhone());
-        value.setCountry(data.getCountry());
-        value.setFederalState(data.getFederalState());
-        value.setOriginInformation(data.getOriginInformation());
-        value.setPrefferedStatus(data.getPrefferedStatus());
-        value.setTradeWorthValue(data.getTradeWorth().getValue());
-        value.setTradeWorthCurrency(data.getTradeWorth().getCurrency());
-        return value;
+    public static CustomsDataDto toValue(CustomsData data) {
+        CustomsDataDto dto = new CustomsDataDto();
+        dto.setId(data.getId());
+        dto.setCatenaxId(data.getCatenaxId());
+        dto.setCustomerPartNumber(data.getCustomerPart().getNumber());
+        dto.setCustomerPartName(data.getCustomerPart().getName());
+        dto.setManufacturerPartNumber(data.getManufacturePart().getNumber());
+        dto.setManufacturerPartName(data.getManufacturePart().getName());
+        dto.setType(data.getType());
+        dto.setConfirmationDate(data.getConfirmationDate());
+        dto.setValidFrom(data.getValidFrom());
+        dto.setContactName(data.getContact().getName());
+        dto.setContactEmail(data.getContact().getEmail());
+        dto.setContactPhone(data.getContact().getPhone());
+        dto.setContactJobTitle(data.getContact().getJobTitle());
+        dto.setCountry(data.getCountry());
+        dto.setFederalState(data.getFederalState());
+        dto.setOriginInformation(data.getOriginInformation());
+        dto.setPrefferedStatus(data.getPrefferedStatus());
+        dto.setTradeWorthValue(data.getTradeWorth().getValue());
+        dto.setTradeWorthCurrency(data.getTradeWorth().getCurrency());
+        return dto;
     }
 
-    public static CustomsData toDomain(CustomsDataValue value) {
+    public static CustomsData toDomain(CustomsDataDto dto) {
         CustomsData data = new CustomsData();
-        data.setCatenaxId(value.getCatenaxId());
+        data.setId(dto.getId());
+        data.setCatenaxId(dto.getCatenaxId());
 
         Part customerPart = new Part();
-        customerPart.setNumber(value.getCustomerPartNumber());
-        customerPart.setName(value.getCustomerPartName());
+        customerPart.setNumber(dto.getCustomerPartNumber());
+        customerPart.setName(dto.getCustomerPartName());
         data.setCustomerPart(customerPart);
 
         Part manufacturePart = new Part();
-        manufacturePart.setNumber(value.getManufacturerPartNumber());
-        manufacturePart.setName(value.getManufacturerPartName());
+        manufacturePart.setNumber(dto.getManufacturerPartNumber());
+        manufacturePart.setName(dto.getManufacturerPartName());
         data.setManufacturePart(manufacturePart);
 
-        data.setType(value.getType());
-        data.setConfirmationDate(value.getConfirmationDate());
-        data.setValidFrom(value.getValidFrom());
+        data.setType(dto.getType());
+        data.setConfirmationDate(dto.getConfirmationDate());
+        data.setValidFrom(dto.getValidFrom());
 
         ContactData contact = new ContactData();
-        contact.setName(value.getContactName());
-        contact.setEmail(value.getContactEmail());
-        contact.setPhone(value.getContactPhone());
-        contact.setJobTitle(value.getContactJobTitle());
+        contact.setName(dto.getContactName());
+        contact.setEmail(dto.getContactEmail());
+        contact.setPhone(dto.getContactPhone());
+        contact.setJobTitle(dto.getContactJobTitle());
         data.setContact(contact);
 
-        data.setCountry(value.getCountry());
-        data.setFederalState(value.getFederalState());
-        data.setOriginInformation(value.getOriginInformation());
-        data.setPrefferedStatus(value.getPrefferedStatus());
+        data.setCountry(dto.getCountry());
+        data.setFederalState(dto.getFederalState());
+        data.setOriginInformation(dto.getOriginInformation());
+        data.setPrefferedStatus(dto.getPrefferedStatus());
 
         TradeWorth tradeWorth = new TradeWorth();
-        tradeWorth.setValue(value.getTradeWorthValue());
-        tradeWorth.setCurrency(value.getTradeWorthCurrency());
+        tradeWorth.setValue(dto.getTradeWorthValue());
+        tradeWorth.setCurrency(dto.getTradeWorthCurrency());
         data.setTradeWorth(tradeWorth);
 
         return data;

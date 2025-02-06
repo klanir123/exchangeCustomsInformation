@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.msg.customs.adapter.in.web.CustomsAPI;
 import com.msg.customs.adapter.in.web.mapper.CustomsDataValueMapper;
-import com.msg.customs.adapter.in.web.model.CustomsDataValue;
+import com.msg.customs.adapter.in.web.model.CustomsDataDto;
 import com.msg.customs.application.domain.model.CustomsData;
 import com.msg.customs.application.port.in.LoadCustomsDataByCatenaxIdUseCase;
 import com.msg.customs.application.port.in.LoadCustomsDataListQuery;
@@ -29,25 +29,25 @@ public class CustomsAPIController implements CustomsAPI {
 	private final LoadCustomsDataByCatenaxIdUseCase loadCustomsDataByCatenaxIdUseCase;
 	
 	@Override
-	public ResponseEntity<List<CustomsDataValue>> getCustomsData() {
+	public ResponseEntity<List<CustomsDataDto>> getCustomsData() {
 		List<CustomsData> customsData = loadCustomsDataUseCase.loadCustomsData(LoadCustomsDataListQuery.queryAll());
 		return ResponseEntity.ok(customsData.stream().map(CustomsDataValueMapper::toValue).toList());
 	}
 
 	@Override
-	public ResponseEntity<CustomsDataValue> getCustomsData(String id) {
+	public ResponseEntity<CustomsDataDto> getCustomsData(String id) {
 		CustomsData customsData = loadCustomsDataByCatenaxIdUseCase.loadCustomsData(id);
 		return ResponseEntity.ok(CustomsDataValueMapper.toValue(customsData));
 	}
 
 	@Override
-	public ResponseEntity<CustomsDataValue> deleteCustomsData(String catenaxId) {
+	public ResponseEntity<CustomsDataDto> deleteCustomsData(String catenaxId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseEntity<Void> saveCustomsData(CustomsDataValue customsDataValue) {
+	public ResponseEntity<Void> saveCustomsData(CustomsDataDto customsDataValue) {
 		log.info(customsDataValue.toString());
 		CustomsData customsData = CustomsDataValueMapper.toDomain(customsDataValue);
 		saveCustomsDataUseCase.saveCustomsData(SaveCustomsDataCommand.builder().customsData(customsData).build());

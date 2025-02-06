@@ -17,5 +17,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.msg.customs</groupId>
+			<artifactId>customs-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

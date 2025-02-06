@@ -3,12 +3,15 @@ package com.msg.customs.application.domain.model;
 import java.util.Date;
 import java.util.List;
 
-import com.msg.customs.adapter.in.web.model.CustomsTypeEnum;
+import com.msg.customs.model.CustomsTypeEnum;
 
 import lombok.Data;
 
 @Data
 public class CustomsData {
+	
+	// internal id to store the entity
+	private Long id;
 	
 	private String catenaxId;
 	

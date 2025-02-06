@@ -1,4 +1,4 @@
-package com.msg.customs.adapter.in.web.model;
+package com.msg.customs.model;
 
 public enum CustomsTypeEnum {
 	InitialRequest,

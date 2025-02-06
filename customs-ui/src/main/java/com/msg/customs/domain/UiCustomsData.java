@@ -1,11 +1,13 @@
 package com.msg.customs.domain;
 
-import com.msg.customs.adapter.in.web.model.CustomsTypeEnum;
+import com.msg.customs.model.CustomsTypeEnum;
 
 import lombok.Data;
 
 @Data
 public class UiCustomsData {
+	
+	private Long id;
 	
 	private String catenaxId;
 

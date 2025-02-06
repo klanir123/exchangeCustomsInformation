@@ -3,7 +3,7 @@ package com.msg.customs.adapter.out.storage.model;
 import java.util.Date;
 import java.util.List;
 
-import com.msg.customs.adapter.in.web.model.CustomsTypeEnum;
+import com.msg.customs.model.CustomsTypeEnum;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -36,7 +36,7 @@ public class CustomsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "catenax_id", nullable = false)
+    @Column(name = "catenax_id", nullable = false, unique = true)
     private String catenaxId;
 
     @Embedded

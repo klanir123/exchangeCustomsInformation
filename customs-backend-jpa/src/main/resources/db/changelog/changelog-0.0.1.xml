@@ -13,7 +13,7 @@
 	            <constraints primaryKey="true" nullable="false"/>
 	        </column>
 	        <column name="catenax_id" type="varchar(255)">
-	            <constraints nullable="false"/>
+	            <constraints nullable="false" unique="true"/>
 	        </column>
 	        <column name="customer_part_number" type="varchar(255)"/>
 	        <column name="customer_part_name" type="varchar(255)"/>

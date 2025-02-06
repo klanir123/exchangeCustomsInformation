@@ -3,11 +3,15 @@ package com.msg.customs.adapter.in.web.model;
 import java.util.Date;
 import java.util.List;
 
+import com.msg.customs.model.CustomsTypeEnum;
+
 import lombok.Data;
 
 @Data
-public class CustomsDataValue {
-
+public class CustomsDataDto {
+	
+	private Long id;
+	
     private String catenaxId;
 
     private String customerPartNumber;

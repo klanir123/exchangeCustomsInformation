@@ -78,5 +78,6 @@
 		<module>customs-backend-jpa</module>
 		<module>customs-backend-app</module>
 		<module>customs-backend-api</module>
+		<module>customs-commons</module>
 	</modules>
 </project>

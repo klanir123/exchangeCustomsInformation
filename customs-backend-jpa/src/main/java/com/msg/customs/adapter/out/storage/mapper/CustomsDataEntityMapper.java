@@ -9,6 +9,9 @@ public class CustomsDataEntityMapper {
 
     public static CustomsEntity toEntity(CustomsData data) {
         CustomsEntity entity = new CustomsEntity();
+        
+        entity.setId(data.getId());
+        
         entity.setCatenaxId(data.getCatenaxId());
 
         entity.setCustomerPart(PartEntityMapper.toEntity(data.getCustomerPart()));
@@ -32,6 +35,9 @@ public class CustomsDataEntityMapper {
     
     public static CustomsData toDomain(CustomsEntity entity) {
         CustomsData data = new CustomsData();
+        
+        data.setId(entity.getId());
+        
         data.setCatenaxId(entity.getCatenaxId());
 
         data.setCustomerPart(PartEntityMapper.toDomain(entity.getCustomerPart()));

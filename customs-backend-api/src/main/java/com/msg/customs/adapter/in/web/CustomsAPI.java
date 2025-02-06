@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.msg.customs.adapter.in.web.model.CustomsDataValue;
+import com.msg.customs.adapter.in.web.model.CustomsDataDto;
 
 @RequestMapping(value = "/customs", produces = MediaType.APPLICATION_JSON_VALUE)
 public interface CustomsAPI {
 
 	
 	@GetMapping
-	ResponseEntity<List<CustomsDataValue>> getCustomsData();
+	ResponseEntity<List<CustomsDataDto>> getCustomsData();
 	
 	@GetMapping(value = "/{id}")
-	ResponseEntity<CustomsDataValue> getCustomsData(@PathVariable String id);
+	ResponseEntity<CustomsDataDto> getCustomsData(@PathVariable String id);
 	
 	@DeleteMapping(value = "/{id}")
-	ResponseEntity<CustomsDataValue> deleteCustomsData(@PathVariable String catenaxId);
+	ResponseEntity<CustomsDataDto> deleteCustomsData(@PathVariable String catenaxId);
 	
 	@PostMapping
-	ResponseEntity<Void> saveCustomsData(@RequestBody CustomsDataValue customsData);
+	ResponseEntity<Void> saveCustomsData(@RequestBody CustomsDataDto customsData);
 		
 }

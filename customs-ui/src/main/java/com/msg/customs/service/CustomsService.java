@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.msg.customs.adapter.in.web.model.CustomsDataValue;
+import com.msg.customs.adapter.in.web.model.CustomsDataDto;
 import com.msg.customs.domain.UiCustomsData;
 import com.msg.customs.domain.UiCustomsReducedData;
 import com.msg.customs.mapper.UiCustomsMapper;
@@ -27,23 +27,23 @@ public class CustomsService {
 
 	public List<UiCustomsReducedData> getCustoms() {
 		
-		ResponseEntity<List<CustomsDataValue>> customsEntities = restTemplate.exchange(
+		ResponseEntity<List<CustomsDataDto>> customsEntities = restTemplate.exchange(
 				"http://localhost:8080/customs", 
 				HttpMethod.GET,
 				null,
-				new ParameterizedTypeReference<List<CustomsDataValue>>() {}
+				new ParameterizedTypeReference<List<CustomsDataDto>>() {}
 			);
 		
 		return customsEntities.getBody().stream().map(UiCustomsReducedMapper::toUiData).toList();		
 	}
 	
 	public UiCustomsData getCustomsData(String catenaxId) {
-		ResponseEntity<CustomsDataValue> entity = restTemplate.getForEntity("http://localhost:8080/customs/{id}", CustomsDataValue.class, Map.of("id", catenaxId));
+		ResponseEntity<CustomsDataDto> entity = restTemplate.getForEntity("http://localhost:8080/customs/{id}", CustomsDataDto.class, Map.of("id", catenaxId));
 		return UiCustomsMapper.toUiData(entity.getBody());
 	}
 	
 	public void saveCustoms(UiCustomsData uiCustoms) {		
-		CustomsDataValue customsData = UiCustomsMapper.toValue(uiCustoms);		
+		CustomsDataDto customsData = UiCustomsMapper.toValue(uiCustoms);		
 		restTemplate.postForEntity("http://localhost:8080/customs", customsData, Void.class);
 	}
 			

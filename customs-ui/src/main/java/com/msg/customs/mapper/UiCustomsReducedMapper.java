@@ -1,18 +1,20 @@
 package com.msg.customs.mapper;
 
-import com.msg.customs.adapter.in.web.model.CustomsDataValue;
+import com.msg.customs.adapter.in.web.model.CustomsDataDto;
 import com.msg.customs.domain.UiCustomsReducedData;
 
 public class UiCustomsReducedMapper {
 
 	
-	public static UiCustomsReducedData toUiData(CustomsDataValue value) {
+	public static UiCustomsReducedData toUiData(CustomsDataDto dto) {
 		UiCustomsReducedData data = new UiCustomsReducedData();
 		
-		data.setCatenaxId(value.getCatenaxId());
+		data.setId(dto.getId());
 		
-		data.setCustomerPartNumber(value.getCustomerPartNumber());
-		data.setCustomerPartName(value.getCustomerPartName());
+		data.setCatenaxId(dto.getCatenaxId());
+		
+		data.setCustomerPartNumber(dto.getCustomerPartNumber());
+		data.setCustomerPartName(dto.getCustomerPartName());
 				
 		return data;
 	}	

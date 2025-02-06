@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UiCustomsReducedData {
 	
+	private Long id;
+	
 	private String catenaxId;
 	
 	private String customerPartNumber;
