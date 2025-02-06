@@ -28,7 +28,7 @@ public class CustomsAPIController implements CustomsAPI {
 	
 	@Override
 	public ResponseEntity<List<CustomsDataValue>> getCustomsData() {
-		List<CustomsData> customsData = loadCustomsDataUseCase.loadCustomsData(new LoadCustomsDataQuery());
+		List<CustomsData> customsData = loadCustomsDataUseCase.loadCustomsData(LoadCustomsDataQuery.queryAll());
 		return ResponseEntity.ok(customsData.stream().map(CustomsDataValueMapper::toValue).toList());
 	}
 
@@ -45,13 +45,11 @@ public class CustomsAPIController implements CustomsAPI {
 	}
 
 	@Override
-	public ResponseEntity<Void> saveCustomsData(CustomsDataValue customsDataRecord) {
-		log.info(customsDataRecord.toString());
-		CustomsData customsData = CustomsDataValueMapper.toDomain(customsDataRecord);
+	public ResponseEntity<Void> saveCustomsData(CustomsDataValue customsDataValue) {
+		log.info(customsDataValue.toString());
+		CustomsData customsData = CustomsDataValueMapper.toDomain(customsDataValue);
 		saveCustomsDataUseCase.saveCustomsData(SaveCustomsDataCommand.builder().customsData(customsData).build());
 		return ResponseEntity.ok().build();
 	}
-
-
 
 }

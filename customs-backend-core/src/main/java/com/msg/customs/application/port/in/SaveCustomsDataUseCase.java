@@ -2,6 +2,6 @@ package com.msg.customs.application.port.in;
 
 public interface SaveCustomsDataUseCase {
 	
-	void saveCustomsData(SaveCustomsDataCommand commandCustomsData);
+	void saveCustomsData(SaveCustomsDataCommand commandCustomsData);	
 
 }
