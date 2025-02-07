@@ -3,7 +3,7 @@ package com.msg.customs.model;
 import java.util.List;
 import java.util.Locale;
 
-public enum CustomsTeritoryEnum implements CustomsTerritory {
+public enum CustomsTerritoryEnum implements CustomsTerritory {
 
 	DE(Locale.GERMANY, CustomsUnionEnum.EU, List.of(GermanFederalStateEnum.values())),
 	FR(Locale.FRANCE, CustomsUnionEnum.EU),
@@ -20,15 +20,15 @@ public enum CustomsTeritoryEnum implements CustomsTerritory {
 	
 	private List<FederalState> federatedStates;
 	
-	private CustomsTeritoryEnum(Locale locale) {
+	private CustomsTerritoryEnum(Locale locale) {
 		this(locale, null);
 	}
 
-	private CustomsTeritoryEnum(Locale locale, CustomsUnion customsUnion) {
+	private CustomsTerritoryEnum(Locale locale, CustomsUnion customsUnion) {
 		this(locale, customsUnion, null);
     }
 	
-	private CustomsTeritoryEnum(Locale locale, CustomsUnion customsUnion, List<FederalState> federatedStates) {
+	private CustomsTerritoryEnum(Locale locale, CustomsUnion customsUnion, List<FederalState> federatedStates) {
 		this.locale = locale;
 		this.customsUnion = customsUnion;
 		this.federatedStates = federatedStates;

@@ -3,12 +3,17 @@ package com.msg.customs.adapter.out.storage.model;
 import java.util.Date;
 import java.util.List;
 
+import com.msg.customs.adapter.out.storage.converter.CustomsTerritoryConverter;
+import com.msg.customs.adapter.out.storage.converter.FederalStateConverter;
+import com.msg.customs.model.CustomsTerritory;
 import com.msg.customs.model.CustomsTypeEnum;
+import com.msg.customs.model.FederalState;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -68,11 +73,13 @@ public class CustomsEntity {
     @Embedded
     private ContactEntity contact;
 
+    @Convert(converter = CustomsTerritoryConverter.class)
     @Column(name = "country", nullable = false)
-    private String country;
+    private CustomsTerritory country;
 
+    @Convert(converter = FederalStateConverter.class)
     @Column(name = "federal_state")
-    private String federalState;
+    private FederalState federalState;
 
     @ElementCollection
     @CollectionTable(name = "customs_origin_information", joinColumns = @JoinColumn(name = "customs_id"))

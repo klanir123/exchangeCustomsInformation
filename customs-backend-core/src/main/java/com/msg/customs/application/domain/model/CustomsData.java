@@ -3,7 +3,9 @@ package com.msg.customs.application.domain.model;
 import java.util.Date;
 import java.util.List;
 
+import com.msg.customs.model.CustomsTerritory;
 import com.msg.customs.model.CustomsTypeEnum;
+import com.msg.customs.model.FederalState;
 
 import lombok.Data;
 
@@ -32,10 +34,10 @@ public class CustomsData {
 	private ContactData contact;
 	
 	// required
-	private String country;
+	private CustomsTerritory country;
 	
 	// country != DE -> disabled, = 99
-	private String federalState;
+	private FederalState federalState;
 	
 	// country == EU -> multi selection possible
 	private List<String> originInformation;

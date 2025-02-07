@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.msg.customs.domain.UiCustomsData;
-import com.msg.customs.model.CustomsTeritoryEnum;
+import com.msg.customs.model.CustomsTerritoryEnum;
 import com.msg.customs.model.CustomsTypeEnum;
 import com.msg.customs.model.GermanFederalStateEnum;
 import com.msg.customs.service.CustomsService;
@@ -49,7 +49,7 @@ public class CustomsController {
 	private void prepareModelForEditOrCreate(Model model, UiCustomsData customs) {
         model.addAttribute("customs", customs);
         model.addAttribute("types", CustomsTypeEnum.values());
-        model.addAttribute("countries", CustomsTeritoryEnum.values());
+        model.addAttribute("countries", CustomsTerritoryEnum.values());
         model.addAttribute("federalStates", GermanFederalStateEnum.values());
     }
 
