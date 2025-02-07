@@ -4,6 +4,19 @@
     <title>Getting Started: Serving Web Content</title> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+    <script>
+        function toggleCountrySelectionChanged() {
+            var country = document.getElementById("country").value;
+            var federalState = document.getElementById("federalState");
+            if (country !== "DE") {
+				federalState.value = "";
+				federalState.disabled = true
+			}
+            else {
+            	federalState.disabled = false
+            }            
+        }
+    </script>    
 </head>
 <body>
 	<h1 th:text="#{customs_header}">Parts Customs Data</h1>
@@ -51,11 +64,17 @@
 		<input type="text" id="contactJobTitle" th:field="*{contactJobTitle}" />
 		
 		<label for="country" th:text="#{customs_country}">Country</label>
-		<input type="text" id="country" th:field="*{country}" />
+		<select id="country" th:field="*{country}" onchange="toggleCountrySelectionChanged()">
+			<option value="" th:text="#{customs_country_notset}">Select Country</option>
+		    <option th:each="country : ${countries}" th:value="${country}" th:with="countryName = 'customs_country_' + ${country.getCode().toLowerCase()}" th:text="${country.getCode()} + ' - ' + #{${countryName}}"></option>		    		    
+		</select>
 		
 		<label for="federalState" th:text="#{customs_federal_state}">State</label>
-		<input type="text" id="federalState" th:field="*{federalState}" />
-		
+		<select id="federalState" th:field="*{federalState}" >
+			<option value="" th:text="#{customs_federal_state_notset}">Select Federal State</option>
+		    <option th:each="federalState : ${federalStates}" th:value="${federalState}" th:text="${federalState.getCode()} + ' - ' + ${federalState.getFederalStateName()}"></option>		    		    
+		</select>
+				
 		<label for="originInformation" th:text="#{customs_origin_information}">Origin Information</label>
 		<input type="text" id="originInformation" th:field="*{originInformation}" />
 		

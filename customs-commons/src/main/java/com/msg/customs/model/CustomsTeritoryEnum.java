@@ -5,7 +5,7 @@ import java.util.Locale;
 
 public enum CustomsTeritoryEnum implements CustomsTerritory {
 
-	DE(Locale.GERMANY, CustomsUnionEnum.EU, List.of(GermanFederatedStateEnum.values())),
+	DE(Locale.GERMANY, CustomsUnionEnum.EU, List.of(GermanFederalStateEnum.values())),
 	FR(Locale.FRANCE, CustomsUnionEnum.EU),
 	IT(Locale.ITALY, CustomsUnionEnum.EU),
 	GB(Locale.UK),
@@ -18,7 +18,7 @@ public enum CustomsTeritoryEnum implements CustomsTerritory {
 	
 	private CustomsUnion customsUnion;
 	
-	private List<FederatedState> federatedStates;
+	private List<FederalState> federatedStates;
 	
 	private CustomsTeritoryEnum(Locale locale) {
 		this(locale, null);
@@ -28,7 +28,7 @@ public enum CustomsTeritoryEnum implements CustomsTerritory {
 		this(locale, customsUnion, null);
     }
 	
-	private CustomsTeritoryEnum(Locale locale, CustomsUnion customsUnion, List<FederatedState> federatedStates) {
+	private CustomsTeritoryEnum(Locale locale, CustomsUnion customsUnion, List<FederalState> federatedStates) {
 		this.locale = locale;
 		this.customsUnion = customsUnion;
 		this.federatedStates = federatedStates;
@@ -46,7 +46,7 @@ public enum CustomsTeritoryEnum implements CustomsTerritory {
 	}
 
 	@Override
-	public List<FederatedState> getFederatedStates() {
+	public List<FederalState> getFederatedStates() {
 		return federatedStates;
 	}
 	

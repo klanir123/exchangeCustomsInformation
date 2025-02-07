@@ -19,6 +19,6 @@ public interface CustomsTerritory {
 		return getFederatedStates() != null && !getFederatedStates().isEmpty();
 	}
 	
-	List<FederatedState> getFederatedStates();
+	List<FederalState> getFederatedStates();
 	
 }

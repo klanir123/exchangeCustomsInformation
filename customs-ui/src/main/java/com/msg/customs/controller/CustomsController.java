@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.msg.customs.domain.UiCustomsData;
+import com.msg.customs.model.CustomsTeritoryEnum;
 import com.msg.customs.model.CustomsTypeEnum;
+import com.msg.customs.model.GermanFederalStateEnum;
 import com.msg.customs.service.CustomsService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,22 +34,24 @@ public class CustomsController {
 	
 	@GetMapping("/customs/edit/{id}")
 	public String editCustomsData(@PathVariable String id, Model model) {				
-		// TODO Load
 		UiCustomsData customs = customsService.getCustomsData(id);
-		model.addAttribute("customs", customs);
-		model.addAttribute("types", CustomsTypeEnum.values());
+		prepareModelForEditOrCreate(model, customs);
 		
 		return "customsEdit";
 	}	
 	
 	@GetMapping("/customs/create")
 	public String createCustomsData(Model model) {
-		UiCustomsData customs = new UiCustomsData();
-		model.addAttribute("customs", customs);
-		model.addAttribute("types", CustomsTypeEnum.values());
-		
+		prepareModelForEditOrCreate(model, new UiCustomsData());		
 		return "customsEdit";
 	}
+	
+	private void prepareModelForEditOrCreate(Model model, UiCustomsData customs) {
+        model.addAttribute("customs", customs);
+        model.addAttribute("types", CustomsTypeEnum.values());
+        model.addAttribute("countries", CustomsTeritoryEnum.values());
+        model.addAttribute("federalStates", GermanFederalStateEnum.values());
+    }
 
 	@PostMapping("/customs/doCreateOrUpdate")
 	public String doCreateOrUpdateCustomsData(Model model, UiCustomsData customs) {

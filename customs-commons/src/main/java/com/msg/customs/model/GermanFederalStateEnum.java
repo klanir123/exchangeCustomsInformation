@@ -1,6 +1,6 @@
 package com.msg.customs.model;
 
-public enum GermanFederatedStateEnum implements FederatedState {
+public enum GermanFederalStateEnum implements FederalState {
 
 	BW("Baden-Württemberg"), 
 	BY("Bayern"), 
@@ -23,7 +23,7 @@ public enum GermanFederatedStateEnum implements FederatedState {
 
 	private String federatedStateName;
 
-	private GermanFederatedStateEnum(String federatedStateName) {
+	private GermanFederalStateEnum(String federatedStateName) {
 		this.federatedStateName = federatedStateName;
 	}
 
@@ -33,7 +33,7 @@ public enum GermanFederatedStateEnum implements FederatedState {
 	}
 
 	@Override
-	public String getFederatedStateName() {
+	public String getFederalStateName() {
 		return federatedStateName;
 	}
 
