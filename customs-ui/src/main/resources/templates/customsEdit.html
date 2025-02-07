@@ -4,7 +4,7 @@
     <title>Getting Started: Serving Web Content</title> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
-    <script>        
+    <script>       
         function toggleCountrySelectionChanged() {
             var country = document.getElementById("country").value;
             var federalState = document.getElementById("federalState");
@@ -85,7 +85,7 @@
 		</select>
 						
 		<label for="validFrom" th:text="#{customs_valid_from}">Valid From</label>
-		<input type="text" id="validFrom" th:field="*{validFrom}" />
+		<input type="date" id="validFrom" th:field="*{validFrom}" />
 		
 		<label for="contactName" th:text="#{customs_contact_name}">Contact Name</label>
 		<input type="text" id="contactName" th:field="*{contactName}" />

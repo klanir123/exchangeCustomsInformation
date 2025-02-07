@@ -1,5 +1,9 @@
 package com.msg.customs.domain;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.msg.customs.model.CustomsTypeEnum;
 
 import lombok.Data;
@@ -21,7 +25,8 @@ public class UiCustomsData {
 	
 	private CustomsTypeEnum type;
 	
-	private String validFrom;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate validFrom;
 	
 	private String contactName;
 	

@@ -1,5 +1,6 @@
 package com.msg.customs.adapter.out.storage.mapper;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.msg.customs.adapter.out.storage.model.CustomsEntity;
@@ -19,7 +20,7 @@ public class CustomsDataEntityMapper {
 
         entity.setType(data.getType());
         entity.setConfirmationDate(data.getConfirmationDate());
-        entity.setValidFrom(new Date());
+        entity.setValidFrom(data.getValidFrom());
         
         entity.setContact(ContactDataEntityMapper.toEntity(data.getContact()));
 

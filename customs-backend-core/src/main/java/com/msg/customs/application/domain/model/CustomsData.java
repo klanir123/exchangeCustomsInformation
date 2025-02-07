@@ -1,5 +1,6 @@
 package com.msg.customs.application.domain.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -26,10 +27,10 @@ public class CustomsData {
 	private CustomsTypeEnum type;
 	
 	// internal date to store the date of the creation 
-	private Date confirmationDate;
+	private LocalDate confirmationDate;
 	
 	// required
-	private Date validFrom;
+	private LocalDate validFrom;
 	
 	// required
 	private ContactData contact;

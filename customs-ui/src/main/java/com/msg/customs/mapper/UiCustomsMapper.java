@@ -1,5 +1,6 @@
 package com.msg.customs.mapper;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class UiCustomsMapper {
 		
 		// TODO setConfirmationDate
 				
-		data.setValidFrom(null);
+		data.setValidFrom(dto.getValidFrom());
 		// TODO use enum instead
 		data.setType(dto.getType());
 		
@@ -68,7 +69,7 @@ public class UiCustomsMapper {
 		// TODO setConfirmationDate
 		
 		// TODO: map to date
-		dto.setValidFrom(new Date());
+		dto.setValidFrom(data.getValidFrom());
 		dto.setType(data.getType());
 		
 		dto.setContactName(data.getContactName());

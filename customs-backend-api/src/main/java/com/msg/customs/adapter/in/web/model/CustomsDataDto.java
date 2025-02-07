@@ -1,5 +1,6 @@
 package com.msg.customs.adapter.in.web.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,9 +23,9 @@ public class CustomsDataDto {
 
     private CustomsTypeEnum type;
 
-    private Date confirmationDate;
+    private LocalDate confirmationDate;
 
-    private Date validFrom;
+    private LocalDate validFrom;
 
     private String contactName;
     private String contactEmail;

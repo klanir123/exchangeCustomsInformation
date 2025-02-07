@@ -1,7 +1,10 @@
 package com.msg.customs.adapter.out.storage.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateConverter;
 
 import com.msg.customs.adapter.out.storage.converter.CustomsTerritoryConverter;
 import com.msg.customs.adapter.out.storage.converter.FederalStateConverter;
@@ -63,13 +66,15 @@ public class CustomsEntity {
     @Column(name = "type", nullable = false)
     private CustomsTypeEnum type;
 
+    @Convert(converter = LocalDateConverter.class)
     @Column(name = "confirmation_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date confirmationDate;
+//    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDate confirmationDate;
 
+    @Convert(converter = LocalDateConverter.class)
     @Column(name = "valid_from", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date validFrom;
+//    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDate validFrom;
 
     @Embedded
     private ContactEntity contact;

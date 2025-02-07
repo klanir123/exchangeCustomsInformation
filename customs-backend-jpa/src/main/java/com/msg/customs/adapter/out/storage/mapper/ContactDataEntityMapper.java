@@ -16,7 +16,7 @@ public class ContactDataEntityMapper {
 
 	public static ContactData toDomain(ContactEntity entity) {
 		ContactData data = new ContactData();
-		if (entity == null) {
+		if (entity != null) {
 			data.setName(entity.getName());
 			data.setEmail(entity.getEmail());
 			data.setPhone(entity.getPhone());

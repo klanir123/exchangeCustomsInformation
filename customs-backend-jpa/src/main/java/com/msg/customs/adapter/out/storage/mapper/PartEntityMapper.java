@@ -14,7 +14,7 @@ public class PartEntityMapper {
 	
 	public static Part toDomain(PartEntity entity) {
 		Part part = new Part();
-		if (entity == null) {
+		if (entity != null) {
 			part.setName(entity.getName());
 			part.setNumber(entity.getNumber());
 		}
