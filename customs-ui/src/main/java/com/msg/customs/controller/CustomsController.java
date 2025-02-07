@@ -22,7 +22,7 @@ public class CustomsController {
 	
 	
 	@GetMapping("/customs")
-	public String listCustoms(Model model) {
+	public String listCustomsData(Model model) {
 		model.addAttribute("name", "Thomas");
 		
 		model.addAttribute("customsList", customsService.getCustoms());
@@ -31,26 +31,26 @@ public class CustomsController {
 	}
 	
 	@GetMapping("/customs/edit/{id}")
-	public String editCustoms(@PathVariable String id, Model model) {				
+	public String editCustomsData(@PathVariable String id, Model model) {				
 		// TODO Load
 		UiCustomsData customs = customsService.getCustomsData(id);
 		model.addAttribute("customs", customs);
 		model.addAttribute("types", CustomsTypeEnum.values());
 		
-		return "customsCreate";
+		return "customsEdit";
 	}	
 	
-	@GetMapping("/customs/doStartCreate")
-	public String createCustoms(Model model) {
+	@GetMapping("/customs/create")
+	public String createCustomsData(Model model) {
 		UiCustomsData customs = new UiCustomsData();
 		model.addAttribute("customs", customs);
 		model.addAttribute("types", CustomsTypeEnum.values());
 		
-		return "customsCreate";
+		return "customsEdit";
 	}
 
-	@PostMapping("/customs/create")
-	public String createCustoms(Model model, UiCustomsData customs) {
+	@PostMapping("/customs/doCreateOrUpdate")
+	public String doCreateOrUpdateCustomsData(Model model, UiCustomsData customs) {
 		
 		log.info(customs.toString());
 		customsService.saveCustoms(customs);

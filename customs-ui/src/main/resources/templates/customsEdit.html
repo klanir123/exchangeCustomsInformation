@@ -8,7 +8,7 @@
 <body>
 	<h1 th:text="#{customs_header}">Parts Customs Data</h1>
 	
-	<form action="#" th:action="@{/customs/create}" th:object="${customs}" method="post">
+	<form action="#" th:action="@{/customs/doCreateOrUpdate}" th:object="${customs}" method="post">
 	
 		<input type="hidden" th:field="*{id}" />
 	
@@ -69,7 +69,7 @@
 		<input type="text" id="tradeWorthCurrency" th:field="*{tradeWorthCurrency}" />		
 		
 		<button type="submit" th:text="${customs.catenaxId} == null ? #{customs_action_create} : #{customs_action_update}">Save</button>
-	
+		<button type="button" onclick="location.href='/customs'">Abbrechen</button>
 	</form>
 		
 </body>
