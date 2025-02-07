@@ -5,6 +5,7 @@ import com.msg.customs.application.domain.model.ContactData;
 import com.msg.customs.application.domain.model.CustomsData;
 import com.msg.customs.application.domain.model.Part;
 import com.msg.customs.application.domain.model.TradeWorth;
+import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritoryEnum;
 import com.msg.customs.model.GermanFederalStateEnum;
 
@@ -28,7 +29,7 @@ public class CustomsDataValueMapper {
         dto.setCountry(data.getCountry() != null ? data.getCountry().getCode() : null);
         dto.setFederalState(data.getFederalState() != null ? data.getFederalState().getCode() : null);
         dto.setOriginInformation(data.getOriginInformation());
-        dto.setPrefferedStatus(data.getPrefferedStatus());
+        dto.setPrefferedStatus(data.getPrefferedStatus().name());
         dto.setTradeWorthValue(data.getTradeWorth().getValue());
         dto.setTradeWorthCurrency(data.getTradeWorth().getCurrency());
         return dto;
@@ -63,7 +64,7 @@ public class CustomsDataValueMapper {
         data.setCountry(dto.getCountry() != null ? CustomsTerritoryEnum.valueOf(dto.getCountry()) : null);
         data.setFederalState(dto.getFederalState() != null ? GermanFederalStateEnum.valueOf(dto.getFederalState()) : null);
         data.setOriginInformation(dto.getOriginInformation());
-        data.setPrefferedStatus(dto.getPrefferedStatus());
+        data.setPrefferedStatus(dto.getPrefferedStatus() != null ? CertifiedEnum.valueOf(dto.getPrefferedStatus()) : CertifiedEnum.N);
 
         TradeWorth tradeWorth = new TradeWorth();
         tradeWorth.setValue(dto.getTradeWorthValue());

@@ -3,6 +3,7 @@ package com.msg.customs.application.domain.model;
 import java.util.Date;
 import java.util.List;
 
+import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritory;
 import com.msg.customs.model.CustomsTypeEnum;
 import com.msg.customs.model.FederalState;
@@ -43,7 +44,7 @@ public class CustomsData {
 	private List<String> originInformation;
 	
 	// country != EU -> disabled, = N-NotCertified
-	private String prefferedStatus;
+	private CertifiedEnum prefferedStatus;
 	
 	private TradeWorth tradeWorth;
 }

@@ -25,7 +25,7 @@ public class CustomsDataEntityMapper {
 
         entity.setCountry(data.getCountry());
         entity.setFederalState(data.getFederalState());
-        entity.setOriginInformation(data.getOriginInformation());
+        entity.setOriginInformation(data.getOriginInformation()); 
         entity.setPrefferedStatus(data.getPrefferedStatus());
 
         entity.setTradeWorth(TradeWorthEntityMapper.toEntity(data.getTradeWorth()));

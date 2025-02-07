@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.msg.customs.adapter.out.storage.converter.CustomsTerritoryConverter;
 import com.msg.customs.adapter.out.storage.converter.FederalStateConverter;
+import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritory;
 import com.msg.customs.model.CustomsTypeEnum;
 import com.msg.customs.model.FederalState;
@@ -86,8 +87,9 @@ public class CustomsEntity {
     @Column(name = "origin_information")
     private List<String> originInformation;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "preffered_status")
-    private String prefferedStatus;
+    private CertifiedEnum prefferedStatus;
 
     @Embedded
     private TradeWorthEntity tradeWorth;
