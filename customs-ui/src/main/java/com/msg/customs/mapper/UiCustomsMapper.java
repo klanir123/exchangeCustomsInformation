@@ -7,6 +7,7 @@ import java.util.List;
 import com.msg.customs.adapter.in.web.model.CustomsDataDto;
 import com.msg.customs.domain.UiCustomsData;
 import com.msg.customs.model.CertifiedEnum;
+import com.msg.customs.model.RequestStatusEnum;
 
 public class UiCustomsMapper {
 	
@@ -16,6 +17,13 @@ public class UiCustomsMapper {
 		data.setId(dto.getId());
 		
 		data.setCatenaxId(dto.getCatenaxId());
+		
+		if (RequestStatusEnum.Complete == dto.getRequestStatus()) {
+			data.setCompleted(true);
+		}
+		else {
+			data.setCompleted(false);
+		}
 		
 		data.setCustomerPartNumber(dto.getCustomerPartNumber());
 		data.setCustomerPartName(dto.getCustomerPartName());
@@ -59,6 +67,12 @@ public class UiCustomsMapper {
 		dto.setId(data.getId());
 		
 		dto.setCatenaxId(data.getCatenaxId());
+		if (data.isCompleted()) {
+            dto.setRequestStatus(RequestStatusEnum.Complete);
+        }
+        else {
+			dto.setRequestStatus(RequestStatusEnum.NotComplete);
+		}
 		
 		dto.setCustomerPartNumber(data.getCustomerPartNumber());
 		dto.setCustomerPartName(data.getCustomerPartName());

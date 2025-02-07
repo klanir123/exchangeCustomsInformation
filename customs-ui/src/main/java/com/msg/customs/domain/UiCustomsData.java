@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.msg.customs.model.CustomsTypeEnum;
+import com.msg.customs.model.RequestStatusEnum;
 
 import lombok.Data;
 
@@ -12,6 +13,8 @@ import lombok.Data;
 public class UiCustomsData {
 	
 	private Long id;
+	
+	private boolean completed;
 	
 	private String catenaxId;
 

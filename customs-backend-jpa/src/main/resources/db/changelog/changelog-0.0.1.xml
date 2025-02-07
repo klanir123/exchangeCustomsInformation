@@ -15,6 +15,7 @@
 	        <column name="catenax_id" type="varchar(255)">
 	            <constraints nullable="false" unique="true"/>
 	        </column>
+			<column name="request_status" type="varchar(255)"/>	        
 	        <column name="customer_part_number" type="varchar(255)"/>
 	        <column name="customer_part_name" type="varchar(255)"/>
 	        <column name="manufacturer_part_number" type="varchar(255)"/>

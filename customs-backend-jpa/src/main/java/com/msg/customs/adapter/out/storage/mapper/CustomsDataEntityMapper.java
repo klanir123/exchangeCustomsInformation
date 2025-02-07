@@ -1,8 +1,5 @@
 package com.msg.customs.adapter.out.storage.mapper;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 import com.msg.customs.adapter.out.storage.model.CustomsEntity;
 import com.msg.customs.application.domain.model.CustomsData;
 
@@ -14,6 +11,7 @@ public class CustomsDataEntityMapper {
         entity.setId(data.getId());
         
         entity.setCatenaxId(data.getCatenaxId());
+        entity.setRequestStatus(data.getRequestStatus());
 
         entity.setCustomerPart(PartEntityMapper.toEntity(data.getCustomerPart()));
         entity.setManufacturePart(PartEntityMapper.toEntity(data.getManufacturePart()));
@@ -40,6 +38,7 @@ public class CustomsDataEntityMapper {
         data.setId(entity.getId());
         
         data.setCatenaxId(entity.getCatenaxId());
+        data.setRequestStatus(entity.getRequestStatus());
 
         data.setCustomerPart(PartEntityMapper.toDomain(entity.getCustomerPart()));
         data.setManufacturePart(PartEntityMapper.toDomain(entity.getManufacturePart()));

@@ -89,10 +89,20 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
+.inline-label-checkbox {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.inline-label-checkbox label {
+    margin-right: 10px;
+}
 

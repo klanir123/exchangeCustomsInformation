@@ -15,6 +15,7 @@ public class CustomsDataValueMapper {
         CustomsDataDto dto = new CustomsDataDto();
         dto.setId(data.getId());
         dto.setCatenaxId(data.getCatenaxId());
+        dto.setRequestStatus(data.getRequestStatus());
         dto.setCustomerPartNumber(data.getCustomerPart().getNumber());
         dto.setCustomerPartName(data.getCustomerPart().getName());
         dto.setManufacturerPartNumber(data.getManufacturePart().getNumber());
@@ -39,7 +40,8 @@ public class CustomsDataValueMapper {
         CustomsData data = new CustomsData();
         data.setId(dto.getId());
         data.setCatenaxId(dto.getCatenaxId());
-
+        data.setRequestStatus(dto.getRequestStatus());
+        
         Part customerPart = new Part();
         customerPart.setNumber(dto.getCustomerPartNumber());
         customerPart.setName(dto.getCustomerPartName());

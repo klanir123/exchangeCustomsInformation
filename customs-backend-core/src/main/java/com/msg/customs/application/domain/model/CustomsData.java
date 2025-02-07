@@ -8,6 +8,7 @@ import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritory;
 import com.msg.customs.model.CustomsTypeEnum;
 import com.msg.customs.model.FederalState;
+import com.msg.customs.model.RequestStatusEnum;
 
 import lombok.Data;
 
@@ -16,6 +17,8 @@ public class CustomsData {
 	
 	// internal id to store the entity
 	private Long id;
+	
+	private RequestStatusEnum requestStatus;
 	
 	private String catenaxId;
 	

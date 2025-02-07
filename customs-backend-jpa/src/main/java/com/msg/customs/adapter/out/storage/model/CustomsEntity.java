@@ -1,7 +1,6 @@
 package com.msg.customs.adapter.out.storage.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateConverter;
@@ -12,6 +11,7 @@ import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritory;
 import com.msg.customs.model.CustomsTypeEnum;
 import com.msg.customs.model.FederalState;
+import com.msg.customs.model.RequestStatusEnum;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -28,8 +28,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -47,6 +45,10 @@ public class CustomsEntity {
 
     @Column(name = "catenax_id", nullable = false, unique = true)
     private String catenaxId;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "request_status", nullable = false)
+    private RequestStatusEnum requestStatus;
 
     @Embedded
     @AttributeOverrides({

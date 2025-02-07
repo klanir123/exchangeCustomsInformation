@@ -125,6 +125,11 @@
 		<label for="tradeWorthCurrency" th:text="#{customs_tradeworth_currency}">Trade Worth Currency</label>
 		<input type="text" id="tradeWorthCurrency" th:field="*{tradeWorthCurrency}" />		
 		
+		<div class="inline-label-checkbox">
+			<label for="completed" th:text="#{customs_completed}">Completed</label>
+	        <input type="checkbox" id="completed" th:field="*{completed}" />
+        </div>
+		
 		<button type="submit" th:text="${customs.catenaxId} == null ? #{customs_action_create} : #{customs_action_update}">Save</button>
 		<button type="button" onclick="location.href='/customs'">Abbrechen</button>
 	</form>

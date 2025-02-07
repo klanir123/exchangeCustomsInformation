@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.msg.customs.model.CustomsTypeEnum;
+import com.msg.customs.model.RequestStatusEnum;
 
 import lombok.Data;
 
@@ -15,6 +16,8 @@ public class CustomsDataDto {
 	
     private String catenaxId;
 
+    private RequestStatusEnum requestStatus;
+    
     private String customerPartNumber;
     private String customerPartName;
 
