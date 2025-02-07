@@ -43,7 +43,7 @@ public class CustomsService {
 	}
 	
 	public void saveCustoms(UiCustomsData uiCustoms) {		
-		CustomsDataDto customsData = UiCustomsMapper.toValue(uiCustoms);		
+		CustomsDataDto customsData = UiCustomsMapper.toDto(uiCustoms);		
 		restTemplate.postForEntity("http://localhost:8080/customs", customsData, Void.class);
 	}
 			

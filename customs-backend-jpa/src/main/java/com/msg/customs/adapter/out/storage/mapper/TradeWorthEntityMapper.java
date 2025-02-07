@@ -14,8 +14,10 @@ public class TradeWorthEntityMapper {
 
 	public static TradeWorth toDomain(TradeWorthEntity entity) {
 		TradeWorth tradeWorth = new TradeWorth();
-		tradeWorth.setCurrency(entity.getCurrency());
-		tradeWorth.setValue(entity.getValue());
+		if (entity != null) {
+			tradeWorth.setCurrency(entity.getCurrency());
+			tradeWorth.setValue(entity.getValue());			
+		}
 		return tradeWorth;
 	}
 	

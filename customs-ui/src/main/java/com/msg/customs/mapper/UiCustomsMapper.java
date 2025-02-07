@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.msg.customs.adapter.in.web.model.CustomsDataDto;
 import com.msg.customs.domain.UiCustomsData;
+import com.msg.customs.model.CertifiedEnum;
 
 public class UiCustomsMapper {
 	
@@ -36,6 +37,14 @@ public class UiCustomsMapper {
 		data.setOriginInformation(dto.getOriginInformation().get(0));
 		
 		data.setPrefferedStatus(dto.getPrefferedStatus());
+		if (data.getPrefferedStatus() == null) {
+            data.setPrefferedStatus(CertifiedEnum.N.name());
+		}
+            
+		data.setPrefferedStatus(dto.getPrefferedStatus());
+		if (data.getPrefferedStatus() == null) {
+			data.setPrefferedStatus(CertifiedEnum.N.name());
+		}
 		
 		data.setTradeWorthValue(dto.getTradeWorthValue());
 		data.setTradeWorthCurrency(dto.getTradeWorthCurrency());
@@ -43,7 +52,7 @@ public class UiCustomsMapper {
 		return data;
 	}
 	
-	public static CustomsDataDto toValue(UiCustomsData data) {
+	public static CustomsDataDto toDto(UiCustomsData data) {
 		CustomsDataDto dto = new CustomsDataDto();
 		
 		dto.setId(data.getId());
@@ -72,6 +81,9 @@ public class UiCustomsMapper {
 		dto.setOriginInformation(List.of(data.getOriginInformation()));
 		
 		dto.setPrefferedStatus(data.getPrefferedStatus());
+		if (dto.getPrefferedStatus() == null) {
+			dto.setPrefferedStatus(CertifiedEnum.N.name());
+		}
 		
 		dto.setTradeWorthValue(data.getTradeWorthValue());
 		dto.setTradeWorthCurrency(data.getTradeWorthCurrency());

@@ -4,7 +4,7 @@
     <title>Getting Started: Serving Web Content</title> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
-    <script>
+    <script>        
         function toggleCountrySelectionChanged() {
             var country = document.getElementById("country").value;
             var federalState = document.getElementById("federalState");
@@ -14,8 +14,44 @@
 			}
             else {
             	federalState.disabled = false
-            }            
+            }
+
+            var prefferedStatus = document.getElementById("prefferedStatus");            
+            fetch(`/union/membership/${country}`)
+            .then(response => response.json())
+            .then(isEuMember => {
+                if (isEuMember) {
+                	prefferedStatus.disabled = false;                	
+                } else {
+                	prefferedStatus.value = "N";
+                	prefferedStatus.disabled = true;
+    				tradeWorthValue.disabled = false;				
+    				tradeWorthCurrency.disabled = false;                	
+                }
+            })
+            .catch(error => console.error('Error:', error));                       
         }
+        
+    	function togglePrefferedStatusSelecttionChanged() {
+    		var prefferedStatus = document.getElementById("prefferedStatus").value;
+			var tradeWorthValue = document.getElementById("tradeWorthValue");
+			var tradeWorthCurrency = document.getElementById("tradeWorthCurrency");
+			if (prefferedStatus === "N") {
+				tradeWorthValue.disabled = false;				
+				tradeWorthCurrency.disabled = false;
+			} else {				
+				tradeWorthValue.value = "";
+				tradeWorthValue.disabled = true;
+				tradeWorthCurrency.value = "";
+				tradeWorthCurrency.disabled = true;				
+			}
+    	} 
+    	
+	    window.onload = function() {
+	    	toggleCountrySelectionChanged();	
+	    	togglePrefferedStatusSelecttionChanged();
+	    }
+    	        
     </script>    
 </head>
 <body>
@@ -79,8 +115,10 @@
 		<input type="text" id="originInformation" th:field="*{originInformation}" />
 		
 		<label for="prefferedStatus" th:text="#{customs_preffered_status}">Preffered Status</label>
-		<input type="text" id="prefferedStatus" th:field="*{prefferedStatus}" />
-		
+		<select id="prefferedStatus" th:field="*{prefferedStatus}" onchange="togglePrefferedStatusSelecttionChanged()" >
+		    <option th:each="prefferedStatus : ${certifiedOptions}" th:value="${prefferedStatus}" th:text="${prefferedStatus.getCode()}"></option>		    		    
+		</select>
+				
 		<label for="tradeWorthValue" th:text="#{customs_tradeworth_value}">Trade Worth Value</label>
 		<input type="text" id="tradeWorthValue" th:field="*{tradeWorthValue}" />
 		

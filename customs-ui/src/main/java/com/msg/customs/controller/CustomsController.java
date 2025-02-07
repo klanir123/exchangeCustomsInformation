@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.msg.customs.domain.UiCustomsData;
+import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritoryEnum;
 import com.msg.customs.model.CustomsTypeEnum;
 import com.msg.customs.model.GermanFederalStateEnum;
@@ -51,6 +52,7 @@ public class CustomsController {
         model.addAttribute("types", CustomsTypeEnum.values());
         model.addAttribute("countries", CustomsTerritoryEnum.values());
         model.addAttribute("federalStates", GermanFederalStateEnum.values());
+        model.addAttribute("certifiedOptions", CertifiedEnum.values());
     }
 
 	@PostMapping("/customs/doCreateOrUpdate")
