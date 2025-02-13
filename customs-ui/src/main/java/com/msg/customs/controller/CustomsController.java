@@ -13,6 +13,7 @@ import com.msg.customs.model.CustomsTypeEnum;
 import com.msg.customs.model.GermanFederalStateEnum;
 import com.msg.customs.service.CustomsService;
 
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +33,8 @@ public class CustomsController {
 		
 		return "customs";
 	}
+
+	
 	
 	@GetMapping("/customs/edit/{id}")
 	public String editCustomsData(@PathVariable String id, Model model) {				
@@ -63,6 +66,14 @@ public class CustomsController {
 		
 		return "redirect:/customs";
 	}
-
+	
+	@PostMapping("/customs/addOriginInformation/{originInformation}")
+	public String addOriginInformation(Model model, UiCustomsData customs, @PathParam("originInformation") String originInformation) {
+		
+		customs.getOriginInformations().add(originInformation);
+		
+		return "customsEdit::#originInformationItems";
+	}
+	
 
 }

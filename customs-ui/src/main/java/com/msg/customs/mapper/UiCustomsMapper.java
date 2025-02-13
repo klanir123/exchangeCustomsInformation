@@ -43,8 +43,8 @@ public class UiCustomsMapper {
 		
 		data.setCountry(dto.getCountry());
 		data.setFederalState(dto.getFederalState());
-		data.setOriginInformation(dto.getOriginInformation().get(0));
-		
+		data.setOriginInformations(dto.getOriginInformation());
+				
 		data.setPrefferedStatus(dto.getPrefferedStatus());
 		if (data.getPrefferedStatus() == null) {
             data.setPrefferedStatus(CertifiedEnum.N.name());
@@ -93,7 +93,7 @@ public class UiCustomsMapper {
 		
 		dto.setCountry(data.getCountry());
 		dto.setFederalState(data.getFederalState());
-		dto.setOriginInformation(List.of(data.getOriginInformation()));
+		dto.setOriginInformation(data.getOriginInformations());
 		
 		dto.setPrefferedStatus(data.getPrefferedStatus());
 		if (dto.getPrefferedStatus() == null) {

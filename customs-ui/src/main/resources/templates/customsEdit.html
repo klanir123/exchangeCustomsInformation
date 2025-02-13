@@ -4,7 +4,52 @@
     <title>Getting Started: Serving Web Content</title> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
-    <script>       
+    <script>
+	    function addOriginInformationField() {
+	        var inputField = document.getElementById("originInformation");
+	        var inputValue = inputField.value;
+	        if (inputValue.trim() !== "") {
+	        	var hiddenField = document.getElementById("originInformations");
+	        	var currentValues = hiddenField.value ? hiddenField.value.split(",") : [];
+	            currentValues.push(inputValue);
+	            hiddenField.value = currentValues.join(",");
+	        	
+	            refreshOriginTable(currentValues);
+	            
+	            inputField.value = ""; // Clear the input field
+	        }
+	    }
+	    
+	    function removeOriginInformationField(index) {
+	        var hiddenField = document.getElementById("originInformations");
+	        var currentValues = hiddenField.value ? hiddenField.value.split(",") : [];	        
+	        if (index > -1 && index < currentValues.length) {
+	            currentValues.splice(index, 1);
+	            hiddenField.value = currentValues.join(",");
+	            refreshOriginTable(currentValues);
+	        }
+	    }	    
+	    	    
+	    function refreshOriginTable(currentValues) {
+            var tableBody = document.getElementById("originInformationListBody");
+            tableBody.innerHTML = "";
+            currentValues.forEach(function (value) {
+				var row = document.createElement("tr");				
+				var cell = document.createElement("td");
+				cell.textContent = value;
+				row.appendChild(cell);
+				
+				var removeButtonCell = document.createElement("td");
+				var removeButton = document.createElement("button");
+				removeButton.textContent = "Remove";
+				removeButton.onclick = function() { removeOriginInformationField(value); };
+				removeButtonCell.appendChild(removeButton);
+				row.appendChild(removeButtonCell);				
+				
+				tableBody.appendChild(row);
+			});	            	    	
+	    }
+	    
         function toggleCountrySelectionChanged() {
             var country = document.getElementById("country").value;
             var federalState = document.getElementById("federalState");
@@ -110,9 +155,23 @@
 			<option value="" th:text="#{customs_federal_state_notset}">Select Federal State</option>
 		    <option th:each="federalState : ${federalStates}" th:value="${federalState}" th:text="${federalState.getCode()} + ' - ' + ${federalState.getFederalStateName()}"></option>		    		    
 		</select>
-				
+			
 		<label for="originInformation" th:text="#{customs_origin_information}">Origin Information</label>
-		<input type="text" id="originInformation" th:field="*{originInformation}" />
+		<div class=inline-input-button>
+			<input type="text" id="originInformation" />
+			<button type="button" onclick="addOriginInformationField()">Add</button>
+		</div>	
+		<table id="originInformationList">
+			<tbody id="originInformationListBody">
+				<tr th:each="originInformation, iterStat : ${customs.originInformations}">
+					<td th:text="${originInformation}"></td>
+					<td>
+						<button type="button" th:onclick="removeOriginInformationField([[${iterStat.index}]])">Remove</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>						
+        <input id="originInformations" type="hidden" th:field="*{originInformations}" />
 		
 		<label for="prefferedStatus" th:text="#{customs_preffered_status}">Preffered Status</label>
 		<select id="prefferedStatus" th:field="*{prefferedStatus}" onchange="togglePrefferedStatusSelecttionChanged()" >

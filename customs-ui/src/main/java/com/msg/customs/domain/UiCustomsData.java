@@ -1,11 +1,11 @@
 package com.msg.customs.domain;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.msg.customs.model.CustomsTypeEnum;
-import com.msg.customs.model.RequestStatusEnum;
 
 import lombok.Data;
 
@@ -44,7 +44,7 @@ public class UiCustomsData {
 	private String federalState;
 	
 	// Must be a list of 
-	private String originInformation;
+	private List<String> originInformations;
 	
 	private String prefferedStatus;
 	
