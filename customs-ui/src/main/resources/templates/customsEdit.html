@@ -33,19 +33,33 @@
 	    function refreshOriginTable(currentValues) {
             var tableBody = document.getElementById("originInformationListBody");
             tableBody.innerHTML = "";
-            currentValues.forEach(function (value) {
+            currentValues.forEach(function (value, index) {				
 				var row = document.createElement("tr");				
+
+	            var removeButtonCell = document.createElement("td");
+	            var removeIcon = document.createElement("img");
+	            removeIcon.src = "/icon/delete.png";
+	            removeIcon.alt = "Delete";
+	            removeIcon.className = "small-icon";
+	            removeIcon.onclick = function() { removeOriginInformationField(index); };
+	            removeButtonCell.appendChild(removeIcon);
+	            row.appendChild(removeButtonCell);				
+				
+// 				var removeButtonCell = document.createElement("td");
+// 	            var removeButton = document.createElement("button");
+// 	            var removeIcon = document.createElement("img");
+// 	            removeIcon.src = "/icon/delete.png";
+// 	            removeIcon.alt = "Delete";
+// 	            removeIcon.className = "small-icon";
+// 	            removeButton.appendChild(removeIcon);
+// 	            removeButton.onclick = function() { removeOriginInformationField(index); };
+// 	            removeButtonCell.appendChild(removeButton);
+// 	            row.appendChild(removeButtonCell);
+				
 				var cell = document.createElement("td");
 				cell.textContent = value;
 				row.appendChild(cell);
-				
-				var removeButtonCell = document.createElement("td");
-				var removeButton = document.createElement("button");
-				removeButton.textContent = "Remove";
-				removeButton.onclick = function() { removeOriginInformationField(value); };
-				removeButtonCell.appendChild(removeButton);
-				row.appendChild(removeButtonCell);				
-				
+	            
 				tableBody.appendChild(row);
 			});	            	    	
 	    }
@@ -164,10 +178,13 @@
 		<table id="originInformationList">
 			<tbody id="originInformationListBody">
 				<tr th:each="originInformation, iterStat : ${customs.originInformations}">
-					<td th:text="${originInformation}"></td>
 					<td>
-						<button type="button" th:onclick="removeOriginInformationField([[${iterStat.index}]])">Remove</button>
+						<img src="/icon/delete.png" alt="Delete" class="small-icon" th:onclick="removeOriginInformationField([[${iterStat.index}]])">
+<!-- 						<button type="button" th:onclick="removeOriginInformationField([[${iterStat.index}]])"> -->
+<!-- 							<img src="/icon/delete.png" alt="Delete" class="small-icon"> -->
+<!-- 						</button> -->
 					</td>
+					<td th:text="${originInformation}"></td>
 				</tr>
 			</tbody>
 		</table>						
