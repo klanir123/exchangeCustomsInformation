@@ -1,5 +1,7 @@
 package com.msg.customs.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,13 +29,9 @@ public class CustomsController {
 	
 	@GetMapping("/customs")
 	public String listCustomsData(Model model) {
-		model.addAttribute("name", "Thomas");
-		
-		model.addAttribute("customsList", customsService.getCustoms());
-		
+		model.addAttribute("customsList", customsService.getCustoms());		
 		return "customs";
 	}
-
 	
 	
 	@GetMapping("/customs/edit/{id}")
@@ -46,7 +44,9 @@ public class CustomsController {
 	
 	@GetMapping("/customs/create")
 	public String createCustomsData(Model model) {
-		prepareModelForEditOrCreate(model, new UiCustomsData());		
+		UiCustomsData customs = new UiCustomsData();
+		customs.setValidFrom(LocalDate.now());				
+		prepareModelForEditOrCreate(model, customs);		
 		return "customsEdit";
 	}
 	

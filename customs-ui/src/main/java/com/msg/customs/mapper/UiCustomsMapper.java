@@ -33,7 +33,7 @@ public class UiCustomsMapper {
 		// TODO setConfirmationDate
 				
 		data.setValidFrom(dto.getValidFrom());
-		// TODO use enum instead
+
 		data.setType(dto.getType());
 		
 		data.setContactName(dto.getContactName());
@@ -80,9 +80,8 @@ public class UiCustomsMapper {
 		dto.setManufacturerPartName(data.getManufacturerPartName());
 		
 		
-		// TODO setConfirmationDate
+		// TODO setConfirmationDate -> Should this been done in the UI or in the backend during save?
 		
-		// TODO: map to date
 		dto.setValidFrom(data.getValidFrom());
 		dto.setType(data.getType());
 		

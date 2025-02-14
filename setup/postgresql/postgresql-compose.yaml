@@ -1,0 +1,19 @@
+name: customs_db
+
+version: '3.7'
+
+volumes:
+  pg_data:
+    name: customs_pg_data
+
+services:
+  postgres:
+    image: docker.io/library/postgres:17.3
+    environment:
+      - POSTGRES_DB=customs
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data

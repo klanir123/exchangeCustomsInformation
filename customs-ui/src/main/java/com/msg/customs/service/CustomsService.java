@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.msg.customs.adapter.in.web.model.CustomsDataDto;
+import com.msg.customs.config.CustomsBackendProperties;
 import com.msg.customs.domain.UiCustomsData;
 import com.msg.customs.domain.UiCustomsReducedData;
 import com.msg.customs.mapper.UiCustomsMapper;
@@ -24,27 +25,33 @@ public class CustomsService {
 	
 	private final RestTemplate restTemplate;
 	
+	private final CustomsBackendProperties backendProperties;
 
 	public List<UiCustomsReducedData> getCustoms() {
 		
-		ResponseEntity<List<CustomsDataDto>> customsEntities = restTemplate.exchange(
-				"http://localhost:8080/customs", 
-				HttpMethod.GET,
-				null,
-				new ParameterizedTypeReference<List<CustomsDataDto>>() {}
-			);
-		
-		return customsEntities.getBody().stream().map(UiCustomsReducedMapper::toUiData).toList();		
+		try {
+			ResponseEntity<List<CustomsDataDto>> customsEntities = restTemplate.exchange(
+					backendProperties.customsListUrl(), 
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<List<CustomsDataDto>>() {}
+					);
+			
+			return customsEntities.getBody().stream().map(UiCustomsReducedMapper::toUiData).toList();				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return List.of();
 	}
 	
 	public UiCustomsData getCustomsData(String catenaxId) {
-		ResponseEntity<CustomsDataDto> entity = restTemplate.getForEntity("http://localhost:8080/customs/{id}", CustomsDataDto.class, Map.of("id", catenaxId));
+		ResponseEntity<CustomsDataDto> entity = restTemplate.getForEntity(backendProperties.customsEditUrl(), CustomsDataDto.class, Map.of("id", catenaxId));
 		return UiCustomsMapper.toUiData(entity.getBody());
 	}
 	
 	public void saveCustoms(UiCustomsData uiCustoms) {		
 		CustomsDataDto customsData = UiCustomsMapper.toDto(uiCustoms);		
-		restTemplate.postForEntity("http://localhost:8080/customs", customsData, Void.class);
+		restTemplate.postForEntity(backendProperties.customsUpdatetUrl(), customsData, Void.class);
 	}
 			
 }
