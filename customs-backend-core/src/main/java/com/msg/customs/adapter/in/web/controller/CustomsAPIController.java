@@ -13,6 +13,7 @@ import com.msg.customs.application.domain.model.CustomsData;
 import com.msg.customs.application.port.in.LoadCustomsDataByCatenaxIdUseCase;
 import com.msg.customs.application.port.in.LoadCustomsDataListQuery;
 import com.msg.customs.application.port.in.LoadCustomsDataListUseCase;
+import com.msg.customs.application.port.in.NotifyCustomsDataChangedUseCase;
 import com.msg.customs.application.port.in.SaveCustomsDataCommand;
 import com.msg.customs.application.port.in.SaveCustomsDataUseCase;
 
@@ -27,6 +28,7 @@ public class CustomsAPIController implements CustomsAPI {
 	private final LoadCustomsDataListUseCase loadCustomsDataUseCase;
 	private final SaveCustomsDataUseCase saveCustomsDataUseCase;
 	private final LoadCustomsDataByCatenaxIdUseCase loadCustomsDataByCatenaxIdUseCase;
+	private final NotifyCustomsDataChangedUseCase notifyCustomsDataChangedUseCase;
 	
 	@Override
 	public ResponseEntity<List<CustomsDataDto>> getCustomsData() {
@@ -53,5 +55,12 @@ public class CustomsAPIController implements CustomsAPI {
 		saveCustomsDataUseCase.saveCustomsData(SaveCustomsDataCommand.builder().customsData(customsData).build());
 		return ResponseEntity.ok().build();
 	}
+
+	@Override
+	public ResponseEntity<Void> notifyCustomsDataUpdated(List<String> catenaxIds) { 
+		notifyCustomsDataChangedUseCase.notifyCustomsDataChanged(catenaxIds);
+		return ResponseEntity.ok().build();
+	}
+
 
 }

@@ -18,8 +18,8 @@ public class CustomsDataValueMapper {
         dto.setRequestStatus(data.getRequestStatus());
         dto.setCustomerPartNumber(data.getCustomerPart().getNumber());
         dto.setCustomerPartName(data.getCustomerPart().getName());
-        dto.setManufacturerPartNumber(data.getManufacturePart().getNumber());
-        dto.setManufacturerPartName(data.getManufacturePart().getName());
+        dto.setManufacturerPartNumber(data.getManufacturerPart().getNumber());
+        dto.setManufacturerPartName(data.getManufacturerPart().getName());
         dto.setType(data.getType());
         dto.setConfirmationDate(data.getConfirmationDate());
         dto.setValidFrom(data.getValidFrom());
@@ -50,7 +50,7 @@ public class CustomsDataValueMapper {
         Part manufacturePart = new Part();
         manufacturePart.setNumber(dto.getManufacturerPartNumber());
         manufacturePart.setName(dto.getManufacturerPartName());
-        data.setManufacturePart(manufacturePart);
+        data.setManufacturerPart(manufacturePart);
 
         data.setType(dto.getType());
         data.setConfirmationDate(dto.getConfirmationDate());

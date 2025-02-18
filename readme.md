@@ -2,6 +2,30 @@
 
 ## Development
 
+This project is split into the following structure. This structure follows the DDD principles (Ports and Adapters, Onion Architecture):
+
+```
++- customs-commons
+ - customs-backend-app
+ - customs-backend-core // DDD driven structure
+   + adapter
+     - in
+       - web // RestAPI implementation
+     - out
+       - storage       // storage tasks
+       - notifications // notification tasks
+   + application
+     - domain
+       - model
+       - service
+     + port // Use cases for incoming and outgoing operations
+       - in
+       - out 	
+ - customs-backend-api // API part which provides a RestAPI for the UI
+ - customs-backend-jap // JPA implementation (Liquibase, H2, PostgreSQL)
+ - customs-ui
+```
+
 The projects is split into two parts.
 
 ### customs-backend-app
@@ -13,6 +37,8 @@ Currently there are two profiles defined:
 * h2: Uses an in memory test database
 * dev: uses a postgresql test database. (See the postgresql-compose.yml file to setup the database)
 
+> The database is configured by using liquibase. 
+
 ### customs-ui
 
 This module provides a UI. This module communicates with the backend using rest calls.
@@ -23,9 +49,6 @@ There are two common modules.
 
 * customs-commons: This module contains common data model (like enums)
 * customs-backend-api: This module contains the API for the rest calls.
-
-
-
 
 ## Setup Containerfile
 
@@ -66,7 +89,7 @@ file simply contains the setup of a postgresql database. This setup can be used 
 postgresql database.
 
 ```bash
-docker-compose -f postgresql-compose.yaml up
+docker-compose -f postgresql-compose.yaml up -d
 ```
 
 

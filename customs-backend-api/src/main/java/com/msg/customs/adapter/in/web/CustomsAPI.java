@@ -28,5 +28,9 @@ public interface CustomsAPI {
 	
 	@PostMapping
 	ResponseEntity<Void> saveCustomsData(@RequestBody CustomsDataDto customsData);
+	
+	
+	@GetMapping(value = "/notify") 
+	ResponseEntity<Void> notifyCustomsDataUpdated(@RequestBody List<String> catenaxIds);
 		
 }

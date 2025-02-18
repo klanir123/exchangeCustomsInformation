@@ -14,7 +14,7 @@ public class CustomsDataEntityMapper {
         entity.setRequestStatus(data.getRequestStatus());
 
         entity.setCustomerPart(PartEntityMapper.toEntity(data.getCustomerPart()));
-        entity.setManufacturePart(PartEntityMapper.toEntity(data.getManufacturePart()));
+        entity.setManufacturePart(PartEntityMapper.toEntity(data.getManufacturerPart()));
 
         entity.setType(data.getType());
         entity.setConfirmationDate(data.getConfirmationDate());
@@ -41,7 +41,7 @@ public class CustomsDataEntityMapper {
         data.setRequestStatus(entity.getRequestStatus());
 
         data.setCustomerPart(PartEntityMapper.toDomain(entity.getCustomerPart()));
-        data.setManufacturePart(PartEntityMapper.toDomain(entity.getManufacturePart()));
+        data.setManufacturerPart(PartEntityMapper.toDomain(entity.getManufacturePart()));
 
         data.setType(entity.getType());
         data.setConfirmationDate(entity.getConfirmationDate());

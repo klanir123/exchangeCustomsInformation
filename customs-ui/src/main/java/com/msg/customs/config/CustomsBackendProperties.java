@@ -20,6 +20,10 @@ public class CustomsBackendProperties {
 		return uri + "/customs/{id}";
 	}
 	
+	public String customsNotifyUrl() {
+		return uri + "/customs/notify";
+	}
+	
 	public String customsUpdatetUrl() {
 		return uri + "/customs";
 	}

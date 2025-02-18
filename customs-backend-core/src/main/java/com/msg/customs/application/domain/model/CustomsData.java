@@ -1,7 +1,6 @@
 package com.msg.customs.application.domain.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import com.msg.customs.model.CertifiedEnum;
@@ -24,7 +23,7 @@ public class CustomsData {
 	
 	private Part customerPart;
 	
-	private Part manufacturePart;
+	private Part manufacturerPart;
 	
 	// required
 	private CustomsTypeEnum type;

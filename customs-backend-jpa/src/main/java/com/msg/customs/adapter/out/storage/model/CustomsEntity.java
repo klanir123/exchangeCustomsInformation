@@ -27,6 +27,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -100,4 +101,11 @@ public class CustomsEntity {
 
     @Embedded
     private TradeWorthEntity tradeWorth;
+    
+    @PrePersist
+    public void prePersist() {
+    	if (confirmationDate == null) {
+    		confirmationDate = LocalDate.now();
+    	}
+    }
 }
