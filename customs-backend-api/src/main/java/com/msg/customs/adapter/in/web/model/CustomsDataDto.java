@@ -1,7 +1,6 @@
 package com.msg.customs.adapter.in.web.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import com.msg.customs.model.CustomsTypeEnum;

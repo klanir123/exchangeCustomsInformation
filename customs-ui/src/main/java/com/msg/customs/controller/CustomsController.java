@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.msg.customs.domain.UiCustomsData;
-import com.msg.customs.domain.UiCustomsReducedData;
 import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritoryEnum;
 import com.msg.customs.model.CustomsTypeEnum;
