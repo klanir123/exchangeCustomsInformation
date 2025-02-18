@@ -3,12 +3,15 @@ package com.msg.customs.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.msg.customs.domain.NotifyRequest;
 import com.msg.customs.domain.UiCustomsData;
 import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritoryEnum;
@@ -76,15 +79,11 @@ public class CustomsController {
 		return "customsEdit::#originInformationItems";
 	}
 	
-	@GetMapping("/customs/notify")
-	public String notifyCustomsDataUpdates(Model model) {
-		
-		List<String> customs = customsService.getCustomsCatenaxIds();
-		customsService.notifyCustomsDataChanged(customs);
-				
-		return "redirect:/customs";
-	}	
+    @PostMapping("/customs/notify")
+    public ResponseEntity<Void> notifySelected(@RequestBody NotifyRequest notifyRequest) {
+        List<String> catenaxIds = notifyRequest.getCatenaxIds();
+        customsService.notifyCustomsDataChanged(catenaxIds);
+        return ResponseEntity.ok().build();
+    }	
 	
-	
-
 }
