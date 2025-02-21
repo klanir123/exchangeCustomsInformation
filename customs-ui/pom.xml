@@ -43,7 +43,29 @@
 					</excludes>
 				</configuration>
 			</plugin>
+<!--	        <plugin>-->
+<!--	            <groupId>org.openapitools</groupId>-->
+<!--	            <artifactId>openapi-generator-maven-plugin</artifactId>-->
+<!--	            <version>6.0.1</version>-->
+<!--	            <executions>-->
+<!--	                <execution>-->
+<!--	                    <goals>-->
+<!--	                        <goal>generate</goal>-->
+<!--	                    </goals>-->
+<!--	                    <configuration>-->
+<!--	                        <inputSpec>${project.basedir}/src/main/resources/api-docs.json</inputSpec>-->
+<!--	                        <generatorName>spring</generatorName>-->
+<!--	                        <output>${project.build.directory}/generated-sources/api</output>-->
+<!--	                        <apiPackage>com.example.api</apiPackage>-->
+<!--	                        <modelPackage>com.example.model</modelPackage>-->
+<!--	                        <configOptions>-->
+<!--	                            <interfaceOnly>true</interfaceOnly>-->
+<!--	                        </configOptions>-->
+<!--	                    </configuration>-->
+<!--	                </execution>-->
+<!--	            </executions>-->
+<!--	        </plugin>			-->
 		</plugins>
 	</build>
-	
+		
 </project>
