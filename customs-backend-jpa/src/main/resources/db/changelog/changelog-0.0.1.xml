@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<databaseChangeLog  
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"  
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xmlns:pro="http://www.liquibase.org/xml/ns/pro"  
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">  
+
+	<changeSet id="initial" author="tberger">
+	
+	    <createTable tableName="customs">
+	        <column name="id" type="bigint" autoIncrement="true">
+	            <constraints primaryKey="true" nullable="false"/>
+	        </column>
+	        <column name="catenax_id" type="varchar(255)">
+	            <constraints nullable="false" unique="true"/>
+	        </column>
+			<column name="request_status" type="varchar(255)"/>	        
+	        <column name="customer_part_number" type="varchar(255)"/>
+	        <column name="customer_part_name" type="varchar(255)"/>
+	        <column name="manufacturer_part_number" type="varchar(255)"/>
+	        <column name="manufacturer_part_name" type="varchar(255)"/>
+	        <column name="type" type="varchar(255)">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="confirmation_date" type="timestamp"/>
+	        <column name="valid_from" type="timestamp">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="contact_name" type="varchar(255)">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="contact_email" type="varchar(255)">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="contact_phone" type="varchar(255)">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="contact_job_title" type="varchar(255)">
+	            <constraints nullable="false"/>
+	        </column>	        
+	        <column name="country" type="varchar(255)">
+	            <constraints nullable="false"/>
+	        </column>
+	        <column name="federal_state" type="varchar(255)"/>
+	        <column name="origin_information" type="varchar(255)"/>
+	        <column name="preffered_status" type="varchar(255)"/>
+	        <column name="trade_worth_value" type="varchar(255)"/>
+	        <column name="trade_worth_currency" type="varchar(255)"/>
+	    </createTable>
+	    
+        <createTable tableName="customs_origin_information">
+            <column name="customs_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="origin_information" type="VARCHAR(255)"/>
+        </createTable>
+	    
+	    <addForeignKeyConstraint constraintName="fk_customs_origin_information_customs"
+	                             baseTableName="customs_origin_information"
+	                             baseColumnNames="customs_id"
+	                             referencedTableName="customs"
+	                             referencedColumnNames="id"/>	    
+	    
+	</changeSet>	
+	
+</databaseChangeLog>

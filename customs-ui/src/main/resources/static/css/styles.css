@@ -1,0 +1,158 @@
+
+/* customs-ui/src/main/resources/static/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* customs-ui/src/main/resources/static/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+select {
+	width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;	
+}
+
+input:disabled, select:disabled {
+    background-color: #f0f0f0; /* Light gray background */
+    color: #a0a0a0; /* Gray text color */
+    border: 1px solid #d0d0d0; /* Light gray border */
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.inline-label-checkbox {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.inline-label-checkbox label {
+    margin-right: 10px;
+}
+
+.inline-input-button input {
+	width: 80%;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.inline-input-button  button {
+    margin-right: 10px;
+}
+
+#originInformationList {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0px;
+    margin-bottom: 30px; /* Add margin-bottom to increase the distance to the next element */     
+}
+
+#originInformationList td:first-child {
+    width: 30px; /* Adjust the width as needed */
+    text-align: center; /* Center the icon */
+}
+
+#originInformationList th, #originInformationList td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid 
+#ddd;
+}
+
+#originInformationList th {
+    background-color: 
+#f2f2f2;
+}
+
+#originInformationList tr:nth-child(even) {
+    background-color: 
+#f9f9f9;
+}
+
+#originInformationList tr:hover {
+    background-color: 
+#f1f1f1;
+}
+
+.small-icon {
+    width: 24px;
+    height: 24px;
+}
+

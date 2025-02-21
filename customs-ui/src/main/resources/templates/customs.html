@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+    <script>
+        function notifySelected() {
+            const selectedIds = Array.from(document.querySelectorAll('input[name="selectedIds"]:checked'))
+                .map(checkbox => checkbox.value);
+            fetch('/customs/notify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ catenaxIds: selectedIds })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Notification sent successfully');
+                    document.querySelectorAll('input[name="selectedIds"]:checked').forEach(checkbox => checkbox.checked = false);
+                } else {
+                    alert('Failed to send notification');
+                }
+            });
+        }
+    </script>    
+</head>
+<body>
+	<h1 th:text="#{overview_header}">Parts Customs Data</h1>
+	
+	<button onclick="location.href='/customs/create'">Create New Customs Data</button>
+	<button onclick="notifySelected()">Notify selected</button>
+	
+	<table>
+        <thead>
+            <tr>     
+            	<th>Select</th>       
+                <th th:text="#{overview_catenax_id}">Catena-X Id</th>
+                <th th:text="#{overview_customer_part_number}">Customer Part Number</th>
+                <th th:text="#{overview_customer_part_name}">Customer Part Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="custom : ${customsList}">
+            	<td><input type="checkbox" name="selectedIds" th:value="${custom.catenaxId}" /></td>
+				<td>
+            		<a th:href="@{/customs/edit/{id}(id=${custom.catenaxId})}" th:text="${custom.catenaxId}">Edit</a>
+        		</td>            
+                <td th:text="${custom.customerPartNumber}"></td>
+                <td th:text="${custom.customerPartName}"></td>
+            </tr>
+        </tbody>
+	</table>
+		
+</body>
+</html>

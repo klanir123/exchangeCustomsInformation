@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+    <script>
+	    function addOriginInformationField() {
+	        var inputField = document.getElementById("originInformation");
+	        var inputValue = inputField.value;
+	        if (inputValue.trim() !== "") {
+	        	var hiddenField = document.getElementById("originInformations");
+	        	var currentValues = hiddenField.value ? hiddenField.value.split(",") : [];
+	            currentValues.push(inputValue);
+	            hiddenField.value = currentValues.join(",");
+	        	
+	            refreshOriginTable(currentValues);
+	            
+	            inputField.value = ""; // Clear the input field
+	        }
+	    }
+	    
+	    function removeOriginInformationField(index) {
+	        var hiddenField = document.getElementById("originInformations");
+	        var currentValues = hiddenField.value ? hiddenField.value.split(",") : [];	        
+	        if (index > -1 && index < currentValues.length) {
+	            currentValues.splice(index, 1);
+	            hiddenField.value = currentValues.join(",");
+	            refreshOriginTable(currentValues);
+	        }
+	    }	    
+	    	    
+	    function refreshOriginTable(currentValues) {
+            var tableBody = document.getElementById("originInformationListBody");
+            tableBody.innerHTML = "";
+            currentValues.forEach(function (value, index) {				
+				var row = document.createElement("tr");				
+
+	            var removeButtonCell = document.createElement("td");
+	            var removeIcon = document.createElement("img");
+	            removeIcon.src = "/icon/delete.png";
+	            removeIcon.alt = "Delete";
+	            removeIcon.className = "small-icon";
+	            removeIcon.onclick = function() { removeOriginInformationField(index); };
+	            removeButtonCell.appendChild(removeIcon);
+	            row.appendChild(removeButtonCell);				
+				
+// 				var removeButtonCell = document.createElement("td");
+// 	            var removeButton = document.createElement("button");
+// 	            var removeIcon = document.createElement("img");
+// 	            removeIcon.src = "/icon/delete.png";
+// 	            removeIcon.alt = "Delete";
+// 	            removeIcon.className = "small-icon";
+// 	            removeButton.appendChild(removeIcon);
+// 	            removeButton.onclick = function() { removeOriginInformationField(index); };
+// 	            removeButtonCell.appendChild(removeButton);
+// 	            row.appendChild(removeButtonCell);
+				
+				var cell = document.createElement("td");
+				cell.textContent = value;
+				row.appendChild(cell);
+	            
+				tableBody.appendChild(row);
+			});	            	    	
+	    }
+	    
+        function toggleCountrySelectionChanged() {
+            var country = document.getElementById("country").value;
+            var federalState = document.getElementById("federalState");
+            if (country !== "DE") {
+				federalState.value = "";
+				federalState.disabled = true
+			}
+            else {
+            	federalState.disabled = false
+            }
+
+            var prefferedStatus = document.getElementById("prefferedStatus");            
+            fetch(`/union/membership/${country}`)
+            .then(response => response.json())
+            .then(isEuMember => {
+                if (isEuMember) {
+                	prefferedStatus.disabled = false;                	
+                } else {
+                	prefferedStatus.value = "N";
+                	prefferedStatus.disabled = true;
+    				tradeWorthValue.disabled = false;				
+    				tradeWorthCurrency.disabled = false;                	
+                }
+            })
+            .catch(error => console.error('Error:', error));                       
+        }
+        
+    	function togglePrefferedStatusSelecttionChanged() {
+    		var prefferedStatus = document.getElementById("prefferedStatus").value;
+			var tradeWorthValue = document.getElementById("tradeWorthValue");
+			var tradeWorthCurrency = document.getElementById("tradeWorthCurrency");
+			if (prefferedStatus === "N") {
+				tradeWorthValue.disabled = false;				
+				tradeWorthCurrency.disabled = false;
+			} else {				
+				tradeWorthValue.value = "";
+				tradeWorthValue.disabled = true;
+				tradeWorthCurrency.value = "";
+				tradeWorthCurrency.disabled = true;				
+			}
+    	} 
+    	
+	    window.onload = function() {
+	    	toggleCountrySelectionChanged();	
+	    	togglePrefferedStatusSelecttionChanged();
+	    }
+    	        
+    </script>    
+</head>
+<body>
+	<h1 th:text="#{customs_header}">Parts Customs Data</h1>
+	
+	<form action="#" th:action="@{/customs/doCreateOrUpdate}" th:object="${customs}" method="post">
+	
+		<input type="hidden" th:field="*{id}" />
+	
+		<label for="catenaxId" th:text="#{customs_catenax_id}">Catena-X Id</label>
+		<input type="text" id="catenaxId" th:field="*{catenaxId}" th:disabled="${customs.catenaxId} != null" />
+		<input type="hidden" th:field="*{catenaxId}" th:if="${customs.catenaxId} != null" />
+		
+		<label for="customerPartNumber" th:text="#{customs_customer_part_number}">Teilenummer beim Kunden</label>
+		<input type="text" id="customerPartNumber" th:field="*{customerPartNumber}" th:disabled="${customs.catenaxId} != null" />
+		<input type="hidden" th:field="*{customerPartNumber}" th:if="${customs.catenaxId} != null" />
+		
+		<label for="customerPartName" th:text="#{customs_customer_part_name}">Teilename beim Kunden</label>
+		<input type="text" id="customerPartName" th:field="*{customerPartName}" />
+		
+		<label for="manufacturerPartNumber" th:text="#{customs_manufacturer_part_number}">Teilenummer beim Hersteller</label>
+		<input type="text" id="manufacturerPartNumber" th:field="*{manufacturerPartNumber}" />
+		
+		<label for="manufacturerPartName" th:text="#{customs_manufacturer_part_name}">Teilename beim Hersteller</label>
+		<input type="text" id="manufacturerPartName" th:field="*{manufacturerPartName}" />
+				
+		<label for="type" th:text="#{customs_type}">Type</label>
+		<select id="type" th:field="*{type}">
+			<option value="" th:text="#{customs_type_notset}">Select Type</option>
+		    <option th:each="type : ${types}" th:value="${type}" th:with="typeName = 'customs_type_' + ${type.name().toLowerCase()}" th:text="#{${typeName}}"></option>		    		    
+		</select>
+						
+		<label for="validFrom" th:text="#{customs_valid_from}">Valid From</label>
+		<input type="date" id="validFrom" th:field="*{validFrom}" />
+		
+		<label for="contactName" th:text="#{customs_contact_name}">Contact Name</label>
+		<input type="text" id="contactName" th:field="*{contactName}" />
+		
+		<label for="contactEmail" th:text="#{customs_contact_email}">Contact Email</label>
+		<input type="text" id="contactEmail" th:field="*{contactEmail}" />
+		
+		<label for="contactPhone" th:text="#{customs_contact_phone}">Contact Phone</label>
+		<input type="text" id="contactPhone" th:field="*{contactPhone}" />
+		
+		<label for="contactJobTitle" th:text="#{customs_contact_jobtitle}">Contact Job Title</label>
+		<input type="text" id="contactJobTitle" th:field="*{contactJobTitle}" />
+		
+		<label for="country" th:text="#{customs_country}">Country</label>
+		<select id="country" th:field="*{country}" onchange="toggleCountrySelectionChanged()">
+			<option value="" th:text="#{customs_country_notset}">Select Country</option>
+		    <option th:each="country : ${countries}" th:value="${country}" th:with="countryName = 'customs_country_' + ${country.getCode().toLowerCase()}" th:text="${country.getCode()} + ' - ' + #{${countryName}}"></option>		    		    
+		</select>
+		
+		<label for="federalState" th:text="#{customs_federal_state}">State</label>
+		<select id="federalState" th:field="*{federalState}" >
+			<option value="" th:text="#{customs_federal_state_notset}">Select Federal State</option>
+		    <option th:each="federalState : ${federalStates}" th:value="${federalState}" th:text="${federalState.getCode()} + ' - ' + ${federalState.getFederalStateName()}"></option>		    		    
+		</select>
+			
+		<label for="originInformation" th:text="#{customs_origin_information}">Origin Information</label>
+		<div class=inline-input-button>
+			<input type="text" id="originInformation" />
+			<button type="button" onclick="addOriginInformationField()">Add</button>
+		</div>	
+		<table id="originInformationList">
+			<tbody id="originInformationListBody">
+				<tr th:each="originInformation, iterStat : ${customs.originInformations}">
+					<td>
+						<img src="/icon/delete.png" alt="Delete" class="small-icon" th:onclick="removeOriginInformationField([[${iterStat.index}]])">
+<!-- 						<button type="button" th:onclick="removeOriginInformationField([[${iterStat.index}]])"> -->
+<!-- 							<img src="/icon/delete.png" alt="Delete" class="small-icon"> -->
+<!-- 						</button> -->
+					</td>
+					<td th:text="${originInformation}"></td>
+				</tr>
+			</tbody>
+		</table>						
+        <input id="originInformations" type="hidden" th:field="*{originInformations}" />
+		
+		<label for="prefferedStatus" th:text="#{customs_preffered_status}">Preffered Status</label>
+		<select id="prefferedStatus" th:field="*{prefferedStatus}" onchange="togglePrefferedStatusSelecttionChanged()" >
+		    <option th:each="prefferedStatus : ${certifiedOptions}" th:value="${prefferedStatus}" th:text="${prefferedStatus.getCode()}"></option>		    		    
+		</select>
+				
+		<label for="tradeWorthValue" th:text="#{customs_tradeworth_value}">Trade Worth Value</label>
+		<input type="text" id="tradeWorthValue" th:field="*{tradeWorthValue}" />
+		
+		<label for="tradeWorthCurrency" th:text="#{customs_tradeworth_currency}">Trade Worth Currency</label>
+		<input type="text" id="tradeWorthCurrency" th:field="*{tradeWorthCurrency}" />		
+		
+		<div class="inline-label-checkbox">
+			<label for="completed" th:text="#{customs_completed}">Completed</label>
+	        <input type="checkbox" id="completed" th:field="*{completed}" />
+        </div>
+		
+		<button type="submit" th:text="${customs.catenaxId} == null ? #{customs_action_create} : #{customs_action_update}">Save</button>
+		<button type="button" onclick="location.href='/customs'">Abbrechen</button>
+	</form>
+		
+</body>
+</html>
