@@ -1,5 +1,12 @@
 # Application information
 
+## Deployment
+
+Currently there is a docker-compose file which can be used for a deployment on Docker or Podman. For this you need to compile the modules (e.g. mvn clean install), 
+build the image and deploy the result to a container engine.
+
+See the section: Setup Containerfiles 
+
 ## Development
 
 This project is split into the following structure. This structure follows the DDD principles (Ports and Adapters, Onion Architecture):
@@ -23,14 +30,21 @@ This project is split into the following structure. This structure follows the D
        - out 	
  - customs-backend-api // API part which provides a RestAPI for the UI
  - customs-backend-jap // JPA implementation (Liquibase, H2, PostgreSQL)
- - customs-ui
+ - customs-ui // uses the customs-commons, customs-backend-api)
 ```
 
-The projects is split into two parts.
+The projects is split into two parts (customs-backend-xxx and customs-ui).
+
+> Using an OpenAPI configuration would be a better choice. Currently the customs-backend-app generates the OpenAPI documents (e.g. http://localhost:8080/v3/api-docs, http://localhost:8080/v3/api-docs.yaml) 
+> and a Swagger-Ui (e.g. http://localhost:8080/swagger-ui/index.html). The target must be that the customs-ui uses the OpenAPI api-docs to generate the API for the communication. In this case the customs-ui
+> is independent and does not need to import the customs-backend-api directly.
+
 
 ### customs-backend-app
 
 This module has no UI and provides the necessary backend actions.
+
+#### database
 
 Currently there are two profiles defined:
 
@@ -38,6 +52,15 @@ Currently there are two profiles defined:
 * dev: uses a postgresql test database. (See the postgresql-compose.yml file to setup the database)
 
 > The database is configured by using liquibase. 
+
+The database configuration files are used indirectly. This means that there are Spring compatible configuration files (db.yaml, db-dev.yaml, db-h2.yaml) which are not loaded directly 
+by Spring during start up. Instead this configuration files needs to be imported by the application.yaml file in the module customs-backend-app. To support the profiles (h2, dev) the 
+db.yaml file in the module customs-backend-jpa itself imports the profiles.
+
+> Why is the database module not part of the customs-backend-core? 
+>
+> The basic idea behind this decision is that we probably want to use another storage engine (e.g. BaSyx) later on. In this case the customs-backend-app could be copied, the pom.xml 
+> must be changed to import the different modules (e.g. BaSyx) and the application.yaml must configure the new modules.
 
 ### customs-ui
 
@@ -50,7 +73,7 @@ There are two common modules.
 * customs-commons: This module contains common data model (like enums)
 * customs-backend-api: This module contains the API for the rest calls.
 
-## Setup Containerfile
+## Setup Containerfiles
 
 > Tip: If you use Podman simply replace the 'docker' command by 'podman' and 'docker-compose' by 'podman-compose'. For 'podman-compose' the compose libraries must be in the path.
 

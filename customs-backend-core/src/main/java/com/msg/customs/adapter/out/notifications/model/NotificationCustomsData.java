@@ -12,6 +12,9 @@ import com.msg.customs.model.RequestStatusEnum;
 
 import lombok.Data;
 
+/**
+ * Notification data for customs.
+ */
 @Data
 public class NotificationCustomsData {
 

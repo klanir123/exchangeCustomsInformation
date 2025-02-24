@@ -6,6 +6,9 @@ import com.msg.customs.model.GermanFederalStateEnum;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
+/**
+ * Converter for the {@link FederalState} enum.
+ */
 @Converter
 public class FederalStateConverter implements AttributeConverter<FederalState, String> {
 

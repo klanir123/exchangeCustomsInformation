@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Database representation of a part.
+ */
 @Getter
 @Setter
 @ToString

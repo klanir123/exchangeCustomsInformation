@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+
+/**
+ * Command to save customs data.
+ */
 @RequiredArgsConstructor
 @Builder
 @Getter

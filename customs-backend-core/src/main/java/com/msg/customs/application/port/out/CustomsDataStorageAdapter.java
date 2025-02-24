@@ -4,13 +4,36 @@ import java.util.List;
 
 import com.msg.customs.application.domain.model.CustomsData;
 
+/**
+ * Adapter to store and load customs data.
+ */
 public interface CustomsDataStorageAdapter {
 
+	/**
+	 * Load all customs data.
+	 * @return list with all customs data
+	 */
 	List<CustomsData> loadCustomsData();
 	
+	/**
+	 * Load customs data by catenax ids.
+	 * 
+	 * @param catenaxIds list with the catenax ids of the customs data to load.
+	 * @return list of loaded customs data.
+	 */
 	List<CustomsData> loadCustomsDataByCatenaxIds(List<String> catenaxIds);
 	
+	/**
+	 * Load customs data by catenax id.
+	 * @param catenaxId the catenax id of the customs data to load.
+	 * @return the loaded customs data.
+	 */
+	CustomsData loadCustomsDataByCatenaxId(String catenaxId);
+	
+	/**
+	 * Save customs data.
+	 * @param customsData customs data to save
+	 */
 	void saveCustomsData(CustomsData customsData);
 
-	CustomsData loadCustomsDataByCatenaxId(String catenaxId);
 }

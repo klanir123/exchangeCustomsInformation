@@ -11,6 +11,9 @@ import com.msg.customs.application.port.out.CustomsDataStorageAdapter;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Service implementing the UseCases to notify about customs data changes.
+ */
 @RequiredArgsConstructor
 @Service
 public class CustomsDataNotificationService implements NotifyCustomsDataChangedUseCase {

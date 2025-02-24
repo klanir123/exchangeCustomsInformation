@@ -11,6 +11,9 @@ import com.msg.customs.model.RequestStatusEnum;
 
 import lombok.Data;
 
+/**
+ * 
+ */
 @Data
 public class CustomsData {
 	

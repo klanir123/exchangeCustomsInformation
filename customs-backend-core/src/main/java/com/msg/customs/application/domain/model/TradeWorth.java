@@ -2,6 +2,9 @@ package com.msg.customs.application.domain.model;
 
 import lombok.Data;
 
+/**
+ * Domain trade worth data.
+ */
 @Data
 public class TradeWorth {
 	

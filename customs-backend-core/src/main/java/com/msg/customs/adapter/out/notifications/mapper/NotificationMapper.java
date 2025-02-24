@@ -7,9 +7,18 @@ import com.msg.customs.adapter.out.notifications.model.NotificationPart;
 import com.msg.customs.adapter.out.notifications.model.NotificationTradeWorth;
 import com.msg.customs.application.domain.model.CustomsData;
 
+/**
+ * Mapper to map the customs data to the notification data.
+ */
 public class NotificationMapper {
 
 	
+	/**
+     * Maps the customs data to the notification data.
+     * 
+     * @param data the customs data
+     * @return the notification data.
+     */
 	public static NotificationData toNotification(CustomsData data) {
 		NotificationData notification = new NotificationData();
 
@@ -19,6 +28,9 @@ public class NotificationMapper {
 		return notification;
 	}
 	
+	/**
+	 * Maps the customs data to the notification representing some of the customs data.
+	 */
 	public static NotificationCustomsData toNotificationCustomsData(CustomsData data) {
 		NotificationCustomsData notification = new NotificationCustomsData();
 
@@ -40,7 +52,9 @@ public class NotificationMapper {
 		return notification;
 	}
 	
-	
+	/**
+	 * Maps the customs data to the notification representing the part data.
+	 */	
 	public static NotificationPart toNotificationPartData(CustomsData data) {
 		NotificationPart notification = new NotificationPart();
 		
@@ -51,7 +65,10 @@ public class NotificationMapper {
 				
 		return notification;
 	}
-	
+
+	/**
+	 * Maps the customs data to the notification representing the part trade worth.
+	 */		
 	public static NotificationTradeWorth toNotificationTradeWorthData(CustomsData data) {
 		NotificationTradeWorth notification = new NotificationTradeWorth();
 
@@ -67,6 +84,9 @@ public class NotificationMapper {
 		return notification;
 	}
 	
+	/**
+	 * Maps the customs data to the notification representing the contact data.
+	 */				
 	public static NotificationContactData toNotificationContactData(CustomsData data) {
 		NotificationContactData notification = new NotificationContactData();
 

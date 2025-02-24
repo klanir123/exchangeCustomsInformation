@@ -14,6 +14,9 @@ import com.msg.customs.application.port.out.CustomsDataStorageAdapter;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Service to manage customs data storage UseCases.
+ */
 @RequiredArgsConstructor
 @Service
 public class CustomsDataService implements LoadCustomsDataListUseCase, SaveCustomsDataUseCase, LoadCustomsDataByCatenaxIdUseCase {	
@@ -29,13 +32,13 @@ public class CustomsDataService implements LoadCustomsDataListUseCase, SaveCusto
 	}
 
 	@Override
-	public void saveCustomsData(SaveCustomsDataCommand commandCustomsData) {
-		customsStorageAdapter.saveCustomsData(commandCustomsData.getCustomsData());		
-	}
-
-	@Override
 	public CustomsData loadCustomsData(String catenaxId) {
 		return customsStorageAdapter.loadCustomsDataByCatenaxId(catenaxId);
+	}
+	
+	@Override
+	public void saveCustomsData(SaveCustomsDataCommand commandCustomsData) {
+		customsStorageAdapter.saveCustomsData(commandCustomsData.getCustomsData());		
 	}
 
 }

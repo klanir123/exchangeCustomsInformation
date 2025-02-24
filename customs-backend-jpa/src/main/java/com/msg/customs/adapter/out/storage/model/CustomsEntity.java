@@ -33,6 +33,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Database representation of customs data.
+ */
 @Getter
 @Setter
 @ToString

@@ -8,6 +8,9 @@ import com.msg.customs.model.RequestStatusEnum;
 
 import lombok.Data;
 
+/**
+ * Simple class to exchange customs data with ui.
+ */
 @Data
 public class CustomsDataDto {
 	

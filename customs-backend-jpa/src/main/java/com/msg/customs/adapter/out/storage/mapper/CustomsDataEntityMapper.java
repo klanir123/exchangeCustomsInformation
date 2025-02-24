@@ -3,8 +3,16 @@ package com.msg.customs.adapter.out.storage.mapper;
 import com.msg.customs.adapter.out.storage.model.CustomsEntity;
 import com.msg.customs.application.domain.model.CustomsData;
 
+/**
+ * Mapper for customs data domain model and entity.
+ */
 public class CustomsDataEntityMapper {
 
+	/**
+	 * Maps the customs data domain model data to the entity. 
+	 * @param data the customs data domain model
+	 * @return the customs data entity
+	 */
     public static CustomsEntity toEntity(CustomsData data) {
         CustomsEntity entity = new CustomsEntity();
         
@@ -32,6 +40,11 @@ public class CustomsDataEntityMapper {
         return entity;
     }
     
+    /**
+     * Maps the customs data entity to the domain model.
+     * @param entity the customs data entity 
+     * @return the customs data domain model
+     */
     public static CustomsData toDomain(CustomsEntity entity) {
         CustomsData data = new CustomsData();
         

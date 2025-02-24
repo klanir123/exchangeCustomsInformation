@@ -12,6 +12,9 @@ import com.msg.customs.common.config.Adapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * JPA implementation of the CustomsDataStorageAdapter.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Adapter

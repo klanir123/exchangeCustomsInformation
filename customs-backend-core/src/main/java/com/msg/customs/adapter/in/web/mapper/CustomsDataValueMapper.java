@@ -9,9 +9,17 @@ import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritoryEnum;
 import com.msg.customs.model.GermanFederalStateEnum;
 
+/**
+ * Mapper to map the Dto to the internal customs data representation.
+ */
 public class CustomsDataValueMapper {
 
-    public static CustomsDataDto toValue(CustomsData data) {
+	/**
+	 * Maps the internal customs data to the Dto.
+	 * @param data the customs data
+	 * @return the dto.	
+	 */
+    public static CustomsDataDto toDto(CustomsData data) {
         CustomsDataDto dto = new CustomsDataDto();
         dto.setId(data.getId());
         dto.setCatenaxId(data.getCatenaxId());
@@ -36,6 +44,12 @@ public class CustomsDataValueMapper {
         return dto;
     }
 
+	/**
+	 * Maps the Dto to the internal customs data.
+	 * 
+	 * @param dto the dto
+	 * @return the customs data.
+	 */
     public static CustomsData toDomain(CustomsDataDto dto) {
         CustomsData data = new CustomsData();
         data.setId(dto.getId());

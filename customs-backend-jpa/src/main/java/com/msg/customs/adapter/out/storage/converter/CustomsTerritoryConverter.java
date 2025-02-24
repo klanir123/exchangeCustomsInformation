@@ -6,6 +6,9 @@ import com.msg.customs.model.CustomsTerritoryEnum;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
+/**
+ * Converts the {@link CustomsTerritory} to a String and vice versa.
+ */
 @Converter
 public class CustomsTerritoryConverter implements AttributeConverter<CustomsTerritory, String> {
 

@@ -20,6 +20,11 @@ import com.msg.customs.application.port.in.SaveCustomsDataUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Controller for customs data.
+ * <p>
+ * A controller used the UseCases to call the business logic (DDD).
+ */
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -33,13 +38,13 @@ public class CustomsAPIController implements CustomsAPI {
 	@Override
 	public ResponseEntity<List<CustomsDataDto>> getCustomsData() {
 		List<CustomsData> customsData = loadCustomsDataUseCase.loadCustomsData(LoadCustomsDataListQuery.queryAll());
-		return ResponseEntity.ok(customsData.stream().map(CustomsDataValueMapper::toValue).toList());
+		return ResponseEntity.ok(customsData.stream().map(CustomsDataValueMapper::toDto).toList());
 	}
 
 	@Override
 	public ResponseEntity<CustomsDataDto> getCustomsData(String id) {
 		CustomsData customsData = loadCustomsDataByCatenaxIdUseCase.loadCustomsData(id);
-		return ResponseEntity.ok(CustomsDataValueMapper.toValue(customsData));
+		return ResponseEntity.ok(CustomsDataValueMapper.toDto(customsData));
 	}
 
 	@Override
