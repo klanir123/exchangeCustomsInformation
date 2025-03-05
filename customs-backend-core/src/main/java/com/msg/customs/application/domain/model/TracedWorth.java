@@ -6,7 +6,7 @@ import lombok.Data;
  * Domain trade worth data.
  */
 @Data
-public class TradeWorth {
+public class TracedWorth {
 	
 	// prefferState != N-NotCertified -> disabled, empty; else mandatory 
 	private String value;
@@ -14,4 +14,7 @@ public class TradeWorth {
 	// prefferState != N-NotCertified -> disabled, empty; else mandatory
 	private String currency;
 
+	public boolean isEmpty() {
+		return value == null && currency == null;
+	}
 }

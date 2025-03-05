@@ -45,6 +45,6 @@ public class CustomsDataDto {
 
     private String prefferedStatus;
 
-    private String tradeWorthValue;
-    private String tradeWorthCurrency;
+    private String tracedWorthValue;
+    private String tracedWorthCurrency;
 }

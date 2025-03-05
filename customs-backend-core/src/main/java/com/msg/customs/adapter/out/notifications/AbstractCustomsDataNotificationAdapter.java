@@ -14,7 +14,7 @@ public abstract class AbstractCustomsDataNotificationAdapter implements CustomsD
 	 */
 	@Override
 	public void notifyCustomsDataChanged(List<CustomsData> data) {
-		List<NotificationData> notifications = data.stream().map(NotificationMapper::toNotification).toList();
+		List<NotificationData> notifications = List.of(NotificationMapper.toNotification(data));
 		sendNotification(notifications); 
 	}
 		

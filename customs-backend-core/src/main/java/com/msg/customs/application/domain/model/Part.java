@@ -12,4 +12,7 @@ public class Part {
 	
 	private String name;
 
+	public boolean isEmpty() {
+		return number == null && name == null;
+	}
 }

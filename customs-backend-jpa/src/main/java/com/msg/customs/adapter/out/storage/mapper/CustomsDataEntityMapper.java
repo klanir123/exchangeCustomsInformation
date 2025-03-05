@@ -35,7 +35,7 @@ public class CustomsDataEntityMapper {
         entity.setOriginInformation(data.getOriginInformation()); 
         entity.setPrefferedStatus(data.getPrefferedStatus());
 
-        entity.setTradeWorth(TradeWorthEntityMapper.toEntity(data.getTradeWorth()));
+        entity.setTradeWorth(TradeWorthEntityMapper.toEntity(data.getTracedWorth()));
 
         return entity;
     }
@@ -67,7 +67,7 @@ public class CustomsDataEntityMapper {
         data.setOriginInformation(entity.getOriginInformation());
         data.setPrefferedStatus(entity.getPrefferedStatus());
 
-        data.setTradeWorth(TradeWorthEntityMapper.toDomain(entity.getTradeWorth()));
+        data.setTracedWorth(TradeWorthEntityMapper.toDomain(entity.getTradeWorth()));
 
         return data;
     }    

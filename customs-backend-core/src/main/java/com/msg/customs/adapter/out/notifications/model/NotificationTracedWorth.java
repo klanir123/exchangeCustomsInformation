@@ -6,7 +6,7 @@ import lombok.Data;
  * Notification trade worth.
  */
 @Data
-public class NotificationTradeWorth {
+public class NotificationTracedWorth {
 
 	private Double value;
 	

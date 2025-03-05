@@ -1,29 +1,43 @@
 package com.msg.customs.adapter.out.notifications.mapper;
 
-import com.msg.customs.adapter.out.notifications.model.NotificationContactData;
-import com.msg.customs.adapter.out.notifications.model.NotificationCustomsData;
-import com.msg.customs.adapter.out.notifications.model.NotificationData;
-import com.msg.customs.adapter.out.notifications.model.NotificationPart;
-import com.msg.customs.adapter.out.notifications.model.NotificationTradeWorth;
+import com.msg.customs.adapter.out.notifications.model.*;
 import com.msg.customs.application.domain.model.CustomsData;
+import com.msg.customs.application.domain.model.Part;
+
+import java.util.List;
 
 /**
  * Mapper to map the customs data to the notification data.
  */
 public class NotificationMapper {
 
-	
+	/**
+	 * Maps the list of customs data to the notification data.
+	 * @param listOfCustomsData the list of customs data
+	 * @return the notification data (containing the customs update information).
+	 */
+	public static NotificationData toNotification(List<CustomsData> listOfCustomsData) {
+		NotificationData notifications = new NotificationData();
+
+		notifications.setItems(listOfCustomsData.stream().map(NotificationMapper::toNotificationItemData).toList());
+
+		return notifications;
+	}
+
 	/**
      * Maps the customs data to the notification data.
      * 
      * @param data the customs data
      * @return the notification data.
      */
-	public static NotificationData toNotification(CustomsData data) {
-		NotificationData notification = new NotificationData();
+	public static NotificationItemData toNotificationItemData(CustomsData data) {
+		NotificationItemData notification = new NotificationItemData();
+
+		notification.setCatenaxId(data.getCatenaxId());
 
 		notification.setCustomsData(toNotificationCustomsData(data));
-		notification.setPartData(toNotificationPartData(data));
+		notification.setCustomerPart(toNotificationCustomerPartData(data));
+		notification.setManufacturerPart(toNotificationManufacturerPartData(data));
 
 		return notification;
 	}
@@ -33,8 +47,6 @@ public class NotificationMapper {
 	 */
 	public static NotificationCustomsData toNotificationCustomsData(CustomsData data) {
 		NotificationCustomsData notification = new NotificationCustomsData();
-
-		notification.setCatenaxId(data.getCatenaxId());
 		
 		notification.setType(data.getType());
 		notification.setConfirmationDate(data.getConfirmationDate());
@@ -44,10 +56,14 @@ public class NotificationMapper {
 		
 		notification.setCommercialCountryOfOrigin(data.getCountry());
 		notification.setFederalState(data.getFederalState());
-		notification.setOriginInformation(data.getOriginInformation());
+		if (data.getOriginInformation() != null && data.getOriginInformation().size() > 0) {
+			notification.setOriginInformation(data.getOriginInformation());
+		}
 		notification.setPreferredStatus(data.getPrefferedStatus());
 		
-		notification.setTradeWorth(toNotificationTradeWorthData(data));
+		notification.setTracedWorth(toNotificationTracedWorthData(data));
+
+		notification.setStatus(data.getRequestStatus());
 
 		return notification;
 	}
@@ -55,31 +71,46 @@ public class NotificationMapper {
 	/**
 	 * Maps the customs data to the notification representing the part data.
 	 */	
-	public static NotificationPart toNotificationPartData(CustomsData data) {
+	public static NotificationPart toNotificationCustomerPartData(CustomsData data) {
+		return toNotificationPartData(data.getCustomerPart());
+	}
+
+	/**
+	 * Maps the customs data to the notification representing the part data.
+	 */
+	public static NotificationPart toNotificationManufacturerPartData(CustomsData data) {
+		return toNotificationPartData(data.getManufacturerPart());
+	}
+
+	/**
+	 * Maps the customs data to the notification representing the part data.
+	 */
+	public static NotificationPart toNotificationPartData(Part partData) {
+		if (partData == null || partData.isEmpty()) {
+			return null;
+		}
+
 		NotificationPart notification = new NotificationPart();
-		
-		notification.setCustomerPartId(data.getCustomerPart().getNumber());
-		notification.setNameAtCustomer(data.getCustomerPart().getName());
-		notification.setManufacturerPartId(data.getManufacturerPart().getNumber());
-		notification.setNameAtManufacturer(data.getManufacturerPart().getName());
-				
+		notification.setId(partData.getNumber());
+		notification.setName(partData.getName());
 		return notification;
 	}
+
 
 	/**
 	 * Maps the customs data to the notification representing the part trade worth.
 	 */		
-	public static NotificationTradeWorth toNotificationTradeWorthData(CustomsData data) {
-		NotificationTradeWorth notification = new NotificationTradeWorth();
+	public static NotificationTracedWorth toNotificationTracedWorthData(CustomsData data) {
+		NotificationTracedWorth notification = new NotificationTracedWorth();
 
-		if (data.getTradeWorth() == null) {
+		if (data.getTracedWorth() == null || data.getTracedWorth().isEmpty()) {
 			return null;
 		}
 		
-		if (data.getTradeWorth().getValue() != null) {
-			notification.setValue(Double.valueOf(data.getTradeWorth().getValue()));			
+		if (data.getTracedWorth().getValue() != null) {
+			notification.setValue(Double.valueOf(data.getTracedWorth().getValue()));
 		}
-		notification.setCurrency(data.getTradeWorth().getCurrency());
+		notification.setCurrency(data.getTracedWorth().getCurrency());
 
 		return notification;
 	}

@@ -4,7 +4,7 @@ import com.msg.customs.adapter.in.web.model.CustomsDataDto;
 import com.msg.customs.application.domain.model.ContactData;
 import com.msg.customs.application.domain.model.CustomsData;
 import com.msg.customs.application.domain.model.Part;
-import com.msg.customs.application.domain.model.TradeWorth;
+import com.msg.customs.application.domain.model.TracedWorth;
 import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritoryEnum;
 import com.msg.customs.model.GermanFederalStateEnum;
@@ -39,8 +39,8 @@ public class CustomsDataValueMapper {
         dto.setFederalState(data.getFederalState() != null ? data.getFederalState().getCode() : null);
         dto.setOriginInformation(data.getOriginInformation());
         dto.setPrefferedStatus(data.getPrefferedStatus().name());
-        dto.setTradeWorthValue(data.getTradeWorth().getValue());
-        dto.setTradeWorthCurrency(data.getTradeWorth().getCurrency());
+        dto.setTracedWorthValue(data.getTracedWorth().getValue());
+        dto.setTracedWorthCurrency(data.getTracedWorth().getCurrency());
         return dto;
     }
 
@@ -82,10 +82,10 @@ public class CustomsDataValueMapper {
         data.setOriginInformation(dto.getOriginInformation());
         data.setPrefferedStatus(dto.getPrefferedStatus() != null ? CertifiedEnum.valueOf(dto.getPrefferedStatus()) : CertifiedEnum.N);
 
-        TradeWorth tradeWorth = new TradeWorth();
-        tradeWorth.setValue(dto.getTradeWorthValue());
-        tradeWorth.setCurrency(dto.getTradeWorthCurrency());
-        data.setTradeWorth(tradeWorth);
+        TracedWorth tracedWorth = new TracedWorth();
+        tracedWorth.setValue(dto.getTracedWorthValue());
+        tracedWorth.setCurrency(dto.getTracedWorthCurrency());
+        data.setTracedWorth(tracedWorth);
 
         return data;
     }

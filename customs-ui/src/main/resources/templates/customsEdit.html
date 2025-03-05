@@ -195,11 +195,11 @@
 		    <option th:each="prefferedStatus : ${certifiedOptions}" th:value="${prefferedStatus}" th:text="${prefferedStatus.getCode()}"></option>		    		    
 		</select>
 				
-		<label for="tradeWorthValue" th:text="#{customs_tradeworth_value}">Trade Worth Value</label>
-		<input type="text" id="tradeWorthValue" th:field="*{tradeWorthValue}" />
+		<label for="tracedWorthValue" th:text="#{customs_tradeworth_value}">Trade Worth Value</label>
+		<input type="text" id="tracedWorthValue" th:field="*{tracedWorthValue}" />
 		
-		<label for="tradeWorthCurrency" th:text="#{customs_tradeworth_currency}">Trade Worth Currency</label>
-		<input type="text" id="tradeWorthCurrency" th:field="*{tradeWorthCurrency}" />		
+		<label for="tracedWorthCurrency" th:text="#{customs_tradeworth_currency}">Trade Worth Currency</label>
+		<input type="text" id="tracedWorthCurrency" th:field="*{tracedWorthCurrency}" />
 		
 		<div class="inline-label-checkbox">
 			<label for="completed" th:text="#{customs_completed}">Completed</label>

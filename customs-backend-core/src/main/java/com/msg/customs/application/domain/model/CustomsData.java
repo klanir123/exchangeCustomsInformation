@@ -52,5 +52,5 @@ public class CustomsData {
 	// country != EU -> disabled, = N-NotCertified
 	private CertifiedEnum prefferedStatus;
 	
-	private TradeWorth tradeWorth;
+	private TracedWorth tracedWorth;
 }

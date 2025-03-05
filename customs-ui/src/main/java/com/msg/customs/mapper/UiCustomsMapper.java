@@ -51,8 +51,8 @@ public class UiCustomsMapper {
 			data.setPrefferedStatus(CertifiedEnum.N.name());
 		}
 		
-		data.setTradeWorthValue(dto.getTradeWorthValue());
-		data.setTradeWorthCurrency(dto.getTradeWorthCurrency());
+		data.setTracedWorthValue(dto.getTracedWorthValue());
+		data.setTracedWorthCurrency(dto.getTracedWorthCurrency());
 		
 		return data;
 	}
@@ -95,8 +95,8 @@ public class UiCustomsMapper {
 			dto.setPrefferedStatus(CertifiedEnum.N.name());
 		}
 		
-		dto.setTradeWorthValue(data.getTradeWorthValue());
-		dto.setTradeWorthCurrency(data.getTradeWorthCurrency());
+		dto.setTracedWorthValue(data.getTracedWorthValue());
+		dto.setTracedWorthCurrency(data.getTracedWorthCurrency());
 				
 		return dto;
 	}

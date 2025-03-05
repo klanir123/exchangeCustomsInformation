@@ -3,7 +3,8 @@ package com.msg.customs.adapter.out.notifications.model;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.msg.customs.adapter.out.notifications.json.CertifiedEnumSerializer;
 import com.msg.customs.model.CertifiedEnum;
 import com.msg.customs.model.CustomsTerritory;
 import com.msg.customs.model.CustomsTypeEnum;
@@ -17,9 +18,6 @@ import lombok.Data;
  */
 @Data
 public class NotificationCustomsData {
-
-	@JsonProperty("catenaXId")	
-	private String catenaxId;
 	
 	private CustomsTypeEnum type;
 	
@@ -34,11 +32,11 @@ public class NotificationCustomsData {
 	private FederalState federalState;
 	
 	private List<String> originInformation;
-	
+
+	@JsonSerialize(using = CertifiedEnumSerializer.class)
 	private CertifiedEnum preferredStatus;
 	
-	// TODO the example document uses trace worth.
-	private NotificationTradeWorth tradeWorth;
+	private NotificationTracedWorth tracedWorth;
 	
 	private RequestStatusEnum status; 
 

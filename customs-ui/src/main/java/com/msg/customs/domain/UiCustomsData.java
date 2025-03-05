@@ -48,9 +48,9 @@ public class UiCustomsData {
 	
 	private String prefferedStatus;
 	
-	private String tradeWorthValue;
+	private String tracedWorthValue;
 	
-	private String tradeWorthCurrency;
+	private String tracedWorthCurrency;
 	
 
 }

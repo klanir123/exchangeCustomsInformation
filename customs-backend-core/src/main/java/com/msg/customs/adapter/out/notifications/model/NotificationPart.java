@@ -7,10 +7,6 @@ import lombok.Data;
  */
 @Data
 public class NotificationPart {
-
-	private String customerPartId;
-	private String manufacturerPartId;
-	private String nameAtCustomer;
-	private String nameAtManufacturer;
-	
+	private String id;
+	private String name;
 }
