@@ -84,8 +84,8 @@
                 } else {
                 	prefferedStatus.value = "N";
                 	prefferedStatus.disabled = true;
-    				tradeWorthValue.disabled = false;				
-    				tradeWorthCurrency.disabled = false;                	
+    				tracedWorthValue.disabled = false;
+    				tracedWorthCurrency.disabled = false;
                 }
             })
             .catch(error => console.error('Error:', error));                       
@@ -93,16 +93,16 @@
         
     	function togglePrefferedStatusSelecttionChanged() {
     		var prefferedStatus = document.getElementById("prefferedStatus").value;
-			var tradeWorthValue = document.getElementById("tradeWorthValue");
-			var tradeWorthCurrency = document.getElementById("tradeWorthCurrency");
+			var tracedWorthValue = document.getElementById("tracedWorthValue");
+			var tracedWorthCurrency = document.getElementById("tracedWorthCurrency");
 			if (prefferedStatus === "N") {
-				tradeWorthValue.disabled = false;				
-				tradeWorthCurrency.disabled = false;
-			} else {				
-				tradeWorthValue.value = "";
-				tradeWorthValue.disabled = true;
-				tradeWorthCurrency.value = "";
-				tradeWorthCurrency.disabled = true;				
+				tracedWorthValue.disabled = false;
+				tracedWorthCurrency.disabled = false;
+			} else {
+				tracedWorthValue.value = "";
+				tracedWorthValue.disabled = true;
+				tracedWorthCurrency.value = "";
+				tracedWorthCurrency.disabled = true;
 			}
     	} 
     	
@@ -195,10 +195,10 @@
 		    <option th:each="prefferedStatus : ${certifiedOptions}" th:value="${prefferedStatus}" th:text="${prefferedStatus.getCode()}"></option>		    		    
 		</select>
 				
-		<label for="tracedWorthValue" th:text="#{customs_tradeworth_value}">Trade Worth Value</label>
+		<label for="tracedWorthValue" th:text="#{customs_traced_worth_value}">Trade Worth Value</label>
 		<input type="text" id="tracedWorthValue" th:field="*{tracedWorthValue}" />
 		
-		<label for="tracedWorthCurrency" th:text="#{customs_tradeworth_currency}">Trade Worth Currency</label>
+		<label for="tracedWorthCurrency" th:text="#{customs_traced_worth_currency}">Trade Worth Currency</label>
 		<input type="text" id="tracedWorthCurrency" th:field="*{tracedWorthCurrency}" />
 		
 		<div class="inline-label-checkbox">

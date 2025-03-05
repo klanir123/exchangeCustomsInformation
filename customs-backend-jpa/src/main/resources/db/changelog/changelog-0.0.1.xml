@@ -44,9 +44,9 @@
 	        </column>
 	        <column name="federal_state" type="varchar(255)"/>
 	        <column name="origin_information" type="varchar(255)"/>
-	        <column name="preffered_status" type="varchar(255)"/>
-	        <column name="trade_worth_value" type="varchar(255)"/>
-	        <column name="trade_worth_currency" type="varchar(255)"/>
+	        <column name="preferred_status" type="varchar(255)"/>
+	        <column name="traced_worth_value" type="varchar(255)"/>
+	        <column name="traced_worth_currency" type="varchar(255)"/>
 	    </createTable>
 	    
         <createTable tableName="customs_origin_information">

@@ -13,11 +13,11 @@ import lombok.ToString;
 @Setter
 @ToString
 @Embeddable
-public class TradeWorthEntity {
+public class TracedWorthEntity {
 
-    @Column(name = "trade_worth_value")
+    @Column(name = "traced_worth_value")
     private String value;
 
-    @Column(name = "trade_worth_currency")
+    @Column(name = "traced_worth_currency")
     private String currency;
 }

@@ -38,7 +38,7 @@ public class CustomsDataValueMapper {
         dto.setCountry(data.getCountry() != null ? data.getCountry().getCode() : null);
         dto.setFederalState(data.getFederalState() != null ? data.getFederalState().getCode() : null);
         dto.setOriginInformation(data.getOriginInformation());
-        dto.setPrefferedStatus(data.getPrefferedStatus().name());
+        dto.setPrefferedStatus(data.getPreferredStatus().name());
         dto.setTracedWorthValue(data.getTracedWorth().getValue());
         dto.setTracedWorthCurrency(data.getTracedWorth().getCurrency());
         return dto;
@@ -80,7 +80,7 @@ public class CustomsDataValueMapper {
         data.setCountry(dto.getCountry() != null ? CustomsTerritoryEnum.valueOf(dto.getCountry()) : null);
         data.setFederalState(dto.getFederalState() != null ? GermanFederalStateEnum.valueOf(dto.getFederalState()) : null);
         data.setOriginInformation(dto.getOriginInformation());
-        data.setPrefferedStatus(dto.getPrefferedStatus() != null ? CertifiedEnum.valueOf(dto.getPrefferedStatus()) : CertifiedEnum.N);
+        data.setPreferredStatus(dto.getPrefferedStatus() != null ? CertifiedEnum.valueOf(dto.getPrefferedStatus()) : CertifiedEnum.N);
 
         TracedWorth tracedWorth = new TracedWorth();
         tracedWorth.setValue(dto.getTracedWorthValue());

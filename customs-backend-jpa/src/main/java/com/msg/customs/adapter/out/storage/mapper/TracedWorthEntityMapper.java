@@ -1,23 +1,23 @@
 package com.msg.customs.adapter.out.storage.mapper;
 
-import com.msg.customs.adapter.out.storage.model.TradeWorthEntity;
+import com.msg.customs.adapter.out.storage.model.TracedWorthEntity;
 import com.msg.customs.application.domain.model.TracedWorth;
 
 /**
  * Mapper for trade worth domain model to entity.
  */
-public class TradeWorthEntityMapper {
+public class TracedWorthEntityMapper {
 	
 	/**
 	 * Maps trade worth domain model to entity.
 	 * @param tracedWorth the trade worth domain model
 	 * @return the trade worth entity
 	 */
-	public static TradeWorthEntity toEntity(TracedWorth tracedWorth) {
-		TradeWorthEntity tradeWorthEntity = new TradeWorthEntity();
-		tradeWorthEntity.setCurrency(tracedWorth.getCurrency());
-		tradeWorthEntity.setValue(tracedWorth.getValue());
-		return tradeWorthEntity;
+	public static TracedWorthEntity toEntity(TracedWorth tracedWorth) {
+		TracedWorthEntity tracedWorthEntity = new TracedWorthEntity();
+		tracedWorthEntity.setCurrency(tracedWorth.getCurrency());
+		tracedWorthEntity.setValue(tracedWorth.getValue());
+		return tracedWorthEntity;
 	}
 
 	/**
@@ -25,7 +25,7 @@ public class TradeWorthEntityMapper {
 	 * @param entity the trade worth entity
 	 * @return the trade worth domain model
 	 */
-	public static TracedWorth toDomain(TradeWorthEntity entity) {
+	public static TracedWorth toDomain(TracedWorthEntity entity) {
 		TracedWorth tracedWorth = new TracedWorth();
 		if (entity != null) {
 			tracedWorth.setCurrency(entity.getCurrency());

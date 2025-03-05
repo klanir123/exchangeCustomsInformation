@@ -50,7 +50,7 @@ public class CustomsData {
 	private List<String> originInformation;
 	
 	// country != EU -> disabled, = N-NotCertified
-	private CertifiedEnum prefferedStatus;
+	private CertifiedEnum preferredStatus;
 	
 	private TracedWorth tracedWorth;
 }

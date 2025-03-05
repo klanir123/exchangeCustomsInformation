@@ -59,7 +59,7 @@ public class NotificationMapper {
 		if (data.getOriginInformation() != null && data.getOriginInformation().size() > 0) {
 			notification.setOriginInformation(data.getOriginInformation());
 		}
-		notification.setPreferredStatus(data.getPrefferedStatus());
+		notification.setPreferredStatus(data.getPreferredStatus());
 		
 		notification.setTracedWorth(toNotificationTracedWorthData(data));
 

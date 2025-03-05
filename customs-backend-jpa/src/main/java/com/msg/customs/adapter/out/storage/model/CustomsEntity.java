@@ -99,11 +99,11 @@ public class CustomsEntity {
     private List<String> originInformation;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "preffered_status")
-    private CertifiedEnum prefferedStatus;
+    @Column(name = "preferred_status")
+    private CertifiedEnum preferredStatus;
 
     @Embedded
-    private TradeWorthEntity tradeWorth;
+    private TracedWorthEntity tracedWorth;
     
     @PrePersist
     public void prePersist() {
