@@ -78,14 +78,14 @@ There are two common modules.
 > Tip: If you use Podman simply replace the 'docker' command by 'podman' and 'docker-compose' by 'podman-compose'. For 'podman-compose' the compose libraries must be in the path.
 
 1. Call ´´mvn clean install´´ in the root folder.
-2. Go the customs-backend-app module. In the target folder a customs-backend-app-<version>.jar was generated. In the root folder of this module you find a Dockerfile. Execute the following command:
+2. Go the customs-backend-app module. In the target folder a customs-backend-app-<version>.jar was generated. In the root folder of this module you find a Dockerfile. Replace the <version> tag and execute the command.:
 
 ```bash
 # Build the Docker image
 docker build -t customs-backend-app:<version> .
 ```
 
-3. Go the customs-ui module. In the target folder a customs-ui-<version>.jar was generated. In the root folder of this module you find a Dockerfile. Execute the following command:
+3. Go the customs-ui module. In the target folder a customs-ui-<version>.jar was generated. In the root folder of this module you find a Dockerfile. Replace the <version> and execute the command:
 
 ```bash
 # Build the Docker image
@@ -104,6 +104,30 @@ docker-compose stop
 # remove (volumes are not removed, remove the volumes manually or use parameter -v)
 docker-compose down
 ```
+
+###  Minikube (Kubernetes): Setup Containerfiles
+
+The most easy way to push the container file is to build the container using Minikube. The command is more or less 
+similar to the above Docker commands. Replace the <app-name> and <version> and start the command.
+
+```bash
+# Build the Docker for customs-backend-app image using Minikube
+minikube image build -t localhost/<app-name>:<version> .
+```
+
+You can verify if the command was successful by executing the following command which shows the loaded images.
+
+```bash
+# Show images loaded by Minikube
+minikube image ls
+```
+
+There are other possible ways which are possible to get the image loaded into Minikube.
+* With Podman you can push the image directly from Podman-Desktop
+* There is a ```minikube image load``` command. This needs some additional configuration of the command shell. (If you use Podman you need 
+to use the container-runtime  __cri-o__  which on the other hand seems not working with the Ingress addon)
+* You can push the image to a registry.
+
 
 ### PostgreSql database only
 
