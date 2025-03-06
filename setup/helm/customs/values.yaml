@@ -1,0 +1,37 @@
+# Default values for customs-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: customs
+
+postgres:
+  image: docker.io/library/postgres:17.3
+  environment:
+    postgresDb: customs
+    postgresUser: test
+    postgresPassword: test
+  service:
+    port: 5432
+  volume:
+    name: customs-pg-data
+    mountPath: /var/lib/postgresql/data
+
+backend:
+  image: localhost/customs-backend-app:0.0.1
+  service:
+    port: 8080
+  environment:
+    springProfilesActive: dev
+    springDatasourceUrl: jdbc:postgresql://customs-postgres:5432/customs
+
+ui:
+  image: localhost/customs-ui:0.0.1
+  service:
+    port: 9090
+  environment:
+    customsBackendUri: http://customs-customs-backend:8080
+
+ingress:
+  enabled: false
+service:
+  type: NotDefined

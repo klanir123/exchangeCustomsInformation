@@ -31,11 +31,14 @@ This project is split into the following structure. This structure follows the D
  - customs-backend-api // API part which provides a RestAPI for the UI
  - customs-backend-jap // JPA implementation (Liquibase, H2, PostgreSQL)
  - customs-ui // uses the customs-commons, customs-backend-api)
+ - setup
+    + docker // docker compose files 
+    + helm   // helm charts
 ```
 
 The projects is split into two parts (customs-backend-xxx and customs-ui).
 
-> Using an OpenAPI configuration would be a better choice. Currently the customs-backend-app generates the OpenAPI documents (e.g. http://localhost:8080/v3/api-docs, http://localhost:8080/v3/api-docs.yaml) 
+> Using an OpenAPI configuration would be a better choice. Currently, the customs-backend-app generates the OpenAPI documents (e.g. http://localhost:8080/v3/api-docs, http://localhost:8080/v3/api-docs.yaml) 
 > and a Swagger-Ui (e.g. http://localhost:8080/swagger-ui/index.html). The target must be that the customs-ui uses the OpenAPI api-docs to generate the API for the communication. In this case the customs-ui
 > is independent and does not need to import the customs-backend-api directly.
 
@@ -46,7 +49,7 @@ This module has no UI and provides the necessary backend actions.
 
 #### database
 
-Currently there are two profiles defined:
+Currently, there are two profiles defined:
 
 * h2: Uses an in memory test database
 * dev: uses a postgresql test database. (See the postgresql-compose.yml file to setup the database)
@@ -92,7 +95,7 @@ docker build -t customs-backend-app:<version> .
 docker build -t customs-backend-app:<version> .
 ```
 
-4. Open the '/setup/h2' or '/setup/postgresql' folder. 
+4. Open the '/setup/docker/h2' or '/setup/docker/docker/postgresql' folder. 
 5. Before you start docker-compose check the selected versions (Should be equal to the one which was used during the build command).
 6. To start with docker-compose execute the following command:
 
@@ -138,5 +141,19 @@ postgresql database.
 ```bash
 docker-compose -f postgresql-compose.yaml up -d
 ```
+
+## Kubernetes
+
+In this section we describe how to deploy the application to a Kubernetes cluster. The deployment is done using
+the Minikube cluster. The deployment is done in the following steps:
+
+1. Install Kubectl and Helm
+2. Install and start Minikube
+2. Build the Docker images (using Minikube; you can also copy the images to the Minikube cluster later on). See above.
+3. Navigate to the '/setup/helm/customs' folder.
+4. Execute ```helm install customs .``` to deploy the application.
+5. Do use the deployment you can forward the 'ui' and 'postgres' port.
+
+> Currently, there is no check that the database is up before the backend-app starts. This can lead to some strange behaviour.
 
 
