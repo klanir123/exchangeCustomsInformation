@@ -28,10 +28,8 @@ ui:
   image: localhost/customs-ui:0.0.1
   service:
     port: 9090
-  environment:
-    customsBackendUri: http://customs-customs-backend:8080
 
 ingress:
-  enabled: false
-service:
-  type: NotDefined
+  enabled: true
+  className: nginx
+  annotations: {}

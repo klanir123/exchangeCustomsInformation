@@ -145,7 +145,7 @@ docker-compose -f postgresql-compose.yaml up -d
 ## Kubernetes
 
 In this section we describe how to deploy the application to a Kubernetes cluster. The deployment is done using
-the Minikube cluster. The deployment is done in the following steps:
+the Minikube cluster. The deployment is done in the following steps (for some steps administraition rights are needed):
 
 1. Install Kubectl and Helm
 2. Install and start Minikube
@@ -153,6 +153,15 @@ the Minikube cluster. The deployment is done in the following steps:
 3. Navigate to the '/setup/helm/customs' folder.
 4. Execute ```helm install customs .``` to deploy the application.
 5. Do use the deployment you can forward the 'ui' and 'postgres' port.
+
+additional support using ingress (instead of port forwarding):
+
+5. Install the Ingress addon for Minikube: ```minikube addons enable ingress```
+6. Deploy the Ingress configuration: Property 'ingress.enabled' in the values.yaml file must be set to true (=default).
+7. Execute ```helm install customs .``` to deploy the application.
+8. Edit the '/etc/hosts' (on Windows normally c:\Windows\System32\drivers\etc) file and add the following line: ```127.0.0.1 ui.customs```
+9. Open the Minikube tunnel: ```minikube tunnel```
+10. Open the browser and navigate to 'http://ui.customs'
 
 > Currently, there is no check that the database is up before the backend-app starts. This can lead to some strange behaviour.
 

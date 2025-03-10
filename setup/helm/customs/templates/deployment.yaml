@@ -72,4 +72,4 @@ spec:
           image: {{ .Values.ui.image }}
           env:
             - name: CUSTOMS_BACKEND_URI
-              value: {{ .Values.ui.environment.customsBackendUri }}
+              value: 'http://{{ include "customs.fullname" . }}-backend:{{ .Values.backend.service.port }}'
