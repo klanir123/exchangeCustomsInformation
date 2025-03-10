@@ -165,4 +165,8 @@ additional support using ingress (instead of port forwarding):
 
 > Currently, there is no check that the database is up before the backend-app starts. This can lead to some strange behaviour.
 
-
+> If you want to access the database using a tool not installed in the Kubernetes cluster you can use the following 
+> command to forward the port: ```kubectl port-forward svc/<db-service> 5432:5432```. Be aware the name of the database 
+> service depends on the name you have given during the hell install command. If you have used 'customs' the service name
+> should be 'customs-postgres'. Setting up a port forward can be done easier by using a tool like 'Lens' which provides
+> a GUI for the Kubernetes cluster.
