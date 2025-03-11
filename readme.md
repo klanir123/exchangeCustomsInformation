@@ -145,7 +145,10 @@ docker-compose -f postgresql-compose.yaml up -d
 ## Kubernetes
 
 In this section we describe how to deploy the application to a Kubernetes cluster. The deployment is done using
-the Minikube cluster. The deployment is done in the following steps (for some steps administraition rights are needed):
+the Minikube cluster. The deployment is done in the following steps (for some steps administration rights are needed):
+
+> To install the customs services in a dedicated namespace (e.g. 'customs') you can add the following snippet to 
+> the install command: ```--namespace customs --create-namespace```
 
 1. Install Kubectl and Helm
 2. Install and start Minikube
@@ -170,3 +173,16 @@ additional support using ingress (instead of port forwarding):
 > service depends on the name you have given during the hell install command. If you have used 'customs' the service name
 > should be 'customs-postgres'. Setting up a port forward can be done easier by using a tool like 'Lens' which provides
 > a GUI for the Kubernetes cluster.
+
+### Using different namespaces
+
+If you use different namespaces the URL accessing the other namespace looks as follows:
+
+```bash
+http://<service-name>.<namespace>.svc.cluster.local:<port>
+```
+Let's say someone wants to acces the customs-backend service in the customs namespace. The URL would look like this:
+
+```bash
+http://customs-backend.customs.svc.cluster.local:8080
+```
