@@ -18,7 +18,11 @@
 		<artifactId>customs-backend-jpa</artifactId>
 		<version>${project.version}</version>
 	</dependency>
-	
+	  <dependency>
+		  <groupId>com.msg.customs</groupId>
+		  <artifactId>customs-backend-notify</artifactId>
+		  <version>${project.version}</version>
+	  </dependency>
 	<dependency>
 	    <groupId>org.springdoc</groupId>
 	    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>

@@ -11,8 +11,10 @@ public interface CustomsDataNotificationsAdapter {
 	
 	/**
 	 * Notifies the customs data changed.
-	 * @param data the customs data that changed
+	 *
+	 * @param targetBPN the business partner number of the receiver
+	 * @param data      the customs data that changed
 	 */
-	void notifyCustomsDataChanged(List<CustomsData> data);
+	void notifyCustomsDataChanged(String targetBPN, List<CustomsData> data);
 
 }

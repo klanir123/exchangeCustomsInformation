@@ -11,5 +11,5 @@ public interface NotifyCustomsDataChangedUseCase {
 	 * Notifies the customs data changed.
 	 * @param catenaxId the catenax id of the customs data
 	 */
-	void notifyCustomsDataChanged(List<String> catenaxId);
+	void notifyCustomsDataChanged(String targetBPN, List<String> catenaxId);
 }

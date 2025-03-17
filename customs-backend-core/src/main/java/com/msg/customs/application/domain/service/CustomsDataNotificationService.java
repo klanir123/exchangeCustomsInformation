@@ -23,9 +23,9 @@ public class CustomsDataNotificationService implements NotifyCustomsDataChangedU
 	private final CustomsDataStorageAdapter customsDataStorageAdapter;
 
 	@Override
-	public void notifyCustomsDataChanged(List<String> catenaxIds) {
+	public void notifyCustomsDataChanged(String targetBPN, List<String> catenaxIds) {
 		List<CustomsData> dataByCatenaxIds = customsDataStorageAdapter.loadCustomsDataByCatenaxIds(catenaxIds);
-		customsDataNotificationsAdapter.notifyCustomsDataChanged(dataByCatenaxIds);		
+		customsDataNotificationsAdapter.notifyCustomsDataChanged(targetBPN, dataByCatenaxIds);
 	}	
 	
 }

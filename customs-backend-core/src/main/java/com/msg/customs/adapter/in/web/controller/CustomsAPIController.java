@@ -63,9 +63,15 @@ public class CustomsAPIController implements CustomsAPI {
 
 	@Override
 	public ResponseEntity<Void> notifyCustomsDataUpdated(List<String> catenaxIds) { 
-		notifyCustomsDataChangedUseCase.notifyCustomsDataChanged(catenaxIds);
+		notifyCustomsDataChangedUseCase.notifyCustomsDataChanged(getTargetBPN(), catenaxIds);
 		return ResponseEntity.ok().build();
 	}
 
-
+	/**
+	 * Returns a (fixed) target business partner number. For producion purpose this needs to be done mor flexible.
+	 * @return a target business partner number
+	 */
+	private String getTargetBPN() {
+		return "ALICE-987-654-321";
+	}
 }
