@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "customs.fullname" . }}-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "customs.fullname" . }}-postgres
+  template:
+    metadata:
+      labels:
+        app: {{ include "customs.fullname" . }}-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.image }}
+          env:
+            - name: POSTGRES_DB
+              value: {{ .Values.postgres.environment.postgresDb }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgres.environment.postgresUser }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgres.environment.postgresPassword }}
+          volumeMounts:
+            - name: pg-data
+              mountPath: {{ .Values.postgres.volume.mountPath }}
+      volumes:
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.postgres.volume.name }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "customs.fullname" . }}-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "customs.fullname" . }}-backend
+  template:
+    metadata:
+      labels:
+        app: {{ include "customs.fullname" . }}-backend
+    spec:
+      containers:
+        - name: customs-backend
+          image: {{ .Values.backend.image }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.backend.environment.springProfilesActive }}
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://{{ include "customs.fullname" . }}-postgres:5432/customs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "customs.fullname" . }}-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "customs.fullname" . }}-ui
+  template:
+    metadata:
+      labels:
+        app: {{ include "customs.fullname" . }}-ui
+    spec:
+      containers:
+        - name: customs-ui
+          image: {{ .Values.ui.image }}
+          env:
+            - name: CUSTOMS_BACKEND_URI
+              value: 'http://{{ include "customs.fullname" . }}-backend:{{ .Values.backend.service.port }}'

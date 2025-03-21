@@ -1,0 +1,32 @@
+name: customs-test
+
+version: '3.7'
+
+volumes:
+  pg_data:
+    name: customs_pg_data
+
+services:
+    postgres:
+      image: docker.io/library/postgres:17.3
+      environment:
+        - POSTGRES_DB=customs 
+        - POSTGRES_USER=test
+        - POSTGRES_PASSWORD=test
+      ports:
+        - "5432:5432"
+      volumes:
+        - pg_data:/var/lib/postgresql/data  
+    customs-backend:
+      image: localhost/customs-backend-app:0.0.1
+      ports:
+        - "8080:8080"
+      environment:
+        - SPRING_PROFILES_ACTIVE=dev
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/customs
+    customs-ui:
+      image: localhost/customs-ui:0.0.1
+      ports:
+        - "9090:9090"
+      environment:
+        - CUSTOMS_BACKEND_URI=http://customs-backend:8080
