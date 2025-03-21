@@ -65,6 +65,7 @@
 		<module>customs-backend-api</module>
 		<module>customs-backend-core</module>
 		<module>customs-backend-jpa</module>
+		<module>customs-backend-notify</module>
 		<module>customs-backend-app</module>
 		<module>customs-ui</module>
 	</modules>
