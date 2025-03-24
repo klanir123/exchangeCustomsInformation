@@ -1,10 +1,10 @@
 # Build output directies #
 ##########################
 /target
-*/target
-*/apidoc
+**/target
+**/apidoc
 /build
-*/build
+**/build
 
 # Eclipse specific files/directories #
 ######################################
