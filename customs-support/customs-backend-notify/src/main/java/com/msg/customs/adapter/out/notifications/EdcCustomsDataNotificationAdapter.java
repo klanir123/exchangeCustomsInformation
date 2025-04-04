@@ -1,14 +1,16 @@
 package com.msg.customs.adapter.out.notifications;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import com.msg.customs.adapter.out.notifications.api.json.JsonUtil;
-import com.msg.customs.adapter.out.notifications.api.model.CatalogRequest;
-import com.msg.customs.adapter.out.notifications.api.model.CatalogResponse;
+import com.msg.customs.adapter.out.notifications.api.model.*;
 import com.msg.customs.adapter.out.notifications.config.RestProperties;
 import com.msg.customs.adapter.out.notifications.json.NotificationJsonMapper;
 import com.msg.customs.adapter.out.notifications.model.*;
 import com.msg.customs.adapter.out.notifications.service.ContractSelectionService;
+import com.msg.customs.adapter.out.notifications.service.NegotiationStatusChecker;
 import com.msg.customs.adapter.out.notifications.service.RestService;
 import com.msg.customs.common.config.Adapter;
 
@@ -63,13 +65,38 @@ public class EdcCustomsDataNotificationAdapter extends AbstractCustomsDataNotifi
 	}
 
 	@Override
-	protected Negotiation initiateContractNegotiation(EDCEndpoint endPoint, ContractOffer contract) {
-		// TODO Call EDC to initiate the contract negotiation
-		return new Negotiation();
+	protected ContractAgreement initiateContractNegotiation(EDCEndpoint endPoint, ContractOffer offer) {
+		NegotiationRequest request = NegotiationRequest
+				.withDefaults()
+				.counterPartyAddress(endPoint.getEndpoint())
+				.policy(offer.toPolicy())
+				.build();
+
+		ResponseEntity<String> responseEntity = restService.initiateContractNegotiation().callEntity(request);
+		if (responseEntity.getStatusCode() == HttpStatus.OK) {
+			log.info("Contract negotiation initiated successfully");
+			NegotiationResponse response = JsonUtil.fromJson(responseEntity.getBody(), NegotiationResponse.class);
+			NegotiationStatusChecker statusChecker = new NegotiationStatusChecker(restService);
+
+			try {
+				Future<ContractAgreement> future = statusChecker.startCheckingNegotiationStatus(response.getId());
+				ContractAgreement agreement = future.get(); // Wait for the negotiation to complete
+				log.info("Negotiation completed successfully: {}", agreement);
+				return agreement;
+				// Process the agreement as needed
+			} catch (InterruptedException | ExecutionException e) {
+				log.error("Error while waiting for negotiation to complete", e);
+			}
+
+		} else {
+			log.error("Error while initiating contract negotiation: {}", responseEntity.getStatusCode());
+		}
+		// TODO -> used to avoid error
+		return ContractAgreement.builder().build();
 	}
 
 	@Override
-	protected DataTransferConnection initiateDataTransfer(EDCEndpoint endPoint, Negotiation negotiation) {
+	protected DataTransferConnection initiateDataTransfer(EDCEndpoint endPoint, ContractAgreement agreement) {
 		// TODO Call EDC to initiate the data transfer
 		return new DataTransferConnection();
 	}

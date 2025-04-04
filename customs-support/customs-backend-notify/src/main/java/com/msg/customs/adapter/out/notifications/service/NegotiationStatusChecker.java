@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 public class NegotiationStatusChecker {
 
     private static final String NEGOTIATION_SUCCESS_STATE = "FINALIZED";
+    private static final long TIMEOUT_MIN = 5; // Timeout in minutes
 
     private final RestService restService;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -30,7 +31,14 @@ public class NegotiationStatusChecker {
                 future.completeExceptionally(e);
             }
         };
-        scheduler.scheduleAtFixedRate(checker, 0, 30, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(checker, 0, 10, TimeUnit.SECONDS);
+        // Schedule a task to cancel the scheduledFuture after the timeout
+        scheduler.schedule(() -> {
+            if (!future.isDone()) {
+                scheduledFuture.cancel(true);
+                future.completeExceptionally(new TimeoutException("Negotiation status check timed out"));
+            }
+        }, TIMEOUT_MIN, TimeUnit.MINUTES);
         return future;
     }
 
@@ -42,7 +50,7 @@ public class NegotiationStatusChecker {
             AgreementResponse agreementResponse = JsonUtil.fromJson(response.getBody(), AgreementResponse.class);
             boolean isSuccessful = processResponse(agreementResponse);
             if (isSuccessful) {
-                scheduler.shutdown();
+                scheduler.shutdownNow();
                 System.out.println("Negotiation was successful. Stopping the scheduler.");
                 return ContractAgreement.builder()
                         .id(agreementResponse.getId())

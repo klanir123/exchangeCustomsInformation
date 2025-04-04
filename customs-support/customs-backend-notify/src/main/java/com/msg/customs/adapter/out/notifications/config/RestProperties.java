@@ -45,8 +45,8 @@ public class RestProperties {
         @NotNull
         private String baseUrl;
         private String apiCatalogRequest = "/v3/catalog/request";
-        private String apiContractNegotiations = "/v3/contractnegotiationss";
-        private String apiContractAgreementCheck = "/v3/contractnegotiationss";
+        private String apiContractNegotiations = "/v3/contractnegotiations";
+        private String apiContractAgreementCheck = "/v3/contractnegotiations";
 
         public String urlCatalogRequest() {
             return url(baseUrl, apiCatalogRequest);

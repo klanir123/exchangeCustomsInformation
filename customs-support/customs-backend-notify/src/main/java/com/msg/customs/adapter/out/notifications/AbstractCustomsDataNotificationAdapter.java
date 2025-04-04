@@ -18,15 +18,15 @@ public abstract class AbstractCustomsDataNotificationAdapter implements CustomsD
 		if (edcEndpoint == null) {
 			throw new RuntimeException("No EDC endpoint found for business partner number: " + targetBPN);
 		}
-		ContractOffer contract = retrieveContract(edcEndpoint, getSenderBPN());
-		if (contract == null) {
+		ContractOffer offer = retrieveContract(edcEndpoint, getSenderBPN());
+		if (offer == null) {
 			throw new RuntimeException("No contract found for business partner number: " + targetBPN);
 		}
-		Negotiation negotiation = initiateContractNegotiation(edcEndpoint, contract);
-		if (negotiation == null) {
+		ContractAgreement agreement = initiateContractNegotiation(edcEndpoint, offer);
+		if (agreement == null) {
 			throw new RuntimeException("Negotiation could not be initiated for business partner number: " + targetBPN);
 		}
-		DataTransferConnection connection = initiateDataTransfer(edcEndpoint, negotiation);
+		DataTransferConnection connection = initiateDataTransfer(edcEndpoint, agreement);
 		if (connection == null) {
 			throw new RuntimeException("Data transfer could not be initiated for business partner number: " + targetBPN);
 		}
@@ -52,19 +52,21 @@ public abstract class AbstractCustomsDataNotificationAdapter implements CustomsD
 
 	/**
 	 * Initiates the contract negotiation.
+	 *
 	 * @param endPoint the EDC endpoint of the receiver
 	 * @param contract the contract
 	 * @return the negotiation or null if the negotiation could not be initiated
 	 */
-	protected abstract Negotiation initiateContractNegotiation(EDCEndpoint endPoint, ContractOffer contract);
+	protected abstract ContractAgreement initiateContractNegotiation(EDCEndpoint endPoint, ContractOffer contract);
 
 	/**
 	 * Establish data transfer connection.
-	 * @param endPoint the EDC endpoint of the receiver
-	 * @param negotiation the negotiation
+	 *
+	 * @param endPoint  the EDC endpoint of the receiver
+	 * @param agreement the negotiation
 	 * @return the data transfer or null if the data transfer could not be initiated
 	 */
-	protected abstract DataTransferConnection initiateDataTransfer(EDCEndpoint endPoint, Negotiation negotiation);
+	protected abstract DataTransferConnection initiateDataTransfer(EDCEndpoint endPoint, ContractAgreement agreement);
 
 	/**
 	 * Sends the notification.

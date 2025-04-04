@@ -2,7 +2,7 @@
 
 ## Deployment
 
-Currently there is a docker-compose file which can be used for a deployment on Docker or Podman. For this you need to compile the modules (e.g. mvn clean install), 
+Currently, there is a docker-compose file which can be used for a deployment on Docker or Podman. For this you need to compile the modules (e.g. mvn clean install), 
 build the image and deploy the result to a container engine.
 
 See the section: Setup Containerfiles 
@@ -12,31 +12,34 @@ See the section: Setup Containerfiles
 This project is split into the following structure. This structure follows the DDD principles (Ports and Adapters, Onion Architecture):
 
 ```
-+- customs-commons
- - customs-backend-app
- - customs-backend-core // DDD driven structure
-   + adapter
-     - in
-       - web // RestAPI implementation
-     - out
-       - storage       // storage tasks
-       - notifications // notification tasks
-   + application
-     - domain
-       - model
-       - service
-     + port // Use cases for incoming and outgoing operations
-       - in
-       - out 	
- - customs-backend-api // API part which provides a RestAPI for the UI
- - customs-backend-jap // JPA implementation (Liquibase, H2, PostgreSQL)
- - customs-ui // uses the customs-commons, customs-backend-api)
- - setup
-    + docker // docker compose files 
-    + helm   // helm charts
++ customs-support
+    +- customs-commons
+     - customs-backend-app
+     - customs-backend-core // DDD driven structure
+       + adapter
+         - in
+           - web // RestAPI implementation
+         - out
+           - storage       // storage tasks
+           - notifications // notification tasks
+       + application
+         - domain
+           - model
+           - service
+         + port // Use cases for incoming and outgoing operations
+           - in
+           - out 	
+     - customs-backend-api // API part which provides a RestAPI for the UI
+     - customs-backend-jap // JPA implementation (Liquibase, H2, PostgreSQL)
+     - customs-backend-notify // Implementation use to communicate with EDC
+     - edc-api // Uses the OpenAPI defiition to create the EDC APIs (not provided)
+     - customs-ui // uses the customs-commons, customs-backend-api)
+     - setup
+        + docker // docker compose files 
+        + helm   // helm charts
 ```
 
-The projects is split into two parts (customs-backend-xxx and customs-ui).
+The projects are split into two parts (customs-backend-xxx and customs-ui).
 
 > Using an OpenAPI configuration would be a better choice. Currently, the customs-backend-app generates the OpenAPI documents (e.g. http://localhost:8080/v3/api-docs, http://localhost:8080/v3/api-docs.yaml) 
 > and a Swagger-Ui (e.g. http://localhost:8080/swagger-ui/index.html). The target must be that the customs-ui uses the OpenAPI api-docs to generate the API for the communication. In this case the customs-ui
@@ -75,6 +78,27 @@ There are two common modules.
 
 * customs-commons: This module contains common data model (like enums)
 * customs-backend-api: This module contains the API for the rest calls.
+
+### notification
+
+Some words about the notification module. The basic idea was to use the EDC OpenAPI definition to generate the Management API. Unfortunately,
+the EDC OpenAPI definition is not complete (Some of the models are simple Objects, some are not fully specified). Therefore, the
+customs-backend-notify module includes its own necessary API definitions for simple communication with the EDC.
+
+Currently, the customs-backend-notify module implements:
+
+* getting and selecting the customs contract offer 
+* negotiation the customs contract and waiting for the agreement.
+
+However, the edc-api module contains several versioned OpenAPI definitions provided for the EDC which can be used to generate a Spring based
+Java API.
+
+```bash
+cd edc-api
+mvn clean compile
+```
+
+> Note: Module edc-api is removed.
 
 ## Setup Containerfiles
 

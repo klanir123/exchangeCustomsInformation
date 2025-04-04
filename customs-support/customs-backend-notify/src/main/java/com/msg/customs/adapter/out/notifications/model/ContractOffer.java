@@ -1,5 +1,7 @@
 package com.msg.customs.adapter.out.notifications.model;
 
+import com.msg.customs.adapter.out.notifications.api.model.Context;
+import com.msg.customs.adapter.out.notifications.api.model.Policy;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,4 +17,13 @@ public class ContractOffer {
 
     private final String participantId;
 
+    public Policy toPolicy() {
+        return Policy.of()
+                .id(getId())
+                .type("Offer")
+                .provider(getParticipantId())
+                .assetId(getAssetId())
+                .context(Context.of().jsonld())
+                .build();
+    }
 }
