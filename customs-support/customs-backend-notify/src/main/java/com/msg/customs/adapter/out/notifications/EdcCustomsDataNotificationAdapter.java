@@ -2,12 +2,20 @@ package com.msg.customs.adapter.out.notifications;
 
 import java.util.List;
 
+import com.msg.customs.adapter.out.notifications.api.json.JsonUtil;
+import com.msg.customs.adapter.out.notifications.api.model.CatalogRequest;
+import com.msg.customs.adapter.out.notifications.api.model.CatalogResponse;
+import com.msg.customs.adapter.out.notifications.config.RestProperties;
 import com.msg.customs.adapter.out.notifications.json.NotificationJsonMapper;
 import com.msg.customs.adapter.out.notifications.model.*;
+import com.msg.customs.adapter.out.notifications.service.ContractSelectionService;
+import com.msg.customs.adapter.out.notifications.service.RestService;
 import com.msg.customs.common.config.Adapter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Simple NotificationAdapter which simply logs the notification data (instead of calling e.g. the EDC).
@@ -17,21 +25,45 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EdcCustomsDataNotificationAdapter extends AbstractCustomsDataNotificationAdapter {
 
+	private final RestProperties restProperties;
+
+	private final RestService restService;
+
+	private final ContractSelectionService contractSelectionService;
+
 	@Override
 	protected EDCEndpoint retrievEDCEndpoint(BPN businessPartnerNumber) {
 		// TODO Call Discovery Service to get the edc endpoint for the target business partner number
-		return new EDCEndpoint();
+		return EDCEndpoint.builder().endpoint(restProperties.getEndpoint()).build();
 	}
 
 	@Override
-	protected Contract retrieveContract(EDCEndpoint endpoint, BPN senderBPN) {
-		// TODO Call EDC to get the contracts provided by the receiver
-		// TODO Select the contract relevant for customs information
-		return new Contract();
+	protected ContractOffer retrieveContract(EDCEndpoint endpoint, BPN senderBPN) {
+		CatalogRequest catalogRequest = CatalogRequest.withDefaults().counterPartyAddress(endpoint.getEndpoint()).build();
+		ResponseEntity<String> response = restService.fetchCatalog().callEntity(catalogRequest);
+
+		if (response.getStatusCode() == HttpStatus.OK) {
+			log.atInfo().addArgument(response).log("Catalog fetched successfully {}");
+			CatalogResponse catalogResponse = JsonUtil.fromJson(response.getBody(), CatalogResponse.class);
+			// filter catalog and find customs contract offer
+			ContractOffer customsOffer = contractSelectionService.selectCustomsOffer(catalogResponse);
+			if (customsOffer != null) {
+				log.info("Customs offer found in catalog");
+				log.info(customsOffer.toString());
+				// negotiate customs contract
+				return customsOffer;
+			} else {
+				log.error("No customs offer found in catalog");
+			}
+		} else {
+			log.error("Error while fetching catalog: {}", response.getStatusCode());
+		}
+		// TODO -> used to avoid error
+		return ContractOffer.builder().build();
 	}
 
 	@Override
-	protected Negotiation initiateContractNegotiation(EDCEndpoint endPoint, Contract contract) {
+	protected Negotiation initiateContractNegotiation(EDCEndpoint endPoint, ContractOffer contract) {
 		// TODO Call EDC to initiate the contract negotiation
 		return new Negotiation();
 	}

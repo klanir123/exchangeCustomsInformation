@@ -3,6 +3,11 @@ spring:
     import: classpath:notification-${spring.profiles.active}.yaml
 
 edc:
-  version: test
+  endpoint: http://localhost:19194/protocol
   receiver:
-    baseUrl: http://localhost:8080/edc/receiver
+    # The URL used by the sample edc configuration
+    baseUrl: http://localhost:29193/management
+  offer:
+    "assetId": "Customs"
+    "type": "odrl:Offer"
+    "format": "HttpData-PUSH"

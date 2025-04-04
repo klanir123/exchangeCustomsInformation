@@ -18,7 +18,7 @@ public abstract class AbstractCustomsDataNotificationAdapter implements CustomsD
 		if (edcEndpoint == null) {
 			throw new RuntimeException("No EDC endpoint found for business partner number: " + targetBPN);
 		}
-		Contract contract = retrieveContract(edcEndpoint, getSenderBPN());
+		ContractOffer contract = retrieveContract(edcEndpoint, getSenderBPN());
 		if (contract == null) {
 			throw new RuntimeException("No contract found for business partner number: " + targetBPN);
 		}
@@ -43,11 +43,12 @@ public abstract class AbstractCustomsDataNotificationAdapter implements CustomsD
 
 	/**
 	 * Retrieves the contracts and select the contract relevant for customs information.
-	 * @param endpoint the EDC endpoint of the receiver
+	 *
+	 * @param endpoint                the EDC endpoint of the receiver
 	 * @param myBusinessPartnerNumber the business partner number of the sender
 	 * @return the contract or null if no contract is found
 	 */
-	protected abstract Contract retrieveContract(EDCEndpoint endpoint, BPN myBusinessPartnerNumber);
+	protected abstract ContractOffer retrieveContract(EDCEndpoint endpoint, BPN myBusinessPartnerNumber);
 
 	/**
 	 * Initiates the contract negotiation.
@@ -55,7 +56,7 @@ public abstract class AbstractCustomsDataNotificationAdapter implements CustomsD
 	 * @param contract the contract
 	 * @return the negotiation or null if the negotiation could not be initiated
 	 */
-	protected abstract Negotiation initiateContractNegotiation(EDCEndpoint endPoint, Contract contract);
+	protected abstract Negotiation initiateContractNegotiation(EDCEndpoint endPoint, ContractOffer contract);
 
 	/**
 	 * Establish data transfer connection.

@@ -13,11 +13,15 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix = "edc")
 @Data
 @Slf4j
+@Validated
 public class RestProperties {
 
-    private String version;
+    @NotNull
+    private String endpoint;
 
-    private Receiver receiver = new Receiver();
+    private Offer offer;
+
+    private Receiver receiver;
 
     @PostConstruct
     public void afterInit() {
@@ -26,8 +30,18 @@ public class RestProperties {
 
     @Data
     @Validated
-    public class Receiver {
-        private String protocol = "http";
+    public static class Offer {
+        @NotNull
+        private String assetId;
+        @NotNull
+        private String type;
+        @NotNull
+        private String format;
+    }
+
+    @Data
+    @Validated
+    public static class Receiver {
         @NotNull
         private String baseUrl;
         private String apiCatalogRequest = "/v3/catalog/request";
@@ -35,33 +49,35 @@ public class RestProperties {
         private String apiContractAgreementCheck = "/v3/contractnegotiationss";
 
         public String urlCatalogRequest() {
-            return url( protocol, baseUrl, apiCatalogRequest);
+            return url(baseUrl, apiCatalogRequest);
         }
         public String urlContractNegotiation() {
-            return url( protocol, baseUrl, apiContractNegotiations);
+            return url(baseUrl, apiContractNegotiations);
         }
         public String urlContractAgreementCheck(String id) {
-            String url = url(protocol, baseUrl, apiContractNegotiations);
+            String url = url(baseUrl, apiContractNegotiations);
             return attachPathParam(url, id);
         }
-    }
 
-    private String attachPathParam(String url, String pathParam) {
-        if (url.endsWith("/")) {
-            return url + pathParam;
-        } else {
-            return url + "/" + pathParam;
+        private String attachPathParam(String url, String pathParam) {
+            if (url.endsWith("/")) {
+                return url + pathParam;
+            } else {
+                return url + "/" + pathParam;
+            }
         }
+
+        private String url(String baseUrl, String api) {
+            if (baseUrl.endsWith("/")) {
+                baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+            }
+            if (api.startsWith("/")) {
+                api = api.substring(1);
+            }
+            return baseUrl + "/" + api;
+        }
+
     }
 
-    private String url(String protocol, String baseUrl, String api) {
-        String rest = baseUrl + "/" + api;
-        // If baseUrl ends with / and api starts with /, remove one /
-        rest = rest.replace("///", "/");
-        rest = rest.replace("//", "/");
 
-        String url =  protocol + "://" + rest;
-        // If protocol ends with :// remove one ://
-        return url.replace("://://", "://");
-    }
 }
