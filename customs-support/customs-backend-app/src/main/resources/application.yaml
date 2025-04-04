@@ -1,3 +1,5 @@
 spring:
   config:
-    import: classpath:db.yaml
+    import:
+      - classpath:db.yaml
+      - classpath:notification.yaml

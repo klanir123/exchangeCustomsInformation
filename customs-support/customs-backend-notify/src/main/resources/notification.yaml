@@ -1,0 +1,8 @@
+spring:
+  config:
+    import: classpath:notification-${spring.profiles.active}.yaml
+
+edc:
+  version: test
+  receiver:
+    baseUrl: http://localhost:8080/edc/receiver
