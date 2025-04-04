@@ -89,6 +89,7 @@ Currently, the customs-backend-notify module implements:
 
 * getting and selecting the customs contract offer 
 * negotiation the customs contract and waiting for the agreement.
+* (starting the transfer is missing)
 
 However, the edc-api module contains several versioned OpenAPI definitions provided for the EDC which can be used to generate a Spring based
 Java API.
@@ -97,8 +98,6 @@ Java API.
 cd edc-api
 mvn clean compile
 ```
-
-> Note: Module edc-api is removed.
 
 ## Setup Containerfiles
 
