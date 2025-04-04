@@ -7,6 +7,10 @@ build the image and deploy the result to a container engine.
 
 See the section: Setup Containerfiles 
 
+> Note: Currently there is no EDC connector included. However, a EDC connector is needed to execute 
+> fetching the catalog and negotiate the contract. To start an EDC download the 'tractus-x-edc' source 
+> and start the 'transfer' examples. To run a test an additional asset with name 'Customs' is needed.
+
 ## Development
 
 This project is split into the following structure. This structure follows the DDD principles (Ports and Adapters, Onion Architecture):

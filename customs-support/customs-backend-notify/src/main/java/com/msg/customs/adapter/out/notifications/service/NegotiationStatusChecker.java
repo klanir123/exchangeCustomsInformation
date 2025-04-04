@@ -7,6 +7,7 @@ import com.msg.customs.adapter.out.notifications.api.model.AgreementResponse;
 import com.msg.customs.adapter.out.notifications.model.ContractAgreement;
 import org.springframework.http.ResponseEntity;
 
+
 public class NegotiationStatusChecker {
 
     private static final String NEGOTIATION_SUCCESS_STATE = "FINALIZED";
@@ -31,6 +32,10 @@ public class NegotiationStatusChecker {
                 future.completeExceptionally(e);
             }
         };
+
+        // Schedule the task to run every 10 seconds
+        // Be aware that it will take about 10 seconds before the scheduler will stop after
+        // the negotiation is successful.
         ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(checker, 0, 10, TimeUnit.SECONDS);
         // Schedule a task to cancel the scheduledFuture after the timeout
         scheduler.schedule(() -> {
