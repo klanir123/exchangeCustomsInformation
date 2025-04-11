@@ -53,6 +53,14 @@ public class CustomsController {
 		prepareModelForEditOrCreate(model, customs);		
 		return "customsEdit";
 	}
+
+	@GetMapping("/customs/part/create")
+	public String createPartData(Model model) {
+		UiCustomsData customs = new UiCustomsData();
+		prepareModelForEditOrCreate(model, customs);
+		return "customsPartEdit";
+	}
+
 	
 	private void prepareModelForEditOrCreate(Model model, UiCustomsData customs) {
         model.addAttribute("customs", customs);
