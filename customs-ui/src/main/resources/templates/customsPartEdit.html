@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+    <title>partTable</title>
+
+</head>
+<body>
+
+<h2>Sachnummer in die Tabelle hinzufügen</h2>
+
+<form id="entryForm">
+    <label for="column1">Catena-X ID:</label>
+    <input type="text" id="catenaxId" required>
+
+    <label for="column2">Kundensachnummer:</label>
+    <input type="text" id="customerPartNumber" required>
+
+    <label for="column3">Bezeichnung Kundensachnummer:</label>
+    <input type="text" id="customerPartName" required>
+
+    <label for="column4">Sachnummer:</label>
+    <input type="text" id="partNumber" required>
+
+    <label for="column4">Bezeichnung Sachnummer:</label>
+    <input type="text" id="partName" required>
+
+    <input type="submit" value="Eintrag hinzufügen">
+</form>
+
+
+
+<h2 th:text="#{overview_header}">Parts</h2>
+
+<table id="dataTable">
+    <thead>
+    <tr>
+        <th>Select</th>
+        <th>Catena-X ID</th>
+        <th>Kundensachnummer</th>
+        <th>Bezeichnung Kundensachnummer</th>
+        <th>Sachnummer</th>
+        <th>Bezeichnung Sachnummer</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+    // Funktion, um den neuen Eintrag hinzuzufügen
+    document.getElementById('entryForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Verhindert das Absenden des Formulars
+
+        // Werte aus den Eingabefeldern holen
+        const column1 = document.getElementById('catenaxId').value;
+        const column2 = document.getElementById('customerPartNumber').value;
+        const column3 = document.getElementById('customerPartName').value;
+        const column4 = document.getElementById('partNumber').value;
+        const column5 = document.getElementById('partName').value;
+
+        // Neue Zeile für die Tabelle erstellen
+        const newRow = document.createElement('tr');
+
+        // Zellen mit den Werten füllen
+        newRow.innerHTML = `
+                <td><input type="checkbox" name="selectedIds" " /></td>
+                <td>${column1}</td>
+                <td>${column2}</td>
+                <td>${column3}</td>
+                <td>${column4}</td>
+                <td>${column5}</td>
+            `;
+
+        // Die neue Zeile zur Tabelle hinzufügen
+        document.querySelector('#dataTable tbody').appendChild(newRow);
+
+        // Eingabefelder zurücksetzen
+        document.getElementById('entryForm').reset();
+    });
+</script>
+</body>
+</html>
