@@ -78,7 +78,7 @@ public class CustomsService {
 
 	public void saveMasterPart(UiMasterPart uiMasterPart){
 		MasterPartDto masterPartDto = UiMasterPartMapper.toDto(uiMasterPart);
-		ResponseEntity<Void> voidResponseEntity = restTemplate.postForEntity(backendProperties.customsUpdatetUrl(), masterPartDto, Void.class);
+		ResponseEntity<Void> voidResponseEntity = restTemplate.postForEntity(backendProperties.customsMasterPartUpdatetUrl(), masterPartDto, Void.class);
 	}
 
 	public void notifyCustomsDataChanged(List<String> customs) {

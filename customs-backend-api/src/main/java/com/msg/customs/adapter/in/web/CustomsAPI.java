@@ -59,7 +59,7 @@ public interface CustomsAPI {
      * @param masterPartData the data which needs to be saved
      * @return http status
      */
-    @PostMapping
+    @PostMapping(value = "/masterpart")
     ResponseEntity<Void> saveMasterPart(@RequestBody MasterPartDto masterPartData);
 
 
