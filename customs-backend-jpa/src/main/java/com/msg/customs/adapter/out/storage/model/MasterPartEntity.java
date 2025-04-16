@@ -47,7 +47,7 @@ public class MasterPartEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "catenaXId")
+    @Column(name = "catenax_id")
     private String catenaXId;
 
     @Column(name = "customer_part_name")
