@@ -3,6 +3,9 @@ package com.msg.customs.adapter.in.web.controller;
 
 import java.util.List;
 
+import com.msg.customs.adapter.in.web.mapper.MasterPartValueMapper;
+import com.msg.customs.adapter.in.web.model.MasterPartDto;
+import com.msg.customs.application.domain.model.MasterPart;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,7 +56,9 @@ public class CustomsAPIController implements CustomsAPI {
 		return null;
 	}
 
-	@Override
+
+
+    @Override
 	public ResponseEntity<Void> saveCustomsData(CustomsDataDto customsDataValue) {
 		log.info(customsDataValue.toString());
 		CustomsData customsData = CustomsDataValueMapper.toDomain(customsDataValue);
@@ -61,7 +66,17 @@ public class CustomsAPIController implements CustomsAPI {
 		return ResponseEntity.ok().build();
 	}
 
-	@Override
+    @Override
+    public ResponseEntity<Void> saveMasterPart(MasterPartDto masterPartData) {
+		log.info(masterPartData.toString());
+		MasterPart masterPart = MasterPartValueMapper.toDomain(masterPartData);
+
+		saveCustomsDataUseCase.saveMasterPartData(SaveCustomsDataCommand.builder().masterPart(masterPart).build());
+		return ResponseEntity.ok().build();
+
+    }
+
+    @Override
 	public ResponseEntity<Void> notifyCustomsDataUpdated(List<String> catenaxIds) { 
 		notifyCustomsDataChangedUseCase.notifyCustomsDataChanged(getTargetBPN(), catenaxIds);
 		return ResponseEntity.ok().build();

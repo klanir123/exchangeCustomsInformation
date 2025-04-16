@@ -3,6 +3,8 @@ package com.msg.customs.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.msg.customs.domain.UiCustomsReducedData;
+import com.msg.customs.domain.UiMasterPart;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,9 +58,17 @@ public class CustomsController {
 
 	@GetMapping("/customs/part/create")
 	public String createPartData(Model model) {
-		UiCustomsData customs = new UiCustomsData();
-		prepareModelForEditOrCreate(model, customs);
+		UiMasterPart masterPart = new UiMasterPart();
+		//prepareModelForEditOrCreate(model, customs);
+
 		return "customsPartEdit";
+	}
+	@PostMapping("/customs/part/save")
+	public String saveMasterData(Model model, UiMasterPart masterPart) {
+
+		log.info(masterPart.toString());
+		customsService.saveMasterPart(masterPart);
+		return "redirect:/customs";
 	}
 
 	

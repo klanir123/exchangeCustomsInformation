@@ -2,6 +2,7 @@ package com.msg.customs.adapter.in.web;
 
 import java.util.List;
 
+import com.msg.customs.adapter.in.web.model.MasterPartDto;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,8 +52,18 @@ public interface CustomsAPI {
 	 */
 	@PostMapping
 	ResponseEntity<Void> saveCustomsData(@RequestBody CustomsDataDto customsData);
-		
-	/**
+
+    /**
+     * Save master partdata.
+     *
+     * @param masterPartData the data which needs to be saved
+     * @return http status
+     */
+    @PostMapping
+    ResponseEntity<Void> saveMasterPart(@RequestBody MasterPartDto masterPartData);
+
+
+    /**
 	 * Notify that customs data has been updated.
 	 * 
 	 * @param catenaxIds list of catenaxIds

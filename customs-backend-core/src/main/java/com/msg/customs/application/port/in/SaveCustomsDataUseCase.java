@@ -9,6 +9,7 @@ public interface SaveCustomsDataUseCase {
 	 * Saves the customs data.
 	 * @param commandCustomsData the command to save the data
 	 */
-	void saveCustomsData(SaveCustomsDataCommand commandCustomsData);	
+	void saveCustomsData(SaveCustomsDataCommand commandCustomsData);
 
+	void saveMasterPartData(SaveCustomsDataCommand masterPartData);
 }

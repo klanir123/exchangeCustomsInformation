@@ -3,6 +3,7 @@ package com.msg.customs.application.port.out;
 import java.util.List;
 
 import com.msg.customs.application.domain.model.CustomsData;
+import com.msg.customs.application.domain.model.MasterPart;
 
 /**
  * Adapter to store and load customs data.
@@ -36,4 +37,9 @@ public interface CustomsDataStorageAdapter {
 	 */
 	void saveCustomsData(CustomsData customsData);
 
+	/**
+	 * Save masterpart data.
+	 * @param masterPartData customs data to save
+	 */
+	void saveMasterPartData(MasterPart masterPartData);
 }

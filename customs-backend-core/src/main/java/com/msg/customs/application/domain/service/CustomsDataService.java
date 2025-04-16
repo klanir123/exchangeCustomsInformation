@@ -41,4 +41,9 @@ public class CustomsDataService implements LoadCustomsDataListUseCase, SaveCusto
 		customsStorageAdapter.saveCustomsData(commandCustomsData.getCustomsData());		
 	}
 
+	@Override
+	public void saveMasterPartData(SaveCustomsDataCommand masterPartData) {
+		customsStorageAdapter.saveMasterPartData(masterPartData.getMasterPart());
+	}
+
 }

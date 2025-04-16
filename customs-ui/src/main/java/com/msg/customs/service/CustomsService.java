@@ -3,6 +3,9 @@ package com.msg.customs.service;
 import java.util.List;
 import java.util.Map;
 
+import com.msg.customs.adapter.in.web.model.MasterPartDto;
+import com.msg.customs.domain.UiMasterPart;
+import com.msg.customs.mapper.UiMasterPartMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -71,6 +74,11 @@ public class CustomsService {
 	public void saveCustoms(UiCustomsData uiCustoms) {		
 		CustomsDataDto customsData = UiCustomsMapper.toDto(uiCustoms);		
 		restTemplate.postForEntity(backendProperties.customsUpdatetUrl(), customsData, Void.class);
+	}
+
+	public void saveMasterPart(UiMasterPart uiMasterPart){
+		MasterPartDto masterPartDto = UiMasterPartMapper.toDto(uiMasterPart);
+		ResponseEntity<Void> voidResponseEntity = restTemplate.postForEntity(backendProperties.customsUpdatetUrl(), masterPartDto, Void.class);
 	}
 
 	public void notifyCustomsDataChanged(List<String> customs) {

@@ -8,6 +8,10 @@ import lombok.Data;
 @Data
 public class MasterPart {
 	
+	private Long id;
+
+	private String catenaXId;
+
 	private String customerPartNumber;
 	
 	private String customerPartName;
@@ -17,6 +21,6 @@ public class MasterPart {
 	private String manufacturerPartNumber;
 
 	public boolean isEmpty() {
-		return (customerPartNumber == null) && (customerPartName == null) && (manufacturerPartName == null) && (manufacturerPartNumber == null);
+		return ((catenaXId == null) &&(customerPartNumber == null) && (customerPartName == null) && (manufacturerPartName == null) && (manufacturerPartNumber == null));
 	}
 }

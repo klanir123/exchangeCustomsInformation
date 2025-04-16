@@ -27,5 +27,9 @@ public class CustomsBackendProperties {
 	public String customsUpdatetUrl() {
 		return uri + "/customs";
 	}
+
+	public String customsUpdatePartUrl() {
+		return uri + "/customs/part/create";
+	}
 	
 }
