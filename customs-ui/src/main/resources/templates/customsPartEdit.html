@@ -28,20 +28,23 @@
 
 <!--/*@thymesVar id="masterPart" type="com.msg.customs.domain.UiMasterPart"*/-->
 <form id="entryForm" action="#" th:action="@{/customs/part/save}" th:object="${masterPart}" method="post">
+
+    <input type="hidden" th:field="*{id}" />
+
     <label for="catenaxId">Catena-X ID:</label>
-    <input type="text" id="catenaxId" required>
+    <input type="text" id="catenaxId" th:field="*{catenaxId}">
 
     <label for="customerPartNumber">Kundensachnummer:</label>
-    <input type="text" id="customerPartNumber" required>
+    <input type="text" id="customerPartNumber" th:field="*{customerPartNumber}">
 
     <label for="customerPartName">Bezeichnung Kundensachnummer:</label>
-    <input type="text" id="customerPartName" required>
+    <input type="text" id="customerPartName" th:field="*{customerPartName}">
 
     <label for="partNumber">Sachnummer:</label>
-    <input type="text" id="partNumber" required>
+    <input type="text" id="partNumber" th:field="*{manufacturerPartNumber}" >
 
     <label for="partName">Bezeichnung Sachnummer:</label>
-    <input type="text" id="partName" required>
+    <input type="text" id="partName" th:field="*{manufacturerPartName}" >
 
     <input type="submit" value="Eintrag hinzufügen">
 </form>
@@ -54,7 +57,6 @@
 <table id="dataTable">
     <thead>
     <tr>
-        <th>Select</th>
         <th>Catena-X ID</th>
         <th>Kundensachnummer</th>
         <th>Bezeichnung Kundensachnummer</th>
@@ -64,42 +66,51 @@
     </thead>
 
     <tbody>
+        <tr th:each="masterpart :${masterpartList}">
+            <td>
+                <a th:href="@{/customs/part/edit/{id}(id=${masterpart.catenaxId})}" th:text="${masterpart.catenaxId}">Edit</a>
+            </td>
+            <td th:text="${masterpart.customerPartNumber}"></td>
+            <td th:text="${masterpart.customerPartName}"></td>
+            <td th:text="${masterpart.manufacturerPartNumber}"></td>
+            <td th:text="${masterpart.manufacturerPartName}"></td>
+        </tr>
     </tbody>
 </table>
 
-<script>
-    // Funktion, um den neuen Eintrag hinzuzufügen
-    document.getElementById('entryForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Verhindert das Absenden des Formulars
+<!--<script>-->
+<!--    // Funktion, um den neuen Eintrag hinzuzufügen-->
+<!--    document.getElementById('entryForm').addEventListener('submit', function(event) {-->
+<!--        event.preventDefault(); // Verhindert das Absenden des Formulars-->
 
-        // Werte aus den Eingabefeldern holen
-        const column1 = document.getElementById('catenaxId').value;
-        const column2 = document.getElementById('customerPartNumber').value;
-        const column3 = document.getElementById('customerPartName').value;
-        const column4 = document.getElementById('partNumber').value;
-        const column5 = document.getElementById('partName').value;
+<!--        // Werte aus den Eingabefeldern holen-->
+<!--        const column1 = document.getElementById('catenaxId').value;-->
+<!--        const column2 = document.getElementById('customerPartNumber').value;-->
+<!--        const column3 = document.getElementById('customerPartName').value;-->
+<!--        const column4 = document.getElementById('partNumber').value;-->
+<!--        const column5 = document.getElementById('partName').value;-->
 
-        // Neue Zeile für die Tabelle erstellen
-        const newRow = document.createElement('tr');
+<!--        // Neue Zeile für die Tabelle erstellen-->
+<!--        const newRow = document.createElement('tr');-->
 
-        // Zellen mit den Werten füllen
-        newRow.innerHTML = `
-                <td><input type="checkbox" name="selectedIds" " /></td>
-                <td>${column1}</td>
-                <td>${column2}</td>
-                <td>${column3}</td>
-                <td>${column4}</td>
-                <td>${column5}</td>
-            `;
+<!--        // Zellen mit den Werten füllen-->
+<!--        newRow.innerHTML = `-->
+<!--                <td><input type="checkbox" name="selectedIds" " /></td>-->
+<!--                <td>${column1}</td>-->
+<!--                <td>${column2}</td>-->
+<!--                <td>${column3}</td>-->
+<!--                <td>${column4}</td>-->
+<!--                <td>${column5}</td>-->
+<!--            `;-->
 
-        <input type="hidden" th:field="*{catenaxId}" th:if="${com.msg.customs.domain.UiCustomsData.catenaXId} != null" />
+<!--        <input type="hidden" th:field="*{catenaxId}" th:if="${com.msg.customs.domain.UiCustomsData.catenaXId} != null" />-->
 
-        // Die neue Zeile zur Tabelle hinzufügen
-        document.querySelector('#dataTable tbody').appendChild(newRow);
+<!--        // Die neue Zeile zur Tabelle hinzufügen-->
+<!--        document.querySelector('#dataTable tbody').appendChild(newRow);-->
 
-        // Eingabefelder zurücksetzen
-        document.getElementById('entryForm').reset();
-    });
-</script>
+<!--        // Eingabefelder zurücksetzen-->
+<!--        document.getElementById('entryForm').reset();-->
+<!--    });-->
+<!--</script>-->
 </body>
 </html>

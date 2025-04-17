@@ -76,6 +76,21 @@ public class CustomsService {
 		restTemplate.postForEntity(backendProperties.customsUpdatetUrl(), customsData, Void.class);
 	}
 
+	public List<UiMasterPart> getMasterParts() {
+		// TODO: implement service to get all parts
+		// Test Master Part
+		UiMasterPart testMasterPart = new UiMasterPart();
+		testMasterPart.setId(123L);
+		testMasterPart.setCatenaxId("X-123456789");
+		testMasterPart.setCustomerPartName("C-Test");
+		testMasterPart.setManufacturerPartName("M-Test");
+		testMasterPart.setManufacturerPartNumber("M-Test-123");
+		testMasterPart.setCustomerPartNumber("C-Test-123");
+		List<UiMasterPart> masterpartList = List.of(testMasterPart);
+
+		return masterpartList;
+	}
+
 	public void saveMasterPart(UiMasterPart uiMasterPart){
 		MasterPartDto masterPartDto = UiMasterPartMapper.toDto(uiMasterPart);
 		ResponseEntity<Void> voidResponseEntity = restTemplate.postForEntity(backendProperties.customsMasterPartUpdatetUrl(), masterPartDto, Void.class);

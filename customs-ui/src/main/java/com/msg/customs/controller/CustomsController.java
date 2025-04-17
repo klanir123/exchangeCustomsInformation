@@ -46,62 +46,77 @@ public class CustomsController {
 		prepareModelForEditOrCreate(model, customs);
 		
 		return "customsEdit";
-	}	
-	
+	}
+
 	@GetMapping("/customs/create")
 	public String createCustomsData(Model model) {
 		UiCustomsData customs = new UiCustomsData();
-		customs.setValidFrom(LocalDate.now());				
-		prepareModelForEditOrCreate(model, customs);		
+		customs.setValidFrom(LocalDate.now());
+		prepareModelForEditOrCreate(model, customs);
 		return "customsEdit";
+	}
+
+	@PostMapping("/customs/doCreateOrUpdate")
+	public String doCreateOrUpdateCustomsData(Model model, UiCustomsData customs) {
+
+		log.info(customs.toString());
+		customsService.saveCustoms(customs);
+
+		return "redirect:/customs";
+	}
+
+	@GetMapping("/customs/part/edit/{id}")
+	public String editPartData(@PathVariable String id, Model model) {
+		// TODO: implement service to get parts data by id
+		// UiMasterPart masterPart = customsService.getMsertPartData(id);
+		UiMasterPart masterPart = new UiMasterPart();
+		prepareModelForEditOrCreate(model, masterPart);
+
+		return "customsPartEdit";
 	}
 
 	@GetMapping("/customs/part/create")
 	public String createPartData(Model model) {
 		UiMasterPart masterPart = new UiMasterPart();
-		//prepareModelForEditOrCreate(model, customs);
+		prepareModelForEditOrCreate(model, masterPart);
 
 		return "customsPartEdit";
 	}
+
 	@PostMapping("/customs/part/save")
 	public String saveMasterData(Model model, UiMasterPart masterPart) {
 
 		log.info(masterPart.toString());
 		customsService.saveMasterPart(masterPart);
-		return "redirect:/customs";
+		return "redirect:/customs/part/create";
 	}
 
-	
-	private void prepareModelForEditOrCreate(Model model, UiCustomsData customs) {
-        model.addAttribute("customs", customs);
-        model.addAttribute("types", CustomsTypeEnum.values());
-        model.addAttribute("countries", CustomsTerritoryEnum.values());
-        model.addAttribute("federalStates", GermanFederalStateEnum.values());
-        model.addAttribute("certifiedOptions", CertifiedEnum.values());
-    }
-
-	@PostMapping("/customs/doCreateOrUpdate")
-	public String doCreateOrUpdateCustomsData(Model model, UiCustomsData customs) {
-		
-		log.info(customs.toString());
-		customsService.saveCustoms(customs);
-		
-		return "redirect:/customs";
-	}
-	
 	@PostMapping("/customs/addOriginInformation/{originInformation}")
 	public String addOriginInformation(Model model, UiCustomsData customs, @PathParam("originInformation") String originInformation) {
-		
+
 		customs.getOriginInformations().add(originInformation);
-		
+
 		return "customsEdit::#originInformationItems";
 	}
-	
+
     @PostMapping("/customs/notify")
     public ResponseEntity<Void> notifySelected(@RequestBody NotifyRequest notifyRequest) {
         List<String> catenaxIds = notifyRequest.getCatenaxIds();
         customsService.notifyCustomsDataChanged(catenaxIds);
         return ResponseEntity.ok().build();
-    }	
-	
+    }
+
+	private void prepareModelForEditOrCreate(Model model, UiCustomsData customs) {
+		model.addAttribute("customs", customs);
+		model.addAttribute("types", CustomsTypeEnum.values());
+		model.addAttribute("countries", CustomsTerritoryEnum.values());
+		model.addAttribute("federalStates", GermanFederalStateEnum.values());
+		model.addAttribute("certifiedOptions", CertifiedEnum.values());
+	}
+
+	private void prepareModelForEditOrCreate(Model model, UiMasterPart masterPart) {
+		model.addAttribute("masterPart", masterPart);
+		model.addAttribute("masterpartList", customsService.getMasterParts());
+	}
+
 }
