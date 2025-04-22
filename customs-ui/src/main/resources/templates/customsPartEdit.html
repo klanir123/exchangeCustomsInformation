@@ -5,25 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
     <title>partTable</title>
-    <style>
-    body {
-        border: 2px solid black;
-        padding: 10px;
-    }
-
-    .logo {
-        float:right;
-        width: 200px;
-        margin-top: 0px;
-    }
-
-    </style>
 
 </head>
 <body>
 <img src="/icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
-<h1>Sachnummer in die Tabelle hinzufügen</h1>
+<h1>Produkt hinzufügen</h1>
 <hr>
+
 
 
 <!--/*@thymesVar id="masterPart" type="com.msg.customs.domain.UiMasterPart"*/-->
@@ -46,12 +34,14 @@
     <label for="partName">Bezeichnung Sachnummer:</label>
     <input type="text" id="partName" th:field="*{manufacturerPartName}" >
 
-    <input type="submit" value="Eintrag hinzufügen">
+    <!--<input type="submit" value="Eintrag hinzufügen">-->
+    <button type="submit" th:text="${masterPart.catenaxId} == null ? #{masterpart_action_create} : #{masterpart_action_update}">Eintrag hinzufuegen</button>
+    <button type="button" onclick="location.href='/'">Abbrechen</button>
 </form>
 
 
 
-<h1 th:text="#{overview_header}">Parts</h1>
+<h1 th:text="#{masterpart_overview_header}">Parts</h1>
 <hr>
 
 <table id="dataTable">

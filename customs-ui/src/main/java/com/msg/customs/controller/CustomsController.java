@@ -53,6 +53,9 @@ public class CustomsController {
 		UiCustomsData customs = new UiCustomsData();
 		customs.setValidFrom(LocalDate.now());
 		prepareModelForEditOrCreate(model, customs);
+		UiMasterPart masterPart = new UiMasterPart();
+		prepareModelForEditOrCreate(model, masterPart);
+
 		return "customsEdit";
 	}
 

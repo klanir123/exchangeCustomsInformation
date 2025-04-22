@@ -104,9 +104,13 @@
 				tracedWorthCurrency.value = "";
 				tracedWorthCurrency.disabled = true;
 			}
-    	} 
-    	
-	    window.onload = function() {
+    	}
+
+		function toggleMasterPartSelecttionChanged() {
+
+		}
+
+		window.onload = function() {
 	    	toggleCountrySelectionChanged();	
 	    	togglePrefferedStatusSelecttionChanged();
 	    }
@@ -114,18 +118,27 @@
     </script>    
 </head>
 <body>
+	<img src="/icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
 	<h1 th:text="#{customs_header}">Parts Customs Data</h1>
-	
+	<hr/>
 	<form action="#" th:action="@{/customs/doCreateOrUpdate}" th:object="${customs}" method="post">
 	
 		<input type="hidden" th:field="*{id}" />
 	
 		<label for="catenaxId" th:text="#{customs_catenax_id}">Catena-X Id</label>
-		<input type="text" id="catenaxId" th:field="*{catenaxId}" th:disabled="${customs.catenaxId} != null" />
-		<input type="hidden" th:field="*{catenaxId}" th:if="${customs.catenaxId} != null" />
+		<!--<input type="text" id="catenaxId" th:field="*{catenaxId}" th:disabled="${customs.catenaxId} != null" />
+		<input type="hidden" th:field="*{catenaxId}" th:if="${customs.catenaxId} != null" /> -->
+
+		<select id="catenaxId" th:field="*{catenaxId}">
+			<option th:each="masterPart : ${masterpartList}"
+					th:value="${masterPart.catenaxId}"
+					th:text="${masterPart.catenaxId}"></option>
+			!--th:each="type : ${types}" th:value="${type}" th:with="typeName = 'customs_type_' + ${type.name().toLowerCase()}" th:text="#{${typeName}}">-->
+		</select>
+
 		
 		<label for="customerPartNumber" th:text="#{customs_customer_part_number}">Teilenummer beim Kunden</label>
-		<input type="text" id="customerPartNumber" th:field="*{customerPartNumber}" th:disabled="${customs.catenaxId} != null" />
+		<input type="text" id="customerPartNumber" th:field="${masterPart.customerPartNumber}" th:disabled="${customs.catenaxId} != null" />
 		<input type="hidden" th:field="*{customerPartNumber}" th:if="${customs.catenaxId} != null" />
 		
 		<label for="customerPartName" th:text="#{customs_customer_part_name}">Teilename beim Kunden</label>
@@ -140,7 +153,7 @@
 		<label for="type" th:text="#{customs_type}">Type</label>
 		<select id="type" th:field="*{type}">
 			<option value="" th:text="#{customs_type_notset}">Select Type</option>
-		    <option th:each="type : ${types}" th:value="${type}" th:with="typeName = 'customs_type_' + ${type.name().toLowerCase()}" th:text="#{${typeName}}"></option>		    		    
+		    <option th:each="type : ${types}" th:value="${type}" th:with="typeName = 'customs_type_' + ${type.name().toLowerCase()}" th:text="#{${typeName}}"></option>
 		</select>
 						
 		<label for="validFrom" th:text="#{customs_valid_from}">Valid From</label>

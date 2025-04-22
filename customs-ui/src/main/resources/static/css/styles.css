@@ -1,11 +1,10 @@
 
 /* customs-ui/src/main/resources/static/css/styles.css */
 body {
-    border: 1px solid black;
+    border: 0px solid black;
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
+    margin: 30px;
 }
 
 h1 {
@@ -15,7 +14,7 @@ h1 {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 th, td {
@@ -36,17 +35,6 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/* customs-ui/src/main/resources/static/css/styles.css */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-}
-
-h1 {
-    color: #333;
-}
 hr {
     border: 0;
     height: 1px;
@@ -73,6 +61,12 @@ input[type="text"], input[type="date"] {
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.logo {
+    float:right;
+    width: 200px;
+    margin-top: 0px;
 }
 
 select {
@@ -113,7 +107,7 @@ button:hover {
 }
 
 .inline-input-button input {
-	width: 80%;
+	width: 100%;
     display: inline-flex;
     align-items: center;
     margin-top: 10px;
