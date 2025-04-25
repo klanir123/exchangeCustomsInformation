@@ -92,7 +92,7 @@
         }
         
     	function togglePrefferedStatusSelecttionChanged() {
-    		var prefferedStatus = document.getElementById("prefferedStatus").value;
+			var prefferedStatus = document.getElementById("prefferedStatus").value;
 			var tracedWorthValue = document.getElementById("tracedWorthValue");
 			var tracedWorthCurrency = document.getElementById("tracedWorthCurrency");
 			if (prefferedStatus === "N") {
@@ -104,17 +104,23 @@
 				tracedWorthCurrency.value = "";
 				tracedWorthCurrency.disabled = true;
 			}
-    	}
+
+
+			window.onload = function () {
+				toggleCountrySelectionChanged();
+				togglePrefferedStatusSelecttionChanged();
+			}
+		}
 
 		function toggleMasterPartSelecttionChanged() {
+			{
+				var e = document.getElementById("catenaxId");
+				var selectedOption = e.options[e.selectedIndex];
+				document.getElementById("customerPartNumber").value = selectedOption.getAttribute("value2");
+			}
 
 		}
 
-		window.onload = function() {
-	    	toggleCountrySelectionChanged();	
-	    	togglePrefferedStatusSelecttionChanged();
-	    }
-    	        
     </script>    
 </head>
 <body>
@@ -129,9 +135,10 @@
 		<!--<input type="text" id="catenaxId" th:field="*{catenaxId}" th:disabled="${customs.catenaxId} != null" />
 		<input type="hidden" th:field="*{catenaxId}" th:if="${customs.catenaxId} != null" /> -->
 
-		<select id="catenaxId" th:field="*{catenaxId}">
+		<select id="catenaxId" onchange="toggleMasterPartSelecttionChanged()" th:field="*{catenaxId}">
 			<option th:each="masterPart : ${masterpartList}"
 					th:value="${masterPart.catenaxId}"
+					th:value2="${masterPart.customerPartNumber}"
 					th:text="${masterPart.catenaxId}"></option>
 			!--th:each="type : ${types}" th:value="${type}" th:with="typeName = 'customs_type_' + ${type.name().toLowerCase()}" th:text="#{${typeName}}">-->
 		</select>
