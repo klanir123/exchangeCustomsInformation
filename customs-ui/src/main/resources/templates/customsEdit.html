@@ -199,7 +199,7 @@
 			<tbody id="originInformationListBody">
 				<tr th:each="originInformation, iterStat : ${customs.originInformations}">
 					<td>
-						<img src="/icon/delete.png" alt="Delete" class="small-icon" th:onclick="removeOriginInformationField([[${iterStat.index}]])">
+						<img src="/icon/delete.png" alt="Delete" class="small-icon" th:onclick="removeOriginInformationField([[${iterStat.index}]]">
 <!-- 						<button type="button" th:onclick="removeOriginInformationField([[${iterStat.index}]])"> -->
 <!-- 							<img src="/icon/delete.png" alt="Delete" class="small-icon"> -->
 <!-- 						</button> -->
