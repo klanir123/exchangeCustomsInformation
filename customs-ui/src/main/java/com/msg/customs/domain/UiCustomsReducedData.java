@@ -18,6 +18,8 @@ public class UiCustomsReducedData {
 	private String customerPartNumber;
 	
 	private String customerPartName;
+
+	private String preferedStatus;
 	
 	
 }

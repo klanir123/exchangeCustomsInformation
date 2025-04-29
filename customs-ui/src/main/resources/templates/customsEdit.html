@@ -117,6 +117,9 @@
 				var e = document.getElementById("catenaxId");
 				var selectedOption = e.options[e.selectedIndex];
 				document.getElementById("customerPartNumber").value = selectedOption.getAttribute("value2");
+				document.getElementById("customerPartName").value = selectedOption.getAttribute("value3");
+				document.getElementById("manufacturerPartNumber").value = selectedOption.getAttribute("value4");
+				document.getElementById("manufacturerPartName").value = selectedOption.getAttribute("value5");
 			}
 
 		}
@@ -139,23 +142,29 @@
 			<option th:each="masterPart : ${masterpartList}"
 					th:value="${masterPart.catenaxId}"
 					th:value2="${masterPart.customerPartNumber}"
+					th:value3="${masterPart.customerPartName}"
+					th:value4="${masterPart.manufacturerPartNumber}"
+					th:value5="${masterPart.manufacturerPartName}"
 					th:text="${masterPart.catenaxId}"></option>
 			!--th:each="type : ${types}" th:value="${type}" th:with="typeName = 'customs_type_' + ${type.name().toLowerCase()}" th:text="#{${typeName}}">-->
 		</select>
 
 		
 		<label for="customerPartNumber" th:text="#{customs_customer_part_number}">Teilenummer beim Kunden</label>
-		<input type="text" id="customerPartNumber" th:field="${masterPart.customerPartNumber}" th:disabled="${customs.catenaxId} != null" />
+		<input type="text" id="customerPartNumber" th:field="${masterPart.customerPartNumber}" th:disabled="true" />
 		<input type="hidden" th:field="*{customerPartNumber}" th:if="${customs.catenaxId} != null" />
 		
 		<label for="customerPartName" th:text="#{customs_customer_part_name}">Teilename beim Kunden</label>
-		<input type="text" id="customerPartName" th:field="*{customerPartName}" />
+		<input type="text" id="customerPartName" th:field="*{customerPartName}" th:disabled="true"/>
+		<input type="hidden" th:field="*{customerPartName}" th:if="${customs.catenaxId} != null" />
 		
 		<label for="manufacturerPartNumber" th:text="#{customs_manufacturer_part_number}">Teilenummer beim Hersteller</label>
-		<input type="text" id="manufacturerPartNumber" th:field="*{manufacturerPartNumber}" />
+		<input type="text" id="manufacturerPartNumber" th:field="*{manufacturerPartNumber}" th:disabled="true"/>
+		<input type="hidden" th:field="*{manufacturerPartNumber}" th:if="${customs.catenaxId} != null" />
 		
 		<label for="manufacturerPartName" th:text="#{customs_manufacturer_part_name}">Teilename beim Hersteller</label>
-		<input type="text" id="manufacturerPartName" th:field="*{manufacturerPartName}" />
+		<input type="text" id="manufacturerPartName" th:field="*{manufacturerPartName}" th:disabled="true"/>
+		<input type="hidden" th:field="*{manucaturerPartName}" th:if="${customs.catenaxId} != null" />
 				
 		<label for="type" th:text="#{customs_type}">Type</label>
 		<select id="type" th:field="*{type}">
@@ -199,7 +208,7 @@
 			<tbody id="originInformationListBody">
 				<tr th:each="originInformation, iterStat : ${customs.originInformations}">
 					<td>
-						<img src="/icon/delete.png" alt="Delete" class="small-icon" th:onclick="removeOriginInformationField([[${iterStat.index}]]">
+						<img src="/icon/delete.png" alt="Delete" class="small-icon" th:onclick="removeOriginInformationField([[${iterStat.index}]])">
 <!-- 						<button type="button" th:onclick="removeOriginInformationField([[${iterStat.index}]])"> -->
 <!-- 							<img src="/icon/delete.png" alt="Delete" class="small-icon"> -->
 <!-- 						</button> -->

@@ -15,6 +15,8 @@ public class UiCustomsReducedMapper {
 		
 		data.setCustomerPartNumber(dto.getCustomerPartNumber());
 		data.setCustomerPartName(dto.getCustomerPartName());
+
+		data.setPreferedStatus(dto.getPrefferedStatus());
 				
 		return data;
 	}	
