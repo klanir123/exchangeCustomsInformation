@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<html lang="de">
 <head>
+    <title>partTable</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
-    <title>partTable</title>
-
 </head>
 <body>
-<img src="/icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
-<h1>Produkt hinzufügen</h1>
-<hr>
-
-
+<div class ="header">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="#">Meine Aufgaben</a></li>
+        <li><a href="/customs/part/create">Meine Produkte</a></li>
+        <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">About</a></li>
+        <img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+    </ul>
+</div>
+<div class="main">
+    <h1 th:text="#{masterpart_overview_header}">Parts</h1>
 
 <!--/*@thymesVar id="masterPart" type="com.msg.customs.domain.UiMasterPart"*/-->
 <form id="entryForm" action="#" th:action="@{/customs/part/save}" th:object="${masterPart}" method="post">
@@ -41,8 +47,7 @@
 
 
 
-<h1 th:text="#{masterpart_overview_header}">Parts</h1>
-<hr>
+
 
 <table id="dataTable">
     <thead>
@@ -67,6 +72,7 @@
         </tr>
     </tbody>
 </table>
+</div>
 
 <!--<script>-->
 <!--    // Funktion, um den neuen Eintrag hinzuzufügen-->

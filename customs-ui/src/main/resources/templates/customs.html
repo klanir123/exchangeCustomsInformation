@@ -26,9 +26,21 @@
     </script>    
 </head>
 <body>
-    <img src="/icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+<div class ="header">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="#">Meine Aufgaben</a></li>
+        <li><a href="/customs/part/create">Meine Produkte</a></li>
+        <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">About</a></li>
+        <img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+    </ul>
+</div>
+<div class="main">
+
     <h1 th:text="#{overview_header}">Parts Customs Data</h1>
-	<hr/>
+
 	<button onclick="location.href='/customs/part/create'">Neues Teil</button>
     <button onclick="location.href='/customs/create'">Neue LLE</button>
 	<button onclick="notifySelected()">Sende LLE</button>
@@ -40,6 +52,7 @@
                 <th th:text="#{overview_catenax_id}">Catena-X Id</th>
                 <th th:text="#{overview_customer_part_number}">Customer Part Number</th>
                 <th th:text="#{overview_customer_part_name}">Customer Part Name</th>
+                <th th:text="#{overview_customer_part_name}">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -54,6 +67,6 @@
             </tr>
         </tbody>
 	</table>
-		
+</div>
 </body>
 </html>
