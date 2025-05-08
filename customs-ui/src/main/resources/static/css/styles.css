@@ -12,7 +12,7 @@ h1 {
 }
 
 table {
-    width: 100%;
+    width: 1500px;
     border-collapse: collapse;
     margin-top: 30px;
 }
@@ -55,7 +55,7 @@ label {
 }
 
 input[type="text"], input[type="date"] {
-    width: 100%;
+    width: 200px;
     padding: 8px;
     margin-top: 5px;
     margin-bottom: 10px;
@@ -166,6 +166,7 @@ button:hover {
     width: 100%;
     z-index: 1;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 .header ul {

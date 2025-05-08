@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <title>PArts</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class ="header">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="#">Meine Aufgaben</a></li>
+        <li><a href="/parts">Meine Produkte</a></li>
+        <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">About</a></li>
+        <img src="./icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+    </ul>
+</div>
+<div class="main">
+    <h1 th:text="#{masterpart_overview_header}">Parts</h1>
+    <a href="/customs/part/create">Prdoukt anlegen</a></li>
+    <a href="#">Upload Produkte</a></li>
+
+    <table id="dataTable">
+    <thead>
+    <tr>
+        <th>Catena-X ID</th>
+        <th>Kundensachnummer</th>
+        <th>Bezeichnung Kundensachnummer</th>
+        <th>Sachnummer</th>
+        <th>Bezeichnung Sachnummer</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="masterpart :${masterpartList}">
+        <td>
+            <a th:href="@{/customs/part/edit/{id}(id=${masterpart.catenaxId})}" th:text="${masterpart.catenaxId}">Edit</a>
+        </td>
+        <td th:text="${masterpart.customerPartNumber}"></td>
+        <td th:text="${masterpart.customerPartName}"></td>
+        <td th:text="${masterpart.manufacturerPartNumber}"></td>
+        <td th:text="${masterpart.manufacturerPartName}"></td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>

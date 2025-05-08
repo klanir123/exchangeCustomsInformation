@@ -38,6 +38,12 @@ public class CustomsController {
 		model.addAttribute("customsList", customsService.getCustoms());		
 		return "customs";
 	}
+
+	@GetMapping("/parts")
+	public String listPartsData(Model model) {
+		model.addAttribute("masterpartList", customsService.getMasterParts());
+		return "parts";
+	}
 	
 	
 	@GetMapping("/customs/edit/{id}")
