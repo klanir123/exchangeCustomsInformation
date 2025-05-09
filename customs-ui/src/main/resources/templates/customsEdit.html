@@ -133,12 +133,11 @@
 		<li><a href="#">Meine Aufgaben</a></li>
 		<li><a href="/parts">Meine Produkte</a></li>
 		<li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
-		<li><a href="#">Contact</a></li>
-		<li><a href="#">About</a></li>
+		<li><a href="#">User</a></li>
 		<img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
 	</ul>
 </div>
-<div class="main"
+<div class="main">
 	<h1 th:text="#{customs_header}">Meine Langzeitlieferantenerklärungen</h1>
 	<form action="#" th:action="@{/customs/doCreateOrUpdate}" th:object="${customs}" method="post">
 	
@@ -244,10 +243,10 @@
 			<label for="completed" th:text="#{customs_completed}">Completed</label>
 	        <input type="checkbox" id="completed" th:field="*{completed}" />
         </div>
-		
+		</p>
 		<button type="submit" th:text="${customs.catenaxId} == null ? #{customs_action_create} : #{customs_action_update}">Save</button>
 		<button type="button" onclick="location.href='/customs'">Abbrechen</button>
 	</form>
-		</div>
+</div>
 </body>
 </html>
