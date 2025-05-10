@@ -44,6 +44,12 @@ public class CustomsController {
 		model.addAttribute("masterpartList", customsService.getMasterParts());
 		return "parts";
 	}
+
+	@GetMapping("/tasks")
+	public String listTasks(Model model) {
+		model.addAttribute("taskList", customsService.getTasks());
+		return "tasks";
+	}
 	
 	
 	@GetMapping("/customs/edit/{id}")

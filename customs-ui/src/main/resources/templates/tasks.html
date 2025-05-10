@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <title>Tasks</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class ="header">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/tasks">Meine Aufgaben</a></li>
+        <li><a href="/parts">Meine Produkte</a></li>
+        <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
+        <li><a href="#">User</a></li>
+        <img src="./icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+    </ul>
+</div>
+<div class="main">
+    <h1 th:text="#{masterpart_overview_header}">Tasks</h1>
+    <a href="/customs/part/create">Aufgabe beantworten</a></li>
+    <a href="#">Aufgabe verwerfen</a></li>
+
+    <table id="dataTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Kundensachnummer</th>
+        <th>Bezeichnung Kundensachnummer</th>
+        <th>Sachnummer</th>
+        <th>Bezeichnung Sachnummer</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="task :${taskList}">
+        <td>
+           test<!-- <a th:href="@{/customs/task/edit/{id}(id=${task.Id})}" th:text="${task.Id}">Edit</a>-->
+        </td>
+        <td th:text="${task.customerPartNumber}">4</td>
+        <td th:text="${task.customerPartName}">4</td>
+        <td th:text="${task.manufacturerPartNumber}">4</td>
+        <td th:text="${task.manufacturerPartName}">4</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>

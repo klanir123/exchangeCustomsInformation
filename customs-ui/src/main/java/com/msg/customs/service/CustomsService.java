@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.msg.customs.adapter.in.web.model.MasterPartDto;
 import com.msg.customs.domain.UiMasterPart;
+import com.msg.customs.domain.UiTask;
 import com.msg.customs.mapper.UiMasterPartMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -74,6 +75,26 @@ public class CustomsService {
 	public void saveCustoms(UiCustomsData uiCustoms) {		
 		CustomsDataDto customsData = UiCustomsMapper.toDto(uiCustoms);		
 		restTemplate.postForEntity(backendProperties.customsUpdatetUrl(), customsData, Void.class);
+	}
+
+	public List<UiTask> getTasks(){
+		// Test Task
+		UiTask testTask = new UiTask();
+		testTask.setId(1L);
+		testTask.setCustomerPartNumber("1");
+		testTask.setCustomerPartName("1");
+		testTask.setManufacturerPartNumber("1");
+		testTask.setManufacturerPartName("1");
+
+		UiTask testTask2 = new UiTask();
+		testTask2.setId(2L);
+		testTask2.setCustomerPartNumber("2");
+		testTask2.setCustomerPartName("2");
+		testTask2.setManufacturerPartNumber("2");
+		testTask2.setManufacturerPartName("2");
+		return List.of(testTask, testTask2);
+
+
 	}
 
 	public List<UiMasterPart> getMasterParts() {

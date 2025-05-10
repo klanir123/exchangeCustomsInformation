@@ -33,5 +33,6 @@ public class CustomsBackendProperties {
 	public String customsUpdatePartUrl() {
 		return uri + "/customs/part/create";
 	}
-	
+
+	public String tasksEditUrl() { return uri + "/tasks";}
 }
