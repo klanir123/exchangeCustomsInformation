@@ -26,8 +26,14 @@ public interface CustomsAPI {
 	 */
 	@GetMapping
 	ResponseEntity<List<CustomsDataDto>> getCustomsData();
-	
-	/**
+
+    /// Get all customs data (no filtering).
+    ///
+    /// @return list of all master part data
+    @GetMapping(value = "/parts")
+    ResponseEntity<List<MasterPartDto>> getMasterPartsData();
+
+    /**
 	 * Get customs data by id.
 	 * 
 	 * @param id customs data id=catenaxId
@@ -39,7 +45,7 @@ public interface CustomsAPI {
 	/**
 	 * Delete customs data by id.
 	 * 
-	 * @param id customs data id=catenaxId
+	 * @param catenaxId customs data id=catenaxId
 	 * @return deleted customs data
 	 */
 	@DeleteMapping(value = "/{id}")

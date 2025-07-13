@@ -99,24 +99,40 @@ public class CustomsService {
 
 	public List<UiMasterPart> getMasterParts() {
 		// TODO: implement service to get all parts
-		// Test Master Part
-		UiMasterPart testMasterPart = new UiMasterPart();
-		testMasterPart.setId(123L);
-		testMasterPart.setCatenaxId("X-123456789");
-		testMasterPart.setCustomerPartName("C-Test");
-		testMasterPart.setManufacturerPartName("M-Test");
-		testMasterPart.setManufacturerPartNumber("M-Test-123");
-		testMasterPart.setCustomerPartNumber("C-Test-123");
-		UiMasterPart testMasterPart2 = new UiMasterPart();
-		testMasterPart2.setId(123L);
-		testMasterPart2.setCatenaxId("Y-987654321");
-		testMasterPart2.setCustomerPartName("K-Test1");
-		testMasterPart2.setManufacturerPartName("K-Test1");
-		testMasterPart2.setManufacturerPartNumber("L-Test-456");
-		testMasterPart2.setCustomerPartNumber("FRT-Test-456");
-		List<UiMasterPart> masterpartList = List.of(testMasterPart, testMasterPart2);
+		try {
+			ResponseEntity<List<MasterPartDto>> masterPartEntities = restTemplate.exchange(
+					backendProperties.partListUrl(),
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<List<MasterPartDto>>() {}
+			);
 
-		return masterpartList;
+			return masterPartEntities.getBody().stream().map(UiMasterPartMapper::toUiData).toList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return List.of();
+
+
+
+		// Test Master Part
+		// UiMasterPart testMasterPart = new UiMasterPart();
+		//testMasterPart.setId(123L);
+		//testMasterPart.setCatenaxId("X-123456789");
+		// testMasterPart.setCustomerPartName("C-Test");
+		// testMasterPart.setManufacturerPartName("M-Test");
+		// testMasterPart.setManufacturerPartNumber("M-Test-123");
+		// testMasterPart.setCustomerPartNumber("C-Test-123");
+		// UiMasterPart testMasterPart2 = new UiMasterPart();
+		// testMasterPart2.setId(123L);
+		// testMasterPart2.setCatenaxId("Y-987654321");
+		// testMasterPart2.setCustomerPartName("K-Test1");
+		// testMasterPart2.setManufacturerPartName("K-Test1");
+		// testMasterPart2.setManufacturerPartNumber("L-Test-456");
+		// testMasterPart2.setCustomerPartNumber("FRT-Test-456");
+		//List<UiMasterPart> masterpartList = List.of(testMasterPart, testMasterPart2);
+
+		// return masterpartList;
 	}
 
 	public void saveMasterPart(UiMasterPart uiMasterPart){

@@ -42,4 +42,10 @@ public interface CustomsDataStorageAdapter {
 	 * @param masterPartData customs data to save
 	 */
 	void saveMasterPartData(MasterPart masterPartData);
+
+	/**
+	 * Load all customs data.
+	 * @return list with all customs data
+	 */
+    List<MasterPart> loadMasterPartData();
 }

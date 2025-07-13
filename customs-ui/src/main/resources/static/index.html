@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head> 
     <title>Getting Started: Serving Web Content</title> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -126,7 +126,7 @@
 <body>
 <div class ="header">
     <ul>
-        <li><a href="/">Home</a></li>
+        <li th:text="#{overview_menu_home}"><a href="/"><span th:text="#{overview_menu_home}">Hom</span></a></li>
         <li><a href="/tasks">Meine Aufgaben</a></li>
         <li><a href="/parts">Meine Produkte</a></li>
         <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>

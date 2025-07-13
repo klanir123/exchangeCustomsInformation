@@ -2,14 +2,11 @@ package com.msg.customs.application.domain.service;
 
 import java.util.List;
 
+import com.msg.customs.application.domain.model.MasterPart;
+import com.msg.customs.application.port.in.*;
 import org.springframework.stereotype.Service;
 
 import com.msg.customs.application.domain.model.CustomsData;
-import com.msg.customs.application.port.in.LoadCustomsDataByCatenaxIdUseCase;
-import com.msg.customs.application.port.in.LoadCustomsDataListQuery;
-import com.msg.customs.application.port.in.LoadCustomsDataListUseCase;
-import com.msg.customs.application.port.in.SaveCustomsDataCommand;
-import com.msg.customs.application.port.in.SaveCustomsDataUseCase;
 import com.msg.customs.application.port.out.CustomsDataStorageAdapter;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +16,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @Service
-public class CustomsDataService implements LoadCustomsDataListUseCase, SaveCustomsDataUseCase, LoadCustomsDataByCatenaxIdUseCase {	
+public class CustomsDataService implements LoadCustomsDataListUseCase, LoadMasterPartDataListUseCase, SaveCustomsDataUseCase, LoadCustomsDataByCatenaxIdUseCase {
 	
 	private final CustomsDataStorageAdapter customsStorageAdapter;
 	
@@ -44,6 +41,11 @@ public class CustomsDataService implements LoadCustomsDataListUseCase, SaveCusto
 	@Override
 	public void saveMasterPartData(SaveCustomsDataCommand masterPartData) {
 		customsStorageAdapter.saveMasterPartData(masterPartData.getMasterPart());
+	}
+
+	@Override
+	public List<MasterPart> loadMasterPartData(LoadMasterPartListQuery queryMasterPartData) {
+		return customsStorageAdapter.loadMasterPartData();
 	}
 
 }

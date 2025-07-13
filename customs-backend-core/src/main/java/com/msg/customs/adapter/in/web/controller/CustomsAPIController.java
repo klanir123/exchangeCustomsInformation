@@ -6,19 +6,15 @@ import java.util.List;
 import com.msg.customs.adapter.in.web.mapper.MasterPartValueMapper;
 import com.msg.customs.adapter.in.web.model.MasterPartDto;
 import com.msg.customs.application.domain.model.MasterPart;
+import com.msg.customs.application.port.in.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.msg.customs.adapter.in.web.CustomsAPI;
 import com.msg.customs.adapter.in.web.mapper.CustomsDataValueMapper;
 import com.msg.customs.adapter.in.web.model.CustomsDataDto;
 import com.msg.customs.application.domain.model.CustomsData;
-import com.msg.customs.application.port.in.LoadCustomsDataByCatenaxIdUseCase;
-import com.msg.customs.application.port.in.LoadCustomsDataListQuery;
-import com.msg.customs.application.port.in.LoadCustomsDataListUseCase;
-import com.msg.customs.application.port.in.NotifyCustomsDataChangedUseCase;
-import com.msg.customs.application.port.in.SaveCustomsDataCommand;
-import com.msg.customs.application.port.in.SaveCustomsDataUseCase;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomsAPIController implements CustomsAPI {
 
 	private final LoadCustomsDataListUseCase loadCustomsDataUseCase;
+	private final LoadMasterPartDataListUseCase loadMasterPartDataListUseCase;
 	private final SaveCustomsDataUseCase saveCustomsDataUseCase;
 	private final LoadCustomsDataByCatenaxIdUseCase loadCustomsDataByCatenaxIdUseCase;
 	private final NotifyCustomsDataChangedUseCase notifyCustomsDataChangedUseCase;
@@ -44,6 +41,15 @@ public class CustomsAPIController implements CustomsAPI {
 		return ResponseEntity.ok(customsData.stream().map(CustomsDataValueMapper::toDto).toList());
 	}
 
+
+
+	@Override
+	public ResponseEntity<List<MasterPartDto>> getMasterPartsData() {
+		List<MasterPart> masterParts = loadMasterPartDataListUseCase.loadMasterPartData(LoadMasterPartListQuery.queryAll());
+		return ResponseEntity.ok(masterParts.stream().map(MasterPartValueMapper::toDto).toList());
+	}
+
+	@GetMapping("/{id}")
 	@Override
 	public ResponseEntity<CustomsDataDto> getCustomsData(String id) {
 		CustomsData customsData = loadCustomsDataByCatenaxIdUseCase.loadCustomsData(id);

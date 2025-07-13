@@ -3,7 +3,6 @@ package com.msg.customs.application.port.in;
 import java.util.List;
 
 import com.msg.customs.application.domain.model.CustomsData;
-
 /**
  * UseCase to load a list of customs data.
  */
@@ -24,5 +23,6 @@ public interface LoadCustomsDataListUseCase {
 	default LoadCustomsDataListQuery queryAll() {
 		return new LoadCustomsDataListQuery();
 	}
+
 
 }

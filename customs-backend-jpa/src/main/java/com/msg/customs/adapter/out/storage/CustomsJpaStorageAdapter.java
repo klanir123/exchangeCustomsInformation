@@ -7,7 +7,7 @@ import com.msg.customs.adapter.out.storage.mapper.MasterPartEntityMapper;
 import com.msg.customs.adapter.out.storage.model.CustomsEntity;
 import com.msg.customs.adapter.out.storage.model.MasterPartEntity;
 import com.msg.customs.adapter.out.storage.repository.CustomsRepository;
-import com.msg.customs.adapter.out.storage.repository.PartRepository;
+import com.msg.customs.adapter.out.storage.repository.MasterPartRepository;
 import com.msg.customs.application.domain.model.CustomsData;
 import com.msg.customs.application.domain.model.MasterPart;
 import com.msg.customs.application.port.out.CustomsDataStorageAdapter;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomsJpaStorageAdapter implements CustomsDataStorageAdapter {
 
 	private final CustomsRepository customsRepository;
-	private final PartRepository partRepository;
+	private final MasterPartRepository partRepository;
     private MasterPart masterPartData;
 
     @Override
@@ -62,6 +62,12 @@ public class CustomsJpaStorageAdapter implements CustomsDataStorageAdapter {
 	public List<CustomsData> loadCustomsDataByCatenaxIds(List<String> catenaxIds) {
 		List<CustomsEntity> data = customsRepository.findByCatenaxIdIn(catenaxIds);
 		return data.stream().map(CustomsDataEntityMapper::toDomain).toList();
+	}
+
+	@Override
+	public List<MasterPart> loadMasterPartData() {
+		List<MasterPartEntity> allCustoms = partRepository.findAll();
+		return allCustoms.stream().map(MasterPartEntityMapper::toDomain).toList();
 	}
 	
 	

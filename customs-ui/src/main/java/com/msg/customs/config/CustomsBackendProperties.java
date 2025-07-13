@@ -30,6 +30,8 @@ public class CustomsBackendProperties {
 
 	public String customsMasterPartUpdatetUrl() { return customsUpdatetUrl() + "/masterpart"; }
 
+	public String partListUrl() { return uri + "/parts";}
+
 	public String customsUpdatePartUrl() {
 		return uri + "/customs/part/create";
 	}
