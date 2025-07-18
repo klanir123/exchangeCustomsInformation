@@ -41,7 +41,7 @@ public class CustomsController {
 
 	@GetMapping("/parts")
 	public String listPartsData(Model model) {
-		model.addAttribute("master partList", customsService.getMasterParts());
+		model.addAttribute("masterpartList", customsService.getMasterParts());
 		return "parts";
 	}
 

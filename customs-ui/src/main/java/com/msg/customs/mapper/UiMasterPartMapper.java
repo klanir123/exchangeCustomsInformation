@@ -38,32 +38,4 @@ public class UiMasterPartMapper {
 		return dto;
 	}
 
-	public static UiTask toUiData(TaskDto dto) {
-		UiTask data = new UiTask();
-
-		data.setCustomerPartNumber(dto.getCustomerPartNumber());
-		data.setCustomerPartName(dto.getCustomerPartName());
-		data.setManufacturerPartNumber(dto.getManufacturerPartNumber());
-		data.setManufacturerPartName(dto.getManufacturerPartName());
-
-		return data;
-	}
-
-	public static TaskDto toDto(UiTask data) {
-		TaskDto dto = new TaskDto();
-
-		dto.setId(data.getId());
-
-		dto.setCustomerPartNumber(data.getCustomerPartNumber());
-		dto.setCustomerPartName(data.getCustomerPartName());
-		dto.setManufacturerPartNumber(data.getManufacturerPartNumber());
-		dto.setManufacturerPartName(data.getManufacturerPartName());
-
-		return dto;
-	}
-
-
-
-	
-
 }
