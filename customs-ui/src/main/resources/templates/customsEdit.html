@@ -134,7 +134,7 @@
 		<li><a href="/parts">Meine Produkte</a></li>
 		<li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
 		<li><a href="#">User</a></li>
-		<img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+		<img src="../icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
 	</ul>
 </div>
 <div class="main">
@@ -157,23 +157,25 @@
 					th:text="${masterPart.catenaxId}"></option>
 			!--th:each="type : ${types}" th:value="${type}" th:with="typeName = 'customs_type_' + ${type.name().toLowerCase()}" th:text="#{${typeName}}">-->
 		</select>
+		</p>
 
 		
 		<label for="customerPartNumber" th:text="#{customs_customer_part_number}">Teilenummer beim Kunden</label>
-		<input type="text" id="customerPartNumber" th:field="${masterPart.customerPartNumber}" th:disabled="true" />
+		<input type="text" id="customerPartNumber" th:field="*{customerPartNumber}" th:readonly="true" />
 		<input type="hidden" th:field="*{customerPartNumber}" th:if="${customs.catenaxId} != null" />
+		</p>
 		
 		<label for="customerPartName" th:text="#{customs_customer_part_name}">Teilename beim Kunden</label>
-		<input type="text" id="customerPartName" th:field="*{customerPartName}" th:disabled="true"/>
+		<input type="text" id="customerPartName" th:field="*{customerPartName}" th:readonly="true"/>
 		<input type="hidden" th:field="*{customerPartName}" th:if="${customs.catenaxId} != null" />
-		
+
 		<label for="manufacturerPartNumber" th:text="#{customs_manufacturer_part_number}">Teilenummer beim Hersteller</label>
-		<input type="text" id="manufacturerPartNumber" th:field="*{manufacturerPartNumber}" th:disabled="true"/>
+		<input type="text" id="manufacturerPartNumber" th:field="*{manufacturerPartNumber}" th:readonly="true"/>
 		<input type="hidden" th:field="*{manufacturerPartNumber}" th:if="${customs.catenaxId} != null" />
 		
 		<label for="manufacturerPartName" th:text="#{customs_manufacturer_part_name}">Teilename beim Hersteller</label>
-		<input type="text" id="manufacturerPartName" th:field="*{manufacturerPartName}" th:disabled="true"/>
-		<input type="hidden" th:field="*{manucfacturerPartName}" th:if="${customs.catenaxId} != null" />
+		<input type="text" id="manufacturerPartName" th:field="*{manufacturerPartName}" th:readonly="true"/>
+		<input type="hidden" th:field="*{manufacturerPartName}" th:if="${customs.catenaxId} != null" />
 				
 		<label for="type" th:text="#{customs_type}">Type</label>
 		<select id="type" th:field="*{type}">

@@ -35,6 +35,7 @@ public class MasterPartEntityMapper {
 		MasterPart part = new MasterPart();
 		if (entity != null) {
 			part.setId(entity.getId());
+			part.setCatenaXId(entity.getCatenaXId());
 			part.setCustomerPartName(entity.getCustomerPartName());
 			part.setCustomerPartNumber(entity.getCustomerPartNumber());
 			part.setManufacturerPartName(entity.getManufacturerPartName());

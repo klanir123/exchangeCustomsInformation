@@ -14,13 +14,14 @@
         <li><a href="/parts">Meine Produkte</a></li>
         <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
         <li><a href="#">User</a></li>
-        <img src="./icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+        <img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
     </ul>
 </div>
 <div class="main">
     <h1 th:text="#{masterpart_overview_header}">Parts</h1>
-    <a href="/customs/part/create">Prdoukt anlegen</a></li>
-    <a href="#">Upload Produkte</a></li>
+    <button onclick="location.href='/customs/part/create'">Produkt anlegen</button>
+    <button onclick="location.href='#'">Upload Produkte</button>
+
 
     <table>
     <thead>
@@ -35,8 +36,8 @@
 
     <tbody>
     <tr th:each="masterpart :${masterpartList}">
-        <td>
-            <a th:href="@{/customs/part/edit/{id}(id=${masterpart.catenaxId})}" th:text="${masterpart.catenaxId}">Edit</a>
+        <td> <a th:href="@{/customs/part/edit/{id}(id=${masterpart.catenaxId})}" th:text="${masterpart.catenaxId}">Edit</a>
+
         </td>
         <td th:text="${masterpart.customerPartNumber}"></td>
         <td th:text="${masterpart.customerPartName}"></td>

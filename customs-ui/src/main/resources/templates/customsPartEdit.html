@@ -13,16 +13,16 @@
         <li><a href="/parts">Meine Produkte</a></li>
         <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
         <li><a href="#">User</a></li>
-        <img src="./icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+        <img src="../../icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
     </ul>
 </div>
 <div class="main">
     <h1 th:text="#{masterpart_overview_header_create}">Parts</h1>
 
 <!--/*@thymesVar id="masterPart" type="com.msg.customs.domain.UiMasterPart"*/-->
-    <form id="entryForm" action="#" th:action="@{/customs/part/save}" th:object="${masterPart}" method="post">
+    <form action="#" th:action="@{/customs/part/save}" th:object="${masterPart}" method="post">
         <input type="hidden" th:field="*{id}" />
-<table th:width="500px">
+<table th:width="50px">
        <tr>
          <td><label for="catenaxId">Catena-X ID:</label></td>
          <td><input type="text" id="catenaxId" th:field="*{catenaxId}"></td>
