@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.msg.customs.adapter.in.web.model.MasterPartDto;
+import com.msg.customs.adapter.in.web.model.TaskDto;
 import com.msg.customs.domain.UiMasterPart;
 import com.msg.customs.domain.UiTask;
 import com.msg.customs.mapper.UiMasterPartMapper;
+import com.msg.customs.mapper.UiTaskMapper;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -83,27 +85,6 @@ public class CustomsService {
 		}
 		return List.of();
 
-
-
-
-		// Test Master Part
-		// UiMasterPart testMasterPart = new UiMasterPart();
-		//testMasterPart.setId(123L);
-		//testMasterPart.setCatenaxId("X-123456789");
-		// testMasterPart.setCustomerPartName("C-Test");
-		// testMasterPart.setManufacturerPartName("M-Test");
-		// testMasterPart.setManufacturerPartNumber("M-Test-123");
-		// testMasterPart.setCustomerPartNumber("C-Test-123");
-		// UiMasterPart testMasterPart2 = new UiMasterPart();
-		// testMasterPart2.setId(123L);
-		// testMasterPart2.setCatenaxId("Y-987654321");
-		// testMasterPart2.setCustomerPartName("K-Test1");
-		// testMasterPart2.setManufacturerPartName("K-Test1");
-		// testMasterPart2.setManufacturerPartNumber("L-Test-456");
-		// testMasterPart2.setCustomerPartNumber("FRT-Test-456");
-		//List<UiMasterPart> masterpartList = List.of(testMasterPart, testMasterPart2);
-
-		// return masterpartList;
 	}
 	
 	public UiCustomsData getCustomsData(String catenaxId) {
@@ -117,23 +98,19 @@ public class CustomsService {
 	}
 
 	public List<UiTask> getTasks(){
-		// Test Task
-		UiTask testTask = new UiTask();
-		testTask.setId(1L);
-		testTask.setCustomerPartNumber("1");
-		testTask.setCustomerPartName("1");
-		testTask.setManufacturerPartNumber("1");
-		testTask.setManufacturerPartName("1");
+		try {
+			ResponseEntity<List<TaskDto>> taskEntities = restTemplate.exchange(
+					backendProperties.tasksListUrl(),
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<List<TaskDto>>() {}
+			);
 
-		UiTask testTask2 = new UiTask();
-		testTask2.setId(2L);
-		testTask2.setCustomerPartNumber("2");
-		testTask2.setCustomerPartName("2");
-		testTask2.setManufacturerPartNumber("2");
-		testTask2.setManufacturerPartName("2");
-		return List.of(testTask, testTask2);
-
-
+			return taskEntities.getBody().stream().map(UiTaskMapper::toUiData).toList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return List.of();
 	}
 
 

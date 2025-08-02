@@ -4,12 +4,16 @@ import java.util.List;
 
 import com.msg.customs.adapter.out.storage.mapper.CustomsDataEntityMapper;
 import com.msg.customs.adapter.out.storage.mapper.MasterPartEntityMapper;
+import com.msg.customs.adapter.out.storage.mapper.TaskEntityMapper;
 import com.msg.customs.adapter.out.storage.model.CustomsEntity;
 import com.msg.customs.adapter.out.storage.model.MasterPartEntity;
+import com.msg.customs.adapter.out.storage.model.TaskEntity;
 import com.msg.customs.adapter.out.storage.repository.CustomsRepository;
 import com.msg.customs.adapter.out.storage.repository.MasterPartRepository;
+import com.msg.customs.adapter.out.storage.repository.TaskRepository;
 import com.msg.customs.application.domain.model.CustomsData;
 import com.msg.customs.application.domain.model.MasterPart;
+import com.msg.customs.application.domain.model.Task;
 import com.msg.customs.application.port.out.CustomsDataStorageAdapter;
 import com.msg.customs.common.config.Adapter;
 
@@ -26,6 +30,7 @@ public class CustomsJpaStorageAdapter implements CustomsDataStorageAdapter {
 
 	private final CustomsRepository customsRepository;
 	private final MasterPartRepository partRepository;
+	private final TaskRepository taskRepository;
     private MasterPart masterPartData;
 
     @Override
@@ -69,7 +74,12 @@ public class CustomsJpaStorageAdapter implements CustomsDataStorageAdapter {
 		List<MasterPartEntity> allCustoms = partRepository.findAll();
 		return allCustoms.stream().map(MasterPartEntityMapper::toDomain).toList();
 	}
-	
+
+	@Override
+	public List<Task> loadTaskData() {
+		List<TaskEntity> allTasks = taskRepository.findAll();
+		return allTasks.stream().map(TaskEntityMapper::toDomain).toList();
+	}
 	
 
 }

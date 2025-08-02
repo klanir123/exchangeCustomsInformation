@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.msg.customs.application.domain.model.CustomsData;
 import com.msg.customs.application.domain.model.MasterPart;
+import com.msg.customs.application.domain.model.Task;
 
 /**
  * Adapter to store and load customs data.
@@ -45,7 +46,14 @@ public interface CustomsDataStorageAdapter {
 
 	/**
 	 * Load all customs data.
-	 * @return list with all customs data
+	 * @return list with all master part data
 	 */
     List<MasterPart> loadMasterPartData();
+
+	/**
+	 * Load all task data.
+	 *
+	 * @return list with all task data
+	 */
+	List<Task> loadTaskData();
 }

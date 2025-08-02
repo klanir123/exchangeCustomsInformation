@@ -4,8 +4,11 @@ package com.msg.customs.adapter.in.web.controller;
 import java.util.List;
 
 import com.msg.customs.adapter.in.web.mapper.MasterPartValueMapper;
+import com.msg.customs.adapter.in.web.mapper.TaskValueMapper;
 import com.msg.customs.adapter.in.web.model.MasterPartDto;
+import com.msg.customs.adapter.in.web.model.TaskDto;
 import com.msg.customs.application.domain.model.MasterPart;
+import com.msg.customs.application.domain.model.Task;
 import com.msg.customs.application.port.in.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +37,7 @@ public class CustomsAPIController implements CustomsAPI {
 	private final SaveCustomsDataUseCase saveCustomsDataUseCase;
 	private final LoadCustomsDataByCatenaxIdUseCase loadCustomsDataByCatenaxIdUseCase;
 	private final NotifyCustomsDataChangedUseCase notifyCustomsDataChangedUseCase;
+	private final LoadTaskDataListUseCase loadTaskDataListUseCase;
 	
 	@Override
 	public ResponseEntity<List<CustomsDataDto>> getCustomsData() {
@@ -47,6 +51,13 @@ public class CustomsAPIController implements CustomsAPI {
 	public ResponseEntity<List<MasterPartDto>> getMasterPartsData() {
 		List<MasterPart> masterParts = loadMasterPartDataListUseCase.loadMasterPartData(LoadMasterPartListQuery.queryAll());
 		return ResponseEntity.ok(masterParts.stream().map(MasterPartValueMapper::toDto).toList());
+	}
+
+	@GetMapping("/tasks")
+	@Override
+	public ResponseEntity<List<TaskDto>> getTasksData() {
+		List<Task> tasks = loadTaskDataListUseCase.loadTaskData(LoadTaskListQuery.queryAll());
+		return ResponseEntity.ok(tasks.stream().map(TaskValueMapper::toDto).toList());
 	}
 
 	@GetMapping("/{id}")

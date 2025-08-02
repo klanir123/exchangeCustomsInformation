@@ -2,10 +2,14 @@ package com.msg.customs.adapter.in.web.model;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class TaskDto {
 	
 	private Long id;
+
+	private String catenaXId;
 
 	private String customerPartNumber;
 
@@ -14,5 +18,7 @@ public class TaskDto {
 	private String manufacturerPartNumber;
 	
 	private String manufacturerPartName;
+
+	private Date requestDate;
 
 }

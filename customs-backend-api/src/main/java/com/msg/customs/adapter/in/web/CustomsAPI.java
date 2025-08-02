@@ -3,6 +3,7 @@ package com.msg.customs.adapter.in.web;
 import java.util.List;
 
 import com.msg.customs.adapter.in.web.model.MasterPartDto;
+import com.msg.customs.adapter.in.web.model.TaskDto;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -77,5 +78,12 @@ public interface CustomsAPI {
 	 */
 	@GetMapping(value = "/notify") 
 	ResponseEntity<Void> notifyCustomsDataUpdated(@RequestBody List<String> catenaxIds);
+
+
+	/// Get all task data (no filtering).
+	///
+	/// @return list of all task data
+	@GetMapping(value = "/tasks")
+	ResponseEntity<List<TaskDto>> getTasksData();
 		
 }

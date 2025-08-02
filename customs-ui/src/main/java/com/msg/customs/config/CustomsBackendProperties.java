@@ -36,5 +36,5 @@ public class CustomsBackendProperties {
 		return uri + "/customs/part/create";
 	}
 
-	public String tasksEditUrl() { return uri + "/tasks";}
+	public String tasksListUrl() { return uri + "/customs/tasks";}
 }

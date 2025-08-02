@@ -25,23 +25,25 @@
     <table id="dataTable">
     <thead>
     <tr>
-        <th>ID</th>
+        <th>Select</th>
+        <th>Catena-X ID</th>
         <th>Kundensachnummer</th>
         <th>Bezeichnung Kundensachnummer</th>
         <th>Sachnummer</th>
         <th>Bezeichnung Sachnummer</th>
+        <th>Anfragedatum</th>
     </tr>
     </thead>
 
     <tbody>
     <tr th:each="task :${taskList}">
-        <td>
-           test<!-- <a th:href="@{/customs/task/edit/{id}(id=${task.Id})}" th:text="${task.Id}">Edit</a>-->
-        </td>
+        <td><input type="checkbox" name="selectedIds" th:value="${task.catenaxID}" /></td>
+        <td th:text="${task.catenaxID}">4</td>
         <td th:text="${task.customerPartNumber}">4</td>
         <td th:text="${task.customerPartName}">4</td>
         <td th:text="${task.manufacturerPartNumber}">4</td>
         <td th:text="${task.manufacturerPartName}">4</td>
+        <td th:text="${task.requestDate}">4</td>
     </tr>
     </tbody>
 </table>
