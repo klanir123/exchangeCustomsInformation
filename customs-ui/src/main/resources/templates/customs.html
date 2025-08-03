@@ -30,29 +30,29 @@
 
 <div class ="header">
     <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/tasks">Meine Aufgaben</a></li>
-        <li><a href="/parts">Meine Produkte</a></li>
-        <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
-        <li><a href="#">User</a></li>
+        <li><a href="/" th:text="#{menu_home}">4</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">4</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">4</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">4</a></li>
+        <li><a href="#" th:text="#{menu_user}">4</a></li>
         <img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
     </ul>
 </div>
 <div class="main">
 
-    <h1 th:text="#{overview_header}">Parts Customs Data</h1>
+    <h1 th:text="#{customs_overview_header}">Parts Customs Data</h1>
 
-    <button onclick="location.href='/customs/create'">Neue LLE</button>
-	<button onclick="notifySelected()">Sende LLE</button>
+    <button onclick="location.href='/customs/create'" th:text="#{customs_overview_action_new_lle}">Neue LLE</button>
+	<button onclick="notifySelected()" th:text="#{customs_overview_action_send_lle}">Sende LLE</button>
 	
 	<table>
         <thead>
             <tr>     
-            	<th>Select</th>       
-                <th th:text="#{overview_catenax_id}">Catena-X Id</th>
-                <th th:text="#{overview_customer_part_number}">Customer Part Number</th>
-                <th th:text="#{overview_customer_part_name}">Customer Part Name</th>
-                <th th:text="#{overview_customs_state}">Status</th>
+            	<th th:text="#{customs_overview_select}">Select</th>
+                <th th:text="#{customs_overview_catenax_id}">Catena-X Id</th>
+                <th th:text="#{customs_overview_customer_part_number}">Customer Part Number</th>
+                <th th:text="#{customs_overview_customer_part_name}">Customer Part Name</th>
+                <th th:text="#{customs_overview_customs_state}">Status</th>
             </tr>
         </thead>
         <tbody>

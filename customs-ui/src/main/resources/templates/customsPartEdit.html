@@ -8,45 +8,45 @@
 <body>
 <div class ="header">
     <ul>
-        <li ><a href="/">Home</a></li>
-        <li><a href="/tasks">Meine Aufgaben</a></li>
-        <li><a href="/parts">Meine Produkte</a></li>
-        <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
-        <li><a href="#">User</a></li>
+        <li><a href="/" th:text="#{menu_home}">4</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">4</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">4</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">4</a></li>
+        <li><a href="#" th:text="#{menu_user}">4</a></li>
         <img src="../../icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
     </ul>
 </div>
 <div class="main">
-    <h1 th:text="#{masterpart_overview_header_create}">Parts</h1>
+    <h1 th:text="#{masterpart_edit_header_create}">Parts</h1>
 
 <!--/*@thymesVar id="masterPart" type="com.msg.customs.domain.UiMasterPart"*/-->
     <form action="#" th:action="@{/customs/part/save}" th:object="${masterPart}" method="post">
         <input type="hidden" th:field="*{id}" />
 <table th:width="50px">
        <tr>
-         <td><label for="catenaxId">Catena-X ID:</label></td>
+         <td><label th:text="#{masterpart_edit_catenax_id}">4</label></td>
          <td><input type="text" id="catenaxId" th:field="*{catenaxId}"></td>
         </tr>
     <tr>
-        <td><label for="customerPartNumber">Kundensachnummer:</label></td>
+        <td><label th:text="#{masterpart_edit_customer_part_number}">4</label></td>
         <td><input type="text" id="customerPartNumber" th:field="*{customerPartNumber}"></td>
     </tr>
     <tr>
-    <td><label for="customerPartName">Bezeichnung Kundensachnummer:</label></td>
+    <td><label th:text="#{masterpart_edit_customer_part_name}">4</label></td>
     <td><input type="text" id="customerPartName" th:field="*{customerPartName}"></td>
     </tr>
     <tr>
-    <td><label for="partNumber">Sachnummer:</label></td>
+    <td><label th:text="#{masterpart_edit_part_number}">4</label></td>
     <td><input type="text" id="partNumber" th:field="*{manufacturerPartNumber}" ></td>
     </tr>
     <tr>
-    <td> <label for="partName">Bezeichnung Sachnummer:</label></td>
+    <td> <label th:text="#{masterpart_edit_part_name}">4</label></td>
     <td><input type="text" id="partName" th:field="*{manufacturerPartName}" ></td>
     </tr>
 </table>
         <!--<input type="submit" value="Eintrag hinzufügen">-->
-        <button type="submit" th:text="${masterPart.catenaxId} == null ? #{masterpart_action_create} : #{masterpart_action_update}">Eintrag hinzufuegen</button>
-        <button type="button" onclick="location.href='/'">Abbrechen</button>
+        <button type="submit" th:text="${masterPart.catenaxId} == null ? #{masterpart_edit_action_create} : #{masterpart_edit_action_update}">Eintrag hinzufuegen</button>
+        <button type="button" onclick="location.href='/'" th:text="#{masterPart.edit_action_cancel}">Abbrechen</button>
     </form>
 
 </div>

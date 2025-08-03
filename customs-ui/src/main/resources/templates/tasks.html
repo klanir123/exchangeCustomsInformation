@@ -9,29 +9,29 @@
 <body>
 <div class ="header">
     <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/tasks">Meine Aufgaben</a></li>
-        <li><a href="/parts">Meine Produkte</a></li>
-        <li><a href="/customs">Meine Langzeitlieferantenerklärungen (LLE)</a></li>
-        <li><a href="#">User</a></li>
-        <img src="./icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+        <li><a href="/" th:text="#{menu_home}">4</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">4</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">4</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">4</a></li>
+        <li><a href="#" th:text="#{menu_user}">4</a></li>
+        <img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
     </ul>
 </div>
 <div class="main">
-    <h1 th:text="#{masterpart_overview_header}">Tasks</h1>
-    <button onclick="location.href='/customs/part/create'">Aufgabe beantworten</button>
-    <button onclick="location.href='#'">Aufgabe verwerfen</button>
+    <h1 th:text="#{task_overview_header}">Tasks</h1>
+    <button onclick="location.href='/customs/part/create'" th:text="#{task_overview_action_work}">Aufgabe beantworten</button>
+    <button onclick="location.href='#'" th:text="#{task_overview_action_decline}">Aufgabe verwerfen</button>
 
     <table id="dataTable">
     <thead>
     <tr>
-        <th>Select</th>
-        <th>Catena-X ID</th>
-        <th>Kundensachnummer</th>
-        <th>Bezeichnung Kundensachnummer</th>
-        <th>Sachnummer</th>
-        <th>Bezeichnung Sachnummer</th>
-        <th>Anfragedatum</th>
+        <th th:text="#{task_overview_select}">Select</th>
+        <th th:text="#{task_overview_catenax_id}">Catena-X ID</th>
+        <th th:text="#{task_overview_customer_part_number}">Kundensachnummer</th>
+        <th th:text="#{task_overview_customer_part_name}">Bezeichnung Kundensachnummer</th>
+        <th th:text="#{task_overview_part_number}">Sachnummer</th>
+        <th th:text="#{task_overview_part_name}">Bezeichnung Sachnummer</th>
+        <th th:text="#{task_overview_request_date}">Anfragedatum</th>
     </tr>
     </thead>
 
