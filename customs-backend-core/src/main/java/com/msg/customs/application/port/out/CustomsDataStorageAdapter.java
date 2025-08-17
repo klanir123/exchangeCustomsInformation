@@ -31,7 +31,14 @@ public interface CustomsDataStorageAdapter {
 	 * @return the loaded customs data.
 	 */
 	CustomsData loadCustomsDataByCatenaxId(String catenaxId);
-	
+
+	/**
+	 * Load masterpart data by catenax id.
+	 * @param catenaxId the catenax id of the masterpart data to load.
+	 * @return the loaded masterpart data.
+	 */
+	MasterPart loadMasterPartDataByCatenaxId(String catenaxId);
+
 	/**
 	 * Save customs data.
 	 * @param customsData customs data to save

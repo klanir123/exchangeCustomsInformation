@@ -91,6 +91,11 @@ public class CustomsService {
 		ResponseEntity<CustomsDataDto> entity = restTemplate.getForEntity(backendProperties.customsEditUrl(), CustomsDataDto.class, Map.of("id", catenaxId));
 		return UiCustomsMapper.toUiData(entity.getBody());
 	}
+
+	public UiMasterPart getMasterPartData(String catenaxId) {
+		ResponseEntity<MasterPartDto> entity = restTemplate.getForEntity(backendProperties.masterPartEditUrl(), MasterPartDto.class, Map.of("id", catenaxId));
+		return UiMasterPartMapper.toUiData(entity.getBody());
+	}
 	
 	public void saveCustoms(UiCustomsData uiCustoms) {		
 		CustomsDataDto customsData = UiCustomsMapper.toDto(uiCustoms);		
@@ -126,5 +131,5 @@ public class CustomsService {
 		HttpEntity<List<String>> entity = new HttpEntity<>(customs, headers);
 		restTemplate.exchange(backendProperties.customsNotifyUrl(), HttpMethod.GET, entity, Void.class);		
 	}
-			
+
 }

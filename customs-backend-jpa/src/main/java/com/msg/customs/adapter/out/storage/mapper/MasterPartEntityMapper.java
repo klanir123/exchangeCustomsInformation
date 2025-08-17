@@ -18,7 +18,7 @@ public class MasterPartEntityMapper {
 	public static MasterPartEntity toEntity(MasterPart part) {
 		MasterPartEntity entity = new MasterPartEntity();
 		entity.setId(part.getId());
-		entity.setCatenaXId(part.getCatenaXId());
+		entity.setCatenaxId(part.getCatenaXId());
 		entity.setCustomerPartNumber(part.getCustomerPartNumber());
 		entity.setCustomerPartName(part.getCustomerPartName());
 		entity.setManufacturerPartName(part.getManufacturerPartName());
@@ -35,7 +35,7 @@ public class MasterPartEntityMapper {
 		MasterPart part = new MasterPart();
 		if (entity != null) {
 			part.setId(entity.getId());
-			part.setCatenaXId(entity.getCatenaXId());
+			part.setCatenaXId(entity.getCatenaxId());
 			part.setCustomerPartName(entity.getCustomerPartName());
 			part.setCustomerPartNumber(entity.getCustomerPartNumber());
 			part.setManufacturerPartName(entity.getManufacturerPartName());

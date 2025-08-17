@@ -82,9 +82,8 @@ public class CustomsController {
 
 	@GetMapping("/customs/part/edit/{id}")
 	public String editPartData(@PathVariable String id, Model model) {
-		// TODO: implement service to get parts data by id
-		//UiMasterPart masterPart = customsService.getMaster
-		UiMasterPart masterPart = new UiMasterPart();
+
+		UiMasterPart masterPart = customsService.getMasterPartData(id);
 		prepareModelForEditOrCreate(model, masterPart);
 
 		return "customsPartEdit";

@@ -67,6 +67,13 @@ public class CustomsAPIController implements CustomsAPI {
 		return ResponseEntity.ok(CustomsDataValueMapper.toDto(customsData));
 	}
 
+	@GetMapping("/part/{id}")
+	@Override
+	public ResponseEntity<MasterPartDto> getMasterPartData(String id) {
+		MasterPart masterPart = loadCustomsDataByCatenaxIdUseCase.loadMasterPart(id);
+		return ResponseEntity.ok(MasterPartValueMapper.toDto(masterPart));
+	}
+
 	@Override
 	public ResponseEntity<CustomsDataDto> deleteCustomsData(String catenaxId) {
 		// TODO Auto-generated method stub

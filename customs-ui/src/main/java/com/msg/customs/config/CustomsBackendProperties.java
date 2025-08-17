@@ -37,4 +37,6 @@ public class CustomsBackendProperties {
 	}
 
 	public String tasksListUrl() { return uri + "/customs/tasks";}
+
+	public String masterPartEditUrl() {return uri + "/customs/part/{id}";}
 }

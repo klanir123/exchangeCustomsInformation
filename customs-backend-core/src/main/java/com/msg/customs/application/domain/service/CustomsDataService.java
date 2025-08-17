@@ -33,6 +33,11 @@ public class CustomsDataService implements LoadCustomsDataListUseCase, LoadMaste
 	public CustomsData loadCustomsData(String catenaxId) {
 		return customsStorageAdapter.loadCustomsDataByCatenaxId(catenaxId);
 	}
+
+	@Override
+	public MasterPart loadMasterPart(String catenaxId) {
+		return customsStorageAdapter.loadMasterPartDataByCatenaxId(catenaxId);
+	}
 	
 	@Override
 	public void saveCustomsData(SaveCustomsDataCommand commandCustomsData) {

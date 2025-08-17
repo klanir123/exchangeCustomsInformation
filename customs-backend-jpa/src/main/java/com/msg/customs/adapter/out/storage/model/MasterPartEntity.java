@@ -48,7 +48,7 @@ public class MasterPartEntity {
     private Long id;
 
     @Column(name = "catenax_id")
-    private String catenaXId;
+    private String catenaxId;
 
     @Column(name = "customer_part_name")
     private String customerPartName;

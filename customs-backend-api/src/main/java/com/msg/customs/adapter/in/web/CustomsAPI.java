@@ -42,7 +42,16 @@ public interface CustomsAPI {
 	 */
 	@GetMapping(value = "/{id}")
 	ResponseEntity<CustomsDataDto> getCustomsData(@PathVariable String id);
-	
+
+	/**
+	 * Get masterpart data by id.
+	 *
+	 * @param id masterpart data id=catenaxId
+	 * @return masterpart data
+	 */
+	@GetMapping(value = "/part/{id}")
+	ResponseEntity<MasterPartDto> getMasterPartData(@PathVariable String id);
+
 	/**
 	 * Delete customs data by id.
 	 * 
