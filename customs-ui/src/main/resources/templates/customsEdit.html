@@ -147,16 +147,26 @@
 		<!--<input type="text" id="catenaxId" th:field="*{catenaxId}" th:disabled="${customs.catenaxId} != null" />
 		<input type="hidden" th:field="*{catenaxId}" th:if="${customs.catenaxId} != null" /> -->
 
-		<select id="catenaxId" onchange="toggleMasterPartSelecttionChanged()" th:field="*{catenaxId}">
+
+		<select id="catenaxId"
+				onchange="toggleMasterPartSelecttionChanged()"
+				th:field="*{catenaxId}"
+				th:unless="${#lists.isEmpty(masterpartList)}">
 			<option th:each="masterPart : ${masterpartList}"
 					th:value="${masterPart.catenaxId}"
 					th:value2="${masterPart.customerPartNumber}"
 					th:value3="${masterPart.customerPartName}"
 					th:value4="${masterPart.manufacturerPartNumber}"
 					th:value5="${masterPart.manufacturerPartName}"
-					th:text="${masterPart.catenaxId}"></option>
-			!--th:each="type : ${types}" th:value="${type}" th:with="typeName = 'customs_type_' + ${type.name().toLowerCase()}" th:text="#{${typeName}}">-->
+					th:text="${masterPart.catenaxId}">
+			</option>
 		</select>
+
+		<input type="text"
+			   th:if="${#lists.isEmpty(masterpartList)}"
+			   th:field="*{catenaxId}"
+			   readonly />
+
 		</p>
 
 		

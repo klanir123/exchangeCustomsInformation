@@ -14,6 +14,7 @@ public class UiMasterPartMapper {
 	public static UiMasterPart toUiData(MasterPartDto dto) {
 		UiMasterPart data = new UiMasterPart();
 		
+		data.setId(dto.getId());
 		data.setCatenaxId(dto.getCatenaxId());
 		
 		data.setCustomerPartNumber(dto.getCustomerPartNumber());

@@ -19,6 +19,7 @@ public class MasterPartValueMapper {
 	 */
     public static MasterPartDto toDto(MasterPart data) {
         MasterPartDto dto = new MasterPartDto();
+        dto.setId(data.getId());
         dto.setCatenaxId(data.getCatenaXId());
         dto.setCustomerPartNumber(data.getCustomerPartNumber());
         dto.setCustomerPartName(data.getCustomerPartName());
@@ -35,7 +36,7 @@ public class MasterPartValueMapper {
 	 */
     public static MasterPart toDomain(MasterPartDto dto) {
         MasterPart data = new MasterPart();
-
+        data.setId(dto.getId());
         data.setCatenaXId(dto.getCatenaxId());
         data.setCustomerPartNumber(dto.getCustomerPartNumber());
         data.setCustomerPartName(dto.getCustomerPartName());
