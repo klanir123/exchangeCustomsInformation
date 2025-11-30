@@ -10,7 +10,7 @@ public class MasterPart {
 	
 	private Long id;
 
-	private String catenaXId;
+	private String catenaxId;
 
 	private String customerPartNumber;
 	
@@ -21,6 +21,6 @@ public class MasterPart {
 	private String manufacturerPartNumber;
 
 	public boolean isEmpty() {
-		return ((catenaXId == null) &&(customerPartNumber == null) && (customerPartName == null) && (manufacturerPartName == null) && (manufacturerPartNumber == null));
+		return ((catenaxId == null) &&(customerPartNumber == null) && (customerPartName == null) && (manufacturerPartName == null) && (manufacturerPartNumber == null));
 	}
 }

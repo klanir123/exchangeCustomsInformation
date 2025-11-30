@@ -101,8 +101,15 @@ public class CustomsAPIController implements CustomsAPI {
     }
 
     @Override
-	public ResponseEntity<Void> notifyCustomsDataUpdated(List<String> catenaxIds) { 
+	public ResponseEntity<Void> notifyCustomsDataUpdated(List<String> catenaxIds) {
 		notifyCustomsDataChangedUseCase.notifyCustomsDataChanged(getTargetBPN(), catenaxIds);
+		return ResponseEntity.ok().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> deleteMasterParts(List<String> catenaxIds) {
+		log.info("Deleting master parts with catenaxIds: {}", catenaxIds);
+		saveCustomsDataUseCase.deleteMasterParts(catenaxIds);
 		return ResponseEntity.ok().build();
 	}
 

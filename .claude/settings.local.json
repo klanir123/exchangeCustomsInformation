@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd /c \"taskkill /F /PID 6380\")",
+      "Bash(dir:*)",
+      "Bash(mvn spring-boot:run:*)",
+      "WebFetch(domain:www.msg.group)",
+      "Bash(timeout:*)",
+      "Bash(cmd /c \"netstat -ano | findstr 9090\")",
+      "Bash(cmd /c \"taskkill /F /PID 10596\")",
+      "Bash(cmd /c \"taskkill /F /PID 10596 & taskkill /F /PID 11064\")",
+      "Bash(cmd /c \"taskkill /F /PID 6156\")",
+      "Bash(mvn clean install:*)",
+      "Bash(cmd /c \"rmdir /S /Q C:\\Users\\nirschlk\\.m2\\repository\\com\\msg\\customs\")",
+      "Bash(mvn compile:*)",
+      "Bash(curl:*)",
+      "Bash(mvn clean compile:*)",
+      "Bash(cmd /c \"netstat -ano | findstr 8080\")",
+      "Bash(cmd /c \"taskkill /F /PID 20548\")",
+      "Bash(cmd /c \"taskkill /F /PID 13636\")",
+      "Bash(cmd /c \"netstat -ano | findstr :8080\")",
+      "Bash(cmd /c \"netstat -ano | findstr :9090\")",
+      "Bash(cmd /c:*)",
+      "Bash(icacls:*)",
+      "Bash(mvn install:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

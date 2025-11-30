@@ -129,7 +129,14 @@ public class CustomsService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", "application/json");
 		HttpEntity<List<String>> entity = new HttpEntity<>(customs, headers);
-		restTemplate.exchange(backendProperties.customsNotifyUrl(), HttpMethod.GET, entity, Void.class);		
+		restTemplate.exchange(backendProperties.customsNotifyUrl(), HttpMethod.GET, entity, Void.class);
+	}
+
+	public void deleteMasterParts(List<String> catenaxIds) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Type", "application/json");
+		HttpEntity<List<String>> entity = new HttpEntity<>(catenaxIds, headers);
+		restTemplate.exchange(backendProperties.masterPartDeleteUrl(), HttpMethod.DELETE, entity, Void.class);
 	}
 
 }

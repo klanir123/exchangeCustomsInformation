@@ -1,5 +1,6 @@
 package com.msg.customs.adapter.in.web.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.msg.customs.model.CustomsTypeEnum;
 import com.msg.customs.model.RequestStatusEnum;
 import lombok.Data;
@@ -14,6 +15,8 @@ import java.util.List;
 public class MasterPartDto {
 
     private Long id;
+
+    @JsonProperty("catenaxId")
     private String catenaxId;
 
     private String customerPartNumber;

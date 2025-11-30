@@ -2,30 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
-    <title>PArts</title>
+    <title>Parts</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
 </head>
 <body>
 <div class="header">
-    <ul>
-        <li><a href="/" th:text="#{menu_home}">4</a></li>
-        <li><a href="/tasks" th:text="#{menu_tasks}">4</a></li>
-        <li><a href="/parts" th:text="#{menu_parts}">4</a></li>
-        <li><a href="/customs" th:text="#{menu_lle}">4</a></li>
-        <li><a href="#" th:text="#{menu_user}">4</a></li>
-        <img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
     </ul>
 </div>
 <div class="main">
     <h1 th:text="#{masterpart_overview_header}">Parts</h1>
-    <button onclick="location.href='/customs/part/create'" th:text="#{masterpart_overview_action_create}">Produkt anlegen</button>
-    <button onclick="location.href='#'" th:text="#{masterpart_overview_action_upload}">Upload Produkte</button>
+    <div class="text-center mb-3">
+        <button onclick="location.href='/customs/part/create'" th:text="#{masterpart_overview_action_create}">Produkt anlegen</button>
+        <button onclick="location.href='#'" th:text="#{masterpart_overview_action_upload}" class="btn-secondary">Upload Produkte</button>
+        <button onclick="deleteSelected()" th:text="#{masterpart_overview_action_delete}" class="btn-danger">Löschen</button>
+    </div>
 
-
+    <div class="table-container">
     <table>
     <thead>
     <tr>
+        <th th:text="#{masterpart_overview_select}">Select</th>
         <th th:text="#{masterpart_overview_catenax_id}">Catena-X ID</th>
         <th th:text="#{masterpart_overview_customer_part_number}">Kundensachnummer</th>
         <th th:text="#{masterpart_overview_customer_part_name}">Bezeichnung Kundensachnummer</th>
@@ -36,8 +46,12 @@
 
     <tbody>
     <tr th:each="masterpart :${masterpartList}">
-        <td> <a th:href="@{/customs/part/edit/{id}(id=${masterpart.catenaxId})}" th:text="${masterpart.catenaxId}">Edit</a>
-
+        <td>
+            <input type="checkbox" name="selectedIds" th:value="${masterpart.catenaxId}" onclick="highlightRow(this)"/>
+        </td>
+        <td>
+            <a th:href="@{/customs/part/edit/{id}(id=${masterpart.catenaxId})}"
+               th:text="${masterpart.catenaxId != null ? masterpart.catenaxId : 'N/A'}">N/A</a>
         </td>
         <td th:text="${masterpart.customerPartNumber}"></td>
         <td th:text="${masterpart.customerPartName}"></td>
@@ -46,6 +60,46 @@
     </tr>
     </tbody>
 </table>
+    </div>
 </div>
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+// Close menu when clicking on a link (mobile)
+document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('nav-menu').classList.remove('active');
+        }
+    });
+});
+
+function highlightRow(checkbox) {
+    const row = checkbox.closest('tr');
+    if (checkbox.checked) {
+        row.classList.add('selected-row');
+    } else {
+        row.classList.remove('selected-row');
+    }
+}
+
+function deleteSelected() {
+    const selectedIds = Array.from(document.querySelectorAll('input[name="selectedIds"]:checked'))
+        .map(checkbox => checkbox.value);
+    if (selectedIds.length === 0) {
+        alert('Bitte wählen Sie mindestens einen Eintrag aus.');
+        return;
+    }
+    const message = selectedIds.length === 1
+        ? 'Möchten Sie diesen Eintrag wirklich löschen?'
+        : 'Möchten Sie diese ' + selectedIds.length + ' Einträge wirklich löschen?';
+    if (confirm(message)) {
+        window.location.href = '/customs/part/delete?ids=' + encodeURIComponent(selectedIds.join(','));
+    }
+}
+</script>
 </body>
 </html>

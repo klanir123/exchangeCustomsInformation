@@ -3,6 +3,7 @@ package com.msg.customs.adapter.in.web.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.msg.customs.model.CustomsTypeEnum;
 import com.msg.customs.model.RequestStatusEnum;
 
@@ -13,9 +14,10 @@ import lombok.Data;
  */
 @Data
 public class CustomsDataDto {
-	
+
 	private Long id;
-	
+
+	@JsonProperty("catenaxId")
     private String catenaxId;
 
     private RequestStatusEnum requestStatus;

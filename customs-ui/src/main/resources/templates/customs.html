@@ -1,8 +1,9 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head> 
-    <title>Getting Started: Serving Web Content</title> 
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Langzeitlieferantenerklärungen</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
     <script>
         function notifySelected() {
@@ -28,23 +29,31 @@
 <body>
 
 
-<div class ="header">
-    <ul>
-        <li><a href="/" th:text="#{menu_home}">4</a></li>
-        <li><a href="/tasks" th:text="#{menu_tasks}">4</a></li>
-        <li><a href="/parts" th:text="#{menu_parts}">4</a></li>
-        <li><a href="/customs" th:text="#{menu_lle}">4</a></li>
-        <li><a href="#" th:text="#{menu_user}">4</a></li>
-        <img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
     </ul>
 </div>
 <div class="main">
 
     <h1 th:text="#{customs_overview_header}">Parts Customs Data</h1>
 
-    <button onclick="location.href='/customs/create'" th:text="#{customs_overview_action_new_lle}">Neue LLE</button>
-	<button onclick="notifySelected()" th:text="#{customs_overview_action_send_lle}">Sende LLE</button>
-	
+    <div class="text-center mb-3">
+        <button onclick="location.href='/customs/create'" th:text="#{customs_overview_action_new_lle}">Neue LLE</button>
+        <button onclick="notifySelected()" th:text="#{customs_overview_action_send_lle}">Sende LLE</button>
+    </div>
+
+    <div class="table-container">
 	<table>
         <thead>
             <tr>     
@@ -57,16 +66,42 @@
         </thead>
         <tbody>
             <tr th:each="custom : ${customsList}">
-            	<td><input type="checkbox" name="selectedIds" th:value="${custom.catenaxId}" /></td>
+            	<td><input type="checkbox" name="selectedIds" th:value="${custom.catenaxId}" onclick="highlightRow(this)" /></td>
 				<td>
             		<a th:href="@{/customs/edit/{id}(id=${custom.catenaxId})}" th:text="${custom.catenaxId}">Edit</a>
-        		</td>            
+        		</td>
                 <td th:text="${custom.customerPartNumber}"></td>
                 <td th:text="${custom.customerPartName}"></td>
                 <td th:text="${custom.preferedStatus}"></td>
             </tr>
         </tbody>
 	</table>
+    </div>
 </div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+// Close menu when clicking on a link (mobile)
+document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('nav-menu').classList.remove('active');
+        }
+    });
+});
+
+function highlightRow(checkbox) {
+    const row = checkbox.closest('tr');
+    if (checkbox.checked) {
+        row.classList.add('selected-row');
+    } else {
+        row.classList.remove('selected-row');
+    }
+}
+</script>
 </body>
 </html>

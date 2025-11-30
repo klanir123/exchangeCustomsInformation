@@ -1,52 +1,86 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
-    <title>Tasks</title>
+    <title>Aufgaben</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
 </head>
 <body>
-<div class ="header">
-    <ul>
-        <li><a href="/" th:text="#{menu_home}">4</a></li>
-        <li><a href="/tasks" th:text="#{menu_tasks}">4</a></li>
-        <li><a href="/parts" th:text="#{menu_parts}">4</a></li>
-        <li><a href="/customs" th:text="#{menu_lle}">4</a></li>
-        <li><a href="#" th:text="#{menu_user}">4</a></li>
-        <img src="icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
     </ul>
 </div>
 <div class="main">
-    <h1 th:text="#{task_overview_header}">Tasks</h1>
-    <button onclick="location.href='/customs/part/create'" th:text="#{task_overview_action_work}">Aufgabe beantworten</button>
-    <button onclick="location.href='#'" th:text="#{task_overview_action_decline}">Aufgabe verwerfen</button>
+    <h1 th:text="#{task_overview_header}">Aufgaben</h1>
 
-    <table id="dataTable">
-    <thead>
-    <tr>
-        <th th:text="#{task_overview_select}">Select</th>
-        <th th:text="#{task_overview_catenax_id}">Catena-X ID</th>
-        <th th:text="#{task_overview_customer_part_number}">Kundensachnummer</th>
-        <th th:text="#{task_overview_customer_part_name}">Bezeichnung Kundensachnummer</th>
-        <th th:text="#{task_overview_part_number}">Sachnummer</th>
-        <th th:text="#{task_overview_part_name}">Bezeichnung Sachnummer</th>
-        <th th:text="#{task_overview_request_date}">Anfragedatum</th>
-    </tr>
-    </thead>
+    <div class="text-center mb-3">
+        <button onclick="location.href='/customs/part/create'" th:text="#{task_overview_action_work}">Aufgabe beantworten</button>
+        <button onclick="location.href='#'" th:text="#{task_overview_action_decline}" class="btn-secondary">Aufgabe verwerfen</button>
+    </div>
 
-    <tbody>
-    <tr th:each="task :${taskList}">
-        <td><input type="checkbox" name="selectedIds" th:value="${task.catenaxID}" /></td>
-        <td th:text="${task.catenaxID}">4</td>
-        <td th:text="${task.customerPartNumber}">4</td>
-        <td th:text="${task.customerPartName}">4</td>
-        <td th:text="${task.manufacturerPartNumber}">4</td>
-        <td th:text="${task.manufacturerPartName}">4</td>
-        <td th:text="${task.requestDate}">4</td>
-    </tr>
-    </tbody>
-</table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th th:text="#{task_overview_select}">Select</th>
+                    <th th:text="#{task_overview_catenax_id}">Catena-X ID</th>
+                    <th th:text="#{task_overview_customer_part_number}">Kundensachnummer</th>
+                    <th th:text="#{task_overview_customer_part_name}">Bezeichnung Kundensachnummer</th>
+                    <th th:text="#{task_overview_part_number}">Sachnummer</th>
+                    <th th:text="#{task_overview_part_name}">Bezeichnung Sachnummer</th>
+                    <th th:text="#{task_overview_request_date}">Anfragedatum</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="task : ${taskList}">
+                    <td><input type="checkbox" name="selectedIds" th:value="${task.catenaxID}" onclick="highlightRow(this)" /></td>
+                    <td th:text="${task.catenaxID}"></td>
+                    <td th:text="${task.customerPartNumber}"></td>
+                    <td th:text="${task.customerPartName}"></td>
+                    <td th:text="${task.manufacturerPartNumber}"></td>
+                    <td th:text="${task.manufacturerPartName}"></td>
+                    <td th:text="${task.requestDate}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+// Close menu when clicking on a link (mobile)
+document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('nav-menu').classList.remove('active');
+        }
+    });
+});
+
+function highlightRow(checkbox) {
+    const row = checkbox.closest('tr');
+    if (checkbox.checked) {
+        row.classList.add('selected-row');
+    } else {
+        row.classList.remove('selected-row');
+    }
+}
+</script>
 </body>
 </html>

@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface MasterPartRepository extends JpaRepository<MasterPartEntity, Long> {
 
 
-    MasterPartEntity findByCatenaxId(String catenaXId);
+    MasterPartEntity findByCatenaXId(String catenaXId);
+
+    void deleteByCatenaXId(String catenaxId);
 }

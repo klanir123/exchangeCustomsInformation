@@ -19,6 +19,7 @@ import com.msg.customs.common.config.Adapter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * JPA implementation of the CustomsDataStorageAdapter.
@@ -65,7 +66,7 @@ public class CustomsJpaStorageAdapter implements CustomsDataStorageAdapter {
 
 	@Override
 	public MasterPart loadMasterPartDataByCatenaxId(String catenaXId) {
-		return MasterPartEntityMapper.toDomain(partRepository.findByCatenaxId(catenaXId));
+		return MasterPartEntityMapper.toDomain(partRepository.findByCatenaXId(catenaXId));
 	}
 
 	@Override
@@ -85,6 +86,11 @@ public class CustomsJpaStorageAdapter implements CustomsDataStorageAdapter {
 		List<TaskEntity> allTasks = taskRepository.findAll();
 		return allTasks.stream().map(TaskEntityMapper::toDomain).toList();
 	}
-	
+
+	@Override
+	@Transactional
+	public void deleteMasterPartByCatenaxId(String catenaxId) {
+		partRepository.deleteByCatenaXId(catenaxId);
+	}
 
 }

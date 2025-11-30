@@ -1,54 +1,83 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
-    <title>partTable</title>
+    <title>Produkt bearbeiten</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
 </head>
 <body>
-<div class ="header">
-    <ul>
-        <li><a href="/" th:text="#{menu_home}">4</a></li>
-        <li><a href="/tasks" th:text="#{menu_tasks}">4</a></li>
-        <li><a href="/parts" th:text="#{menu_parts}">4</a></li>
-        <li><a href="/customs" th:text="#{menu_lle}">4</a></li>
-        <li><a href="#" th:text="#{menu_user}">4</a></li>
-        <img src="../../icon/msg_systems_logo_RGB.svg" alt="Logo" class="logo">
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
     </ul>
 </div>
-<div class="main">
-    <h1 th:text="#{masterpart_edit_header_create}">Parts</h1>
 
-<!--/*@thymesVar id="masterPart" type="com.msg.customs.domain.UiMasterPart"*/-->
+<div class="main">
+    <h1 th:text="${masterPart.catenaxId} == null ? #{masterpart_edit_header_create} : #{masterpart_edit_header_edit}">Produkt bearbeiten</h1>
+
+    <!--/*@thymesVar id="masterPart" type="com.msg.customs.domain.UiMasterPart"*/-->
     <form action="#" th:action="@{/customs/part/save}" th:object="${masterPart}" method="post">
         <input type="hidden" th:field="*{id}" />
-<table th:width="50px">
-       <tr>
-         <td><label th:text="#{masterpart_edit_catenax_id}">4</label></td>
-         <td><input type="text" id="catenaxId" th:field="*{catenaxId}"></td>
-        </tr>
-    <tr>
-        <td><label th:text="#{masterpart_edit_customer_part_number}">4</label></td>
-        <td><input type="text" id="customerPartNumber" th:field="*{customerPartNumber}"></td>
-    </tr>
-    <tr>
-    <td><label th:text="#{masterpart_edit_customer_part_name}">4</label></td>
-    <td><input type="text" id="customerPartName" th:field="*{customerPartName}"></td>
-    </tr>
-    <tr>
-    <td><label th:text="#{masterpart_edit_part_number}">4</label></td>
-    <td><input type="text" id="partNumber" th:field="*{manufacturerPartNumber}" ></td>
-    </tr>
-    <tr>
-    <td> <label th:text="#{masterpart_edit_part_name}">4</label></td>
-    <td><input type="text" id="partName" th:field="*{manufacturerPartName}" ></td>
-    </tr>
-</table>
-        <!--<input type="submit" value="Eintrag hinzufügen">-->
-        <button type="submit" th:text="${masterPart.catenaxId} == null ? #{masterpart_edit_action_create} : #{masterpart_edit_action_update}">Eintrag hinzufuegen</button>
-        <button type="button" onclick="location.href='/'" th:text="#{masterPart.edit_action_cancel}">Abbrechen</button>
-    </form>
 
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="catenaxId" th:text="#{masterpart_edit_catenax_id}">Catena-X ID</label>
+                <input type="text" id="catenaxId" th:field="*{catenaxId}" placeholder="Eindeutige Catena-X ID">
+            </div>
+
+            <div class="form-group">
+                <label for="customerPartNumber" th:text="#{masterpart_edit_customer_part_number}">Kundensachnummer</label>
+                <input type="text" id="customerPartNumber" th:field="*{customerPartNumber}" placeholder="Kundensachnummer">
+            </div>
+
+            <div class="form-group">
+                <label for="customerPartName" th:text="#{masterpart_edit_customer_part_name}">Bezeichnung Kundensachnummer</label>
+                <input type="text" id="customerPartName" th:field="*{customerPartName}" placeholder="Bezeichnung">
+            </div>
+
+            <div class="form-group">
+                <label for="manufacturerPartNumber" th:text="#{masterpart_edit_part_number}">Sachnummer</label>
+                <input type="text" id="manufacturerPartNumber" th:field="*{manufacturerPartNumber}" placeholder="Sachnummer">
+            </div>
+
+            <div class="form-group">
+                <label for="manufacturerPartName" th:text="#{masterpart_edit_part_name}">Bezeichnung Sachnummer</label>
+                <input type="text" id="manufacturerPartName" th:field="*{manufacturerPartName}" placeholder="Bezeichnung">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" th:text="${masterPart.catenaxId} == null ? #{masterpart_edit_action_create} : #{masterpart_edit_action_update}">Speichern</button>
+            <button type="button" onclick="location.href='/parts'" th:text="#{masterPart.edit_action_cancel}" class="btn-secondary">Abbrechen</button>
+        </div>
+    </form>
 </div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+// Close menu when clicking on a link (mobile)
+document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('nav-menu').classList.remove('active');
+        }
+    });
+});
+</script>
 </body>
 </html>

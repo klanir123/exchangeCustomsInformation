@@ -1,6 +1,7 @@
 package com.msg.customs.controller;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import com.msg.customs.domain.UiCustomsReducedData;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.msg.customs.domain.NotifyRequest;
 import com.msg.customs.domain.UiCustomsData;
@@ -102,7 +104,16 @@ public class CustomsController {
 
 		log.info(masterPart.toString());
 		customsService.saveMasterPart(masterPart);
-		return "redirect:/customs/part/create";
+		return "redirect:/parts";
+		//return "redirect:/customs/part/create";
+	}
+
+	@GetMapping("/customs/part/delete")
+	public String deleteParts(@RequestParam String ids) {
+		List<String> catenaxIds = Arrays.asList(ids.split(","));
+		log.info("Deleting master parts with catenaxIds: {}", catenaxIds);
+		customsService.deleteMasterParts(catenaxIds);
+		return "redirect:/parts";
 	}
 
 	@PostMapping("/customs/addOriginInformation/{originInformation}")

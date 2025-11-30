@@ -59,4 +59,11 @@ public class CustomsDataService implements LoadCustomsDataListUseCase, LoadMaste
 		return customsStorageAdapter.loadTaskData();
 	}
 
+	@Override
+	public void deleteMasterParts(List<String> catenaxIds) {
+		for (String catenaxId : catenaxIds) {
+			customsStorageAdapter.deleteMasterPartByCatenaxId(catenaxId);
+		}
+	}
+
 }

@@ -94,5 +94,14 @@ public interface CustomsAPI {
 	/// @return list of all task data
 	@GetMapping(value = "/tasks")
 	ResponseEntity<List<TaskDto>> getTasksData();
-		
+
+	/**
+	 * Delete masterpart data by catenax ids.
+	 *
+	 * @param catenaxIds comma-separated list of catenax ids
+	 * @return http status
+	 */
+	@DeleteMapping(value = "/parts")
+	ResponseEntity<Void> deleteMasterParts(@RequestBody List<String> catenaxIds);
+
 }

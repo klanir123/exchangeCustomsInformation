@@ -63,4 +63,10 @@ public interface CustomsDataStorageAdapter {
 	 * @return list with all task data
 	 */
 	List<Task> loadTaskData();
+
+	/**
+	 * Delete masterpart data by catenax id.
+	 * @param catenaxId the catenax id of the masterpart to delete
+	 */
+	void deleteMasterPartByCatenaxId(String catenaxId);
 }

@@ -3,6 +3,7 @@ package com.msg.customs.domain;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.msg.customs.model.CustomsTypeEnum;
@@ -11,11 +12,12 @@ import lombok.Data;
 
 @Data
 public class UiCustomsData {
-	
+
 	private Long id;
-	
+
 	private boolean completed;
-	
+
+	@JsonProperty("catenaxId")
 	private String catenaxId;
 
 	private String customerPartNumber;
