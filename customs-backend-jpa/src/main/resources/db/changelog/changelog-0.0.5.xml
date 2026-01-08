@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
+
+	<!-- SNR-Supplier Verknüpfungstabelle für n:m Beziehung -->
+	<!-- Implementiert FR-2.3 aus dem Lastenheft: Zuordnung SNR zu Lieferant -->
+	<changeSet id="createSnrSupplierTable" author="klanir123">
+		<createTable tableName="snr_supplier">
+			<column name="masterpart_id" type="bigint">
+				<constraints nullable="false"/>
+			</column>
+			<column name="supplier_bpnl" type="varchar(16)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="is_primary" type="boolean" defaultValueBoolean="false">
+				<constraints nullable="false"/>
+			</column>
+			<column name="note" type="varchar(500)"/>
+		</createTable>
+
+		<!-- Composite Primary Key -->
+		<addPrimaryKey
+			tableName="snr_supplier"
+			columnNames="masterpart_id, supplier_bpnl"
+			constraintName="pk_snr_supplier"/>
+
+		<!-- Foreign Key zu masterpart -->
+		<addForeignKeyConstraint
+			baseTableName="snr_supplier"
+			baseColumnNames="masterpart_id"
+			constraintName="fk_snr_supplier_masterpart"
+			referencedTableName="masterpart"
+			referencedColumnNames="id"
+			onDelete="CASCADE"/>
+
+		<!-- Foreign Key zu supplier -->
+		<addForeignKeyConstraint
+			baseTableName="snr_supplier"
+			baseColumnNames="supplier_bpnl"
+			constraintName="fk_snr_supplier_supplier"
+			referencedTableName="supplier"
+			referencedColumnNames="bpnl"
+			onDelete="CASCADE"/>
+	</changeSet>
+
+	<!-- Indizes für Performance -->
+	<changeSet id="createSnrSupplierIndexes" author="klanir123">
+		<createIndex indexName="idx_snr_supplier_masterpart" tableName="snr_supplier">
+			<column name="masterpart_id"/>
+		</createIndex>
+		<createIndex indexName="idx_snr_supplier_supplier" tableName="snr_supplier">
+			<column name="supplier_bpnl"/>
+		</createIndex>
+		<createIndex indexName="idx_snr_supplier_primary" tableName="snr_supplier">
+			<column name="masterpart_id"/>
+			<column name="is_primary"/>
+		</createIndex>
+	</changeSet>
+
+</databaseChangeLog>

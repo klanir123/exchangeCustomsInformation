@@ -15,6 +15,7 @@ import com.msg.customs.model.RequestStatusEnum;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -27,6 +28,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -61,4 +63,11 @@ public class MasterPartEntity {
 
     @Column(name = "manufacturer_part_number")
     private String manufacturerPartNumber;
+
+    /**
+     * Verknüpfungen zu Lieferanten.
+     * FR-2.3: Einem Produkt (SNR) können mehrere Lieferanten zugeordnet werden.
+     */
+    @OneToMany(mappedBy = "masterpart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SnrSupplierEntity> supplierLinks;
 }

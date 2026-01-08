@@ -32,26 +32,25 @@
         }
 
         function refreshOriginTable(currentValues) {
-            var tableBody = document.getElementById("originInformationListBody");
-            tableBody.innerHTML = "";
+            var listContainer = document.getElementById("originListContainer");
+            listContainer.innerHTML = "";
             currentValues.forEach(function (value, index) {
-                var row = document.createElement("tr");
+                var item = document.createElement("div");
+                item.className = "origin-item";
 
-                var removeButtonCell = document.createElement("td");
+                var span = document.createElement("span");
+                span.textContent = value;
+                item.appendChild(span);
+
                 var removeIcon = document.createElement("img");
                 removeIcon.src = "/icon/delete.png";
-                removeIcon.alt = "Delete";
+                removeIcon.alt = "Löschen";
                 removeIcon.className = "small-icon";
                 removeIcon.style.cursor = "pointer";
                 removeIcon.onclick = function() { removeOriginInformationField(index); };
-                removeButtonCell.appendChild(removeIcon);
-                row.appendChild(removeButtonCell);
+                item.appendChild(removeIcon);
 
-                var cell = document.createElement("td");
-                cell.textContent = value;
-                row.appendChild(cell);
-
-                tableBody.appendChild(row);
+                listContainer.appendChild(item);
             });
         }
 
@@ -100,16 +99,23 @@
 
         function toggleMasterPartSelecttionChanged() {
             var e = document.getElementById("catenaxId");
-            var selectedOption = e.options[e.selectedIndex];
-            document.getElementById("customerPartNumber").value = selectedOption.getAttribute("value2");
-            document.getElementById("customerPartName").value = selectedOption.getAttribute("value3");
-            document.getElementById("manufacturerPartNumber").value = selectedOption.getAttribute("value4");
-            document.getElementById("manufacturerPartName").value = selectedOption.getAttribute("value5");
+            // Prüfen ob es ein Select-Element ist (nicht input bei leerer Liste)
+            if (e && e.tagName === 'SELECT' && e.options && e.options.length > 0) {
+                var selectedOption = e.options[e.selectedIndex];
+                if (selectedOption) {
+                    document.getElementById("customerPartNumber").value = selectedOption.getAttribute("value2") || '';
+                    document.getElementById("customerPartName").value = selectedOption.getAttribute("value3") || '';
+                    document.getElementById("manufacturerPartNumber").value = selectedOption.getAttribute("value4") || '';
+                    document.getElementById("manufacturerPartName").value = selectedOption.getAttribute("value5") || '';
+                }
+            }
         }
 
         window.onload = function () {
             toggleCountrySelectionChanged();
             togglePrefferedStatusSelecttionChanged();
+            // Produktfelder initial befüllen (wichtig wenn nur ein Produkt vorhanden ist)
+            toggleMasterPartSelecttionChanged();
         }
     </script>
 </head>
@@ -123,8 +129,24 @@
     <ul id="nav-menu">
         <li><a href="/" th:text="#{menu_home}">Home</a></li>
         <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/lle-tasks">LLE-Aufgaben</a></li>
         <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
-        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}" class="active">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Benachrichtigungen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/notifications/outgoing">Ausgehend</a></li>
+                <li><a href="/notifications/incoming">Eingehend</a></li>
+            </ul>
+        </li>
         <li><a href="#" th:text="#{menu_user}">User</a></li>
         <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
     </ul>
@@ -239,34 +261,24 @@
             </div>
 
             <!-- Origin Information -->
-            <div class="form-group-full" style="grid-column: 1 / -1;">
+            <div class="form-group">
                 <label for="originInformation" th:text="#{customs_edit_origin_information}">Ursprungsinformationen</label>
-                <div style="display: flex; gap: 8px; margin-top: 8px;">
-                    <input type="text" id="originInformation" style="flex: 1;" placeholder="Ursprungsland hinzufügen" />
-                    <button type="button" onclick="addOriginInformationField()">Hinzufügen</button>
+                <div class="origin-input-container">
+                    <div class="origin-input-row">
+                        <input type="text" id="originInformation" placeholder="Ursprungsland hinzufügen" />
+                        <button type="button" onclick="addOriginInformationField()">Hinzufügen</button>
+                    </div>
+                    <div class="origin-list" id="originListContainer">
+                        <div th:each="originInformation, iterStat : ${customs.originInformations}" class="origin-item">
+                            <span th:text="${originInformation}">Ursprung</span>
+                            <img src="/icon/delete.png" alt="Löschen" class="small-icon"
+                                 style="cursor: pointer;"
+                                 th:data-index="${iterStat.index}"
+                                 onclick="removeOriginInformationField(this.dataset.index)">
+                        </div>
+                    </div>
+                    <input id="originInformations" type="hidden" th:field="*{originInformations}" />
                 </div>
-
-                <div class="table-container" style="margin-top: 16px;" th:if="${not #lists.isEmpty(customs.originInformations)}">
-                    <table id="originInformationList">
-                        <thead>
-                            <tr>
-                                <th style="width: 50px;">Aktion</th>
-                                <th>Ursprung</th>
-                            </tr>
-                        </thead>
-                        <tbody id="originInformationListBody">
-                            <tr th:each="originInformation, iterStat : ${customs.originInformations}">
-                                <td>
-                                    <img src="/icon/delete.png" alt="Löschen" class="small-icon"
-                                         style="cursor: pointer;"
-                                         th:onclick="'removeOriginInformationField(' + ${iterStat.index} + ')'">
-                                </td>
-                                <td th:text="${originInformation}"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <input id="originInformations" type="hidden" th:field="*{originInformations}" />
             </div>
 
             <!-- Präferenzstatus -->
@@ -289,9 +301,9 @@
                 <input type="text" id="tracedWorthCurrency" th:field="*{tracedWorthCurrency}" />
             </div>
 
-            <div class="form-group" style="align-items: center;">
+            <div class="form-group">
                 <label for="completed" th:text="#{customs_edit_completed}">Abgeschlossen</label>
-                <input type="checkbox" id="completed" th:field="*{completed}" style="width: auto; margin: 0;" />
+                <input type="checkbox" id="completed" th:field="*{completed}" style="width: auto;" />
             </div>
         </div>
 

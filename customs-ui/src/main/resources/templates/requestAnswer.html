@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Anfrage beantworten</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#" class="active">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+<div class="main">
+    <h1>Anfrage beantworten</h1>
+
+    <!-- Anfrage-Details -->
+    <div class="detail-card">
+        <h3>Anfrage-Details</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <label>Anfrage-ID:</label>
+                <span th:text="${request.id}">1</span>
+            </div>
+            <div class="detail-item">
+                <label>Absender:</label>
+                <span th:text="${request.header?.senderBpnl}">BPNL...</span>
+            </div>
+            <div class="detail-item">
+                <label>Sachnummer:</label>
+                <span th:text="${request.customerPartId ?: '-'}">SNR-12345</span>
+            </div>
+            <div class="detail-item">
+                <label>Handelsabkommen:</label>
+                <span th:text="${request.tradeRelation ?: '-'}">EU-MX</span>
+            </div>
+            <div class="detail-item">
+                <label>Gewünschte Gültigkeit:</label>
+                <span th:if="${request.requestedValidFrom != null or request.requestedValidUntil != null}">
+                    <span th:text="${request.requestedValidFrom != null ? #temporals.format(request.requestedValidFrom, 'dd.MM.yyyy') : ''}"></span>
+                    -
+                    <span th:text="${request.requestedValidUntil != null ? #temporals.format(request.requestedValidUntil, 'dd.MM.yyyy') : ''}"></span>
+                </span>
+                <span th:if="${request.requestedValidFrom == null and request.requestedValidUntil == null}">-</span>
+            </div>
+            <div class="detail-item">
+                <label>Antwortfrist:</label>
+                <span th:if="${request.header?.expectedResponseBy != null}"
+                      th:text="${#temporals.format(request.header.expectedResponseBy, 'dd.MM.yyyy HH:mm')}"
+                      th:classappend="${request.overdue ? 'text-danger' : ''}">01.01.2024</span>
+                <span th:if="${request.header?.expectedResponseBy == null}">-</span>
+                <span th:if="${request.daysUntilDeadline >= 0}" class="text-muted"
+                      th:text="'(' + ${request.daysUntilDeadline} + ' Tage verbleibend)'">(14 Tage)</span>
+                <span th:if="${request.overdue}" class="text-danger">(Überfällig!)</span>
+            </div>
+            <div class="detail-item" th:if="${request.remarks}">
+                <label>Bemerkungen:</label>
+                <span th:text="${request.remarks}">Bemerkungen...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- LLE-Auswahl -->
+    <div class="section-card" style="margin-top: 20px;">
+        <h3>LLE-Daten auswählen</h3>
+        <p class="help-text">Wählen Sie die LLE-Datensätze aus, die Sie als Antwort senden möchten.</p>
+
+        <div th:if="${#lists.isEmpty(lleList)}" class="empty-message">
+            <p>Keine passenden LLE-Daten vorhanden.</p>
+            <a href="/customs/create" class="btn-primary">Neue LLE anlegen</a>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(lleList)}" class="table-container">
+            <table id="lleTable">
+                <thead>
+                <tr>
+                    <th>Auswahl</th>
+                    <th>Catena-X ID</th>
+                    <th>Sachnummer</th>
+                    <th>Ursprungsland</th>
+                    <th>Gültig von</th>
+                    <th>Gültig bis</th>
+                    <th>Status</th>
+                    <th>Präferenz</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="lle : ${lleList}"
+                    th:classappend="${lle.lleStatus?.name() == 'Expired' ? 'row-muted' : ''}">
+                    <td>
+                        <input type="checkbox" name="selectedLleIds" th:value="${lle.id}"
+                               th:disabled="${lle.lleStatus?.name() == 'Expired'}"
+                               onclick="highlightRow(this)" />
+                    </td>
+                    <td>
+                        <a th:href="@{/customs/edit/{id}(id=${lle.catenaxId})}"
+                           th:text="${#strings.abbreviate(lle.catenaxId, 20)}">CX-123...</a>
+                    </td>
+                    <td th:text="${lle.customerPart?.number ?: '-'}">SNR-12345</td>
+                    <td th:text="${lle.country?.displayName ?: '-'}">Deutschland</td>
+                    <td th:text="${lle.validFrom != null ? #temporals.format(lle.validFrom, 'dd.MM.yyyy') : '-'}">01.01.2024</td>
+                    <td th:text="${lle.validUntil != null ? #temporals.format(lle.validUntil, 'dd.MM.yyyy') : '-'}">01.01.2025</td>
+                    <td>
+                        <span class="status-badge"
+                              th:classappend="${lle.lleStatus?.name() == 'Active' ? 'status-active' :
+                                               (lle.lleStatus?.name() == 'ExpiringSoon' ? 'status-warning' :
+                                               (lle.lleStatus?.name() == 'Critical' ? 'status-critical' :
+                                               (lle.lleStatus?.name() == 'Expired' ? 'status-blocked' : 'status-draft')))}"
+                              th:text="${lle.lleStatus?.displayName ?: 'Entwurf'}">Aktiv</span>
+                    </td>
+                    <td th:text="${lle.preferredStatus?.displayName ?: '-'}">Zertifiziert</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Aktionen -->
+    <div class="form-actions" style="margin-top: 20px;">
+        <button type="button" onclick="history.back()" class="btn-secondary">Zurück</button>
+        <button type="button" onclick="sendAnswer()" class="btn-success"
+                th:disabled="${#lists.isEmpty(lleList)}">Antwort senden</button>
+    </div>
+
+    <div class="info-box" style="margin-top: 20px;">
+        <h4>Hinweise</h4>
+        <ul>
+            <li>Wählen Sie mindestens eine LLE aus, um die Anfrage zu beantworten.</li>
+            <li>Die ausgewählten LLE-Daten werden als CustomsNotification an den Anfragenden übermittelt.</li>
+            <li>Abgelaufene LLEs (Status "Expired") können nicht ausgewählt werden.</li>
+            <li>Nach dem Senden wird die Anfrage als "Beantwortet" markiert.</li>
+        </ul>
+    </div>
+</div>
+
+<script th:inline="javascript">
+const requestId = [[${request.id}]];
+
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+function highlightRow(checkbox) {
+    const row = checkbox.closest('tr');
+    if (checkbox.checked) {
+        row.classList.add('selected-row');
+    } else {
+        row.classList.remove('selected-row');
+    }
+}
+
+function sendAnswer() {
+    const selectedIds = Array.from(document.querySelectorAll('input[name="selectedLleIds"]:checked'))
+        .map(checkbox => parseInt(checkbox.value));
+
+    if (selectedIds.length === 0) {
+        alert('Bitte wählen Sie mindestens eine LLE aus.');
+        return;
+    }
+
+    if (!confirm('Möchten Sie die Antwort mit ' + selectedIds.length + ' LLE-Datensatz/Datensätzen senden?')) {
+        return;
+    }
+
+    fetch('/api/requests/' + requestId + '/answer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(selectedIds)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Antwort erfolgreich gesendet!');
+            window.location.href = '/requests/incoming';
+        } else {
+            response.json().then(data => {
+                alert('Fehler: ' + (data.message || 'Unbekannter Fehler'));
+            }).catch(() => {
+                alert('Fehler beim Senden der Antwort');
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler beim Senden der Antwort');
+    });
+}
+</script>
+</body>
+</html>

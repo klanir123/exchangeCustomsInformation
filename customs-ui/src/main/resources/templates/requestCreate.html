@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Neue Anfrage erstellen</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#" class="active">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+<div class="main">
+    <h1 th:text="${request?.id != null ? 'Anfrage bearbeiten' : 'Neue Anfrage erstellen'}">Neue Anfrage erstellen</h1>
+
+    <form id="requestForm" th:action="@{/requests/save}" method="post" class="form-container">
+        <input type="hidden" name="id" th:value="${request?.id}" />
+
+        <!-- Lieferant -->
+        <div class="form-group">
+            <label for="supplierBpnl">Lieferant *</label>
+            <select id="supplierBpnl" name="supplierBpnl" required>
+                <option value="">-- Lieferant auswählen --</option>
+                <option th:each="supplier : ${supplierList}"
+                        th:value="${supplier.bpnl}"
+                        th:text="${supplier.name + ' (' + supplier.bpnl + ')'}"
+                        th:selected="${supplier.bpnl == request?.supplierBpnl}">
+                    Lieferant (BPNL)
+                </option>
+            </select>
+            <small class="help-text">Wählen Sie den Lieferanten, an den die Anfrage gesendet werden soll.</small>
+        </div>
+
+        <!-- Sachnummer -->
+        <div class="form-group">
+            <label for="customerPartId">Sachnummer (SNR)</label>
+            <input type="text" id="customerPartId" name="customerPartId"
+                   th:value="${request?.customerPartId}"
+                   placeholder="z.B. SNR-12345678"
+                   maxlength="100" />
+            <small class="help-text">Die Sachnummer, für die Sie Zolldaten anfragen möchten.</small>
+        </div>
+
+        <!-- Handelsabkommen -->
+        <div class="form-group">
+            <label for="tradeRelation">Handelsabkommen</label>
+            <select id="tradeRelation" name="tradeRelation">
+                <option value="">-- Optional: Handelsabkommen auswählen --</option>
+                <option value="EU-CH" th:selected="${request?.tradeRelation == 'EU-CH'}">EU-Schweiz</option>
+                <option value="EU-UK" th:selected="${request?.tradeRelation == 'EU-UK'}">EU-UK TCA</option>
+                <option value="EU-MX" th:selected="${request?.tradeRelation == 'EU-MX'}">EU-Mexiko</option>
+                <option value="EU-CA" th:selected="${request?.tradeRelation == 'EU-CA'}">EU-Kanada (CETA)</option>
+                <option value="EU-JP" th:selected="${request?.tradeRelation == 'EU-JP'}">EU-Japan EPA</option>
+                <option value="EU-KR" th:selected="${request?.tradeRelation == 'EU-KR'}">EU-Südkorea</option>
+                <option value="PEM" th:selected="${request?.tradeRelation == 'PEM'}">PEM-Konvention</option>
+            </select>
+            <small class="help-text">Falls Sie Daten für ein bestimmtes Handelsabkommen benötigen.</small>
+        </div>
+
+        <!-- Gültigkeitszeitraum -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="requestedValidFrom">Gewünschte Gültigkeit von</label>
+                <input type="date" id="requestedValidFrom" name="requestedValidFrom"
+                       th:value="${request?.requestedValidFrom}" />
+            </div>
+            <div class="form-group">
+                <label for="requestedValidUntil">Gewünschte Gültigkeit bis</label>
+                <input type="date" id="requestedValidUntil" name="requestedValidUntil"
+                       th:value="${request?.requestedValidUntil}" />
+            </div>
+        </div>
+
+        <!-- Antwortfrist -->
+        <div class="form-group">
+            <label for="responseDays">Antwortfrist (Tage)</label>
+            <input type="number" id="responseDays" name="responseDays"
+                   th:value="${request?.responseDays ?: 14}"
+                   min="1" max="90" value="14" />
+            <small class="help-text">Anzahl Tage, innerhalb derer eine Antwort erwartet wird (Standard: 14 Tage).</small>
+        </div>
+
+        <!-- Bemerkungen -->
+        <div class="form-group">
+            <label for="remarks">Bemerkungen</label>
+            <textarea id="remarks" name="remarks" rows="4"
+                      placeholder="Optionale Bemerkungen zur Anfrage..."
+                      th:text="${request?.remarks}"></textarea>
+        </div>
+
+        <!-- Aktionen -->
+        <div class="form-actions">
+            <button type="button" onclick="history.back()" class="btn-secondary">Abbrechen</button>
+            <button type="submit" name="action" value="save" class="btn-primary">Speichern (Entwurf)</button>
+            <button type="submit" name="action" value="send" class="btn-success">Speichern und Senden</button>
+        </div>
+    </form>
+
+    <div class="info-box" style="margin-top: 20px;">
+        <h4>Hinweise</h4>
+        <ul>
+            <li>Die Anfrage wird zunächst als <strong>Entwurf</strong> gespeichert.</li>
+            <li>Mit "Speichern und Senden" wird die Anfrage direkt an den Lieferanten übermittelt.</li>
+            <li>Nach dem Versand kann die Anfrage nicht mehr geändert werden.</li>
+            <li>Der Lieferant erhält die Anfrage über den EDC (Eclipse Dataspace Connector).</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+// Validierung vor dem Absenden
+document.getElementById('requestForm').addEventListener('submit', function(e) {
+    const supplierBpnl = document.getElementById('supplierBpnl').value;
+    if (!supplierBpnl) {
+        e.preventDefault();
+        alert('Bitte wählen Sie einen Lieferanten aus.');
+        return false;
+    }
+
+    const action = e.submitter.value;
+    if (action === 'send') {
+        if (!confirm('Möchten Sie die Anfrage wirklich versenden? Sie kann danach nicht mehr geändert werden.')) {
+            e.preventDefault();
+            return false;
+        }
+    }
+});
+
+// Datum-Validierung
+document.getElementById('requestedValidUntil').addEventListener('change', function() {
+    const from = document.getElementById('requestedValidFrom').value;
+    const until = this.value;
+    if (from && until && from > until) {
+        alert('Das Ende-Datum muss nach dem Start-Datum liegen.');
+        this.value = '';
+    }
+});
+</script>
+</body>
+</html>

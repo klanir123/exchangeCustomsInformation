@@ -1,0 +1,42 @@
+# EDC Konfiguration für Customs KIT
+# Diese Konfiguration kann in application.yaml importiert werden
+
+edc:
+  # Eigener Connector (OEM/Kunde)
+  own-connector:
+    participant-id: "BPNL000000000OEM"
+    management-url: "http://localhost:11002/api/management"
+    dsp-endpoint: "http://localhost:11003/api/dsp"
+    api-key: "ApiKeyDefaultValue"
+
+  # Partnerverbindungen (werden dynamisch aus Lieferantendaten geladen)
+  # Beispiel für lokalen Test:
+  test-partners:
+    supplier-a:
+      participant-id: "BPNL000000000SUP"
+      dsp-endpoint: "http://localhost:22003/api/dsp"
+      # Bei Docker: http://connector-b:22003/api/dsp
+
+  # Dataspace Protokoll Konfiguration
+  dataspace:
+    protocol: "dataspace-protocol-http"
+    context: "https://w3id.org/edc/v0.0.1/ns/"
+
+  # Asset-Typen für Customs KIT
+  asset-types:
+    customs-notification: "customs:notification"
+    customs-request: "customs:request"
+    lle-data: "customs:lle-data"
+
+  # Standard-Policies
+  policies:
+    # Zugriff nur für Catena-X Mitglieder
+    catena-x-membership:
+      type: "cx-policy:Membership"
+      operator: "eq"
+      value: "active"
+    # Verwendung nur für Zollzwecke
+    customs-purpose:
+      type: "cx-policy:UsagePurpose"
+      operator: "eq"
+      value: "cx.customs:1"

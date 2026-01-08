@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Benachrichtigung Details</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="active">Benachrichtigungen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/notifications/outgoing">Ausgehend</a></li>
+                <li><a href="/notifications/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+<div class="main">
+    <h1>Benachrichtigung #<span th:text="${notification.id}">1</span></h1>
+
+    <!-- Notification Header -->
+    <div class="detail-card">
+        <h3>Notification Header</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <label>Message-ID:</label>
+                <span th:text="${notification.header?.messageId}">UUID</span>
+            </div>
+            <div class="detail-item">
+                <label>Richtung:</label>
+                <span class="status-badge"
+                      th:classappend="${notification.direction.name() == 'INCOMING' ? 'status-new' : 'status-sent'}"
+                      th:text="${notification.direction.name() == 'INCOMING' ? 'Eingehend' : 'Ausgehend'}">Richtung</span>
+            </div>
+            <div class="detail-item">
+                <label>Status:</label>
+                <span class="status-badge"
+                      th:classappend="${notification.status.name() == 'DRAFT' ? 'status-draft' :
+                                       (notification.status.name() == 'SENT' ? 'status-sent' :
+                                       (notification.status.name() == 'RECEIVED' ? 'status-new' :
+                                       (notification.status.name() == 'PROCESSED' ? 'status-active' : '')))}"
+                      th:text="${notification.statusDisplayName}">Status</span>
+            </div>
+            <div class="detail-item">
+                <label>Absender:</label>
+                <span th:text="${notification.header?.senderBpnl}">BPNL...</span>
+            </div>
+            <div class="detail-item">
+                <label>Empfänger:</label>
+                <span th:text="${notification.header?.receiverBpnl}">BPNL...</span>
+            </div>
+            <div class="detail-item">
+                <label>Versendet am:</label>
+                <span th:if="${notification.header?.sentDateTime != null}"
+                      th:text="${#temporals.format(notification.header.sentDateTime, 'dd.MM.yyyy HH:mm')}">01.01.2024</span>
+                <span th:if="${notification.header?.sentDateTime == null}">-</span>
+            </div>
+            <div class="detail-item">
+                <label>Erstellt am:</label>
+                <span th:text="${#temporals.format(notification.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2024</span>
+            </div>
+            <div class="detail-item" th:if="${notification.remarks}">
+                <label>Bemerkungen:</label>
+                <span th:text="${notification.remarks}">Bemerkungen...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Items (listOfItems) -->
+    <div class="section-card" style="margin-top: 20px;">
+        <h3>LLE-Datensätze (<span th:text="${notification.itemCount}">0</span> Items)</h3>
+
+        <div th:if="${#lists.isEmpty(notification.listOfItems)}" class="empty-message">
+            <p>Keine Items in dieser Benachrichtigung.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(notification.listOfItems)}" class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Catena-X ID</th>
+                    <th>Sachnummer</th>
+                    <th>Ursprungsland</th>
+                    <th>Gültig von</th>
+                    <th>Gültig bis</th>
+                    <th>Status</th>
+                    <th>Präferenz</th>
+                    <th th:if="${notification.direction.name() == 'INCOMING'}">Übernommen</th>
+                    <th th:if="${notification.direction.name() == 'INCOMING'}">Aktion</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${notification.listOfItems}"
+                    th:classappend="${item.adopted ? 'row-muted' : (item.completed ? '' : 'row-warning')}">
+                    <td th:text="${#strings.abbreviate(item.catenaXId, 20)}">CX-123...</td>
+                    <td th:text="${item.customerPartId ?: '-'}">SNR-12345</td>
+                    <td th:text="${item.commercialCountryOfOrigin ?: '-'}">Deutschland</td>
+                    <td th:text="${item.validFrom != null ? #temporals.format(item.validFrom, 'dd.MM.yyyy') : '-'}">01.01.2024</td>
+                    <td th:text="${item.validUntil != null ? #temporals.format(item.validUntil, 'dd.MM.yyyy') : '-'}">01.01.2025</td>
+                    <td>
+                        <span class="status-badge"
+                              th:classappend="${item.completed ? 'status-active' : 'status-warning'}"
+                              th:text="${item.completionStatus ?: '-'}">Status</span>
+                    </td>
+                    <td th:text="${item.preferredStatus ?: '-'}">Y-Certified</td>
+                    <td th:if="${notification.direction.name() == 'INCOMING'}">
+                        <span th:if="${item.adopted}" class="text-success">Ja</span>
+                        <span th:if="${!item.adopted}" class="text-muted">Nein</span>
+                    </td>
+                    <td th:if="${notification.direction.name() == 'INCOMING'}">
+                        <button th:if="${!item.adopted}"
+                                th:data-notification-id="${notification.id}"
+                                th:data-item-id="${item.id}"
+                                onclick="adoptItem(this.dataset.notificationId, this.dataset.itemId)"
+                                class="btn-small btn-primary">Übernehmen</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Aktionen -->
+    <div class="form-actions" style="margin-top: 20px;">
+        <button type="button" onclick="history.back()" class="btn-secondary">Zurück</button>
+        <button th:if="${notification.canBeSent}"
+                th:data-id="${notification.id}"
+                onclick="sendNotification(this.dataset.id)"
+                class="btn-success">Benachrichtigung senden</button>
+        <button th:if="${notification.direction.name() == 'INCOMING' and notification.unadoptedItemCount > 0}"
+                th:data-id="${notification.id}"
+                onclick="adoptAllItems(this.dataset.id)"
+                class="btn-primary">Alle Items übernehmen</button>
+    </div>
+
+    <div class="info-box" style="margin-top: 20px;" th:if="${notification.direction.name() == 'INCOMING'}">
+        <h4>Hinweise zur Übernahme</h4>
+        <ul>
+            <li>Items mit Status "Not-Completed" sollten vor Übernahme geprüft werden.</li>
+            <li>Übernommene Items werden in eigene LLE-Datensätze konvertiert.</li>
+            <li>Die Verknüpfung zur Ursprungs-Notification bleibt erhalten.</li>
+        </ul>
+    </div>
+</div>
+
+<script th:inline="javascript">
+const notificationId = [[${notification.id}]];
+
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+function sendNotification(id) {
+    if (!confirm('Möchten Sie diese Benachrichtigung wirklich versenden?')) {
+        return;
+    }
+
+    fetch('/api/notifications/' + id + '/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Benachrichtigung wurde erfolgreich versendet!');
+            location.reload();
+        } else {
+            alert('Fehler beim Versenden');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler beim Versenden');
+    });
+}
+
+function adoptItem(notificationId, itemId) {
+    if (!confirm('Möchten Sie dieses Item in eine eigene LLE übernehmen?')) {
+        return;
+    }
+
+    fetch('/api/notifications/' + notificationId + '/items/' + itemId + '/adopt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Item wurde erfolgreich übernommen!');
+            location.reload();
+        } else {
+            alert('Fehler bei der Übernahme');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler bei der Übernahme');
+    });
+}
+
+function adoptAllItems(id) {
+    if (!confirm('Möchten Sie alle Items in eigene LLEs übernehmen?')) {
+        return;
+    }
+
+    fetch('/api/notifications/' + id + '/adopt-all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Alle Items wurden erfolgreich übernommen!');
+            location.reload();
+        } else {
+            alert('Fehler bei der Übernahme');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler bei der Übernahme');
+    });
+}
+</script>
+</body>
+</html>

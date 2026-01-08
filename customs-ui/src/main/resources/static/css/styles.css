@@ -279,8 +279,8 @@ form {
 .form-grid {
     display: grid;
     grid-template-columns: 200px 1fr;
-    gap: var(--spacing-md);
-    align-items: start;
+    gap: var(--spacing-sm) var(--spacing-md);
+    align-items: center;
     margin-bottom: var(--spacing-md);
 }
 
@@ -290,15 +290,45 @@ form {
 
 .form-group label {
     text-align: right;
-    padding-top: 12px;
+    padding: 0;
+    margin: 0;
     font-weight: 500;
     color: var(--text-color);
+    line-height: 1.4;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-grid .form-group input,
+.form-grid .form-group select,
+.form-grid .form-group textarea,
+.form-grid .form-group input[type="text"],
+.form-grid .form-group input[type="date"],
+.form-grid .form-group input[type="email"],
+.form-grid .form-group input[type="number"] {
     width: 100%;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+/* Checkbox alignment in form-grid */
+.form-group.checkbox-group {
+    display: contents;
+}
+
+.form-group.checkbox-group > label:first-child {
+    text-align: right;
+}
+
+.form-group.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    margin: 0;
+}
+
+.form-group.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
 }
 
 /* Full width form groups */
@@ -530,13 +560,19 @@ hr {
     /* Stack form grid on mobile */
     .form-grid {
         grid-template-columns: 1fr;
-        gap: var(--spacing-sm);
+        gap: var(--spacing-xs);
     }
 
     .form-group label {
         text-align: left;
         padding-top: 0;
-        margin-bottom: var(--spacing-xs);
+        margin-bottom: 0;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        margin-bottom: var(--spacing-sm);
     }
 
     .form-actions {
@@ -651,5 +687,367 @@ hr {
         box-shadow: none;
         border-top: 1px solid var(--border-color);
         padding: var(--spacing-sm);
+    }
+}
+
+/* ==========================================
+   Status Badges
+   ========================================== */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.status-active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-inactive {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-blocked {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Row styling for status */
+.row-inactive {
+    background-color: #fffbeb;
+}
+
+.row-blocked {
+    background-color: #fef2f2;
+}
+
+.row-primary {
+    background-color: #e3f2fd;
+}
+
+/* ==========================================
+   Detail View
+   ========================================== */
+.detail-card {
+    background: var(--background-light);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: var(--spacing-lg);
+}
+
+.detail-card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-color);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-item label {
+    font-weight: 500;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    margin-top: 0;
+}
+
+.detail-item span {
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+/* ==========================================
+   Badges
+   ========================================== */
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.badge-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+/* ==========================================
+   Button Links
+   ========================================== */
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: none;
+    margin: 0;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+    background: none;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-link.btn-danger {
+    color: #dc3545;
+    background: none;
+}
+
+.btn-link.btn-danger:hover {
+    color: #a71d2a;
+    background: none;
+}
+
+/* Action Cell */
+.action-cell {
+    white-space: nowrap;
+}
+
+.action-cell a,
+.action-cell button {
+    margin-right: var(--spacing-xs);
+}
+
+/* ==========================================
+   Empty State Message
+   ========================================== */
+.empty-message {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--text-light);
+}
+
+.empty-message p {
+    margin: 0;
+}
+
+/* ==========================================
+   Search Bar
+   ========================================== */
+.search-bar input {
+    margin-bottom: 0;
+}
+
+/* ==========================================
+   Checkbox Group
+   ========================================== */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* ==========================================
+   Form Hint
+   ========================================== */
+.form-hint {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+
+/* Input with hint wrapper */
+.input-with-hint {
+    width: 100%;
+}
+
+.input-with-hint input {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+/* ==========================================
+   Origin Information (Ursprungsinformationen)
+   ========================================== */
+.origin-input-container {
+    width: 100%;
+}
+
+.origin-input-row {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.origin-input-row input {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.origin-input-row button {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.origin-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+}
+
+.origin-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--background-gray);
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+}
+
+.origin-item span {
+    color: var(--text-color);
+}
+
+.origin-item .small-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+    transition: var(--transition);
+}
+
+.origin-item .small-icon:hover {
+    opacity: 1;
+}
+
+/* ==========================================
+   Suppliers Section (FR-2.3)
+   ========================================== */
+.suppliers-section {
+    margin-top: var(--spacing-lg);
+    background: var(--background-light);
+    padding: var(--spacing-lg);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.suppliers-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-color);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.supplier-add-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--background-gray);
+    border-radius: 8px;
+}
+
+.supplier-add-form select {
+    flex: 2;
+    min-width: 200px;
+    margin-bottom: 0;
+}
+
+.supplier-add-form input[type="text"] {
+    flex: 1;
+    min-width: 150px;
+    margin-bottom: 0;
+}
+
+.supplier-add-form .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.supplier-add-form .checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.supplier-add-form .btn-add {
+    margin: 0;
+    padding: 12px 20px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--background-light);
+}
+
+.data-table th,
+.data-table td {
+    padding: var(--spacing-sm);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background-color: var(--background-gray);
+    font-weight: 600;
+}
+
+.action-buttons {
+    white-space: nowrap;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    margin: 2px;
+}
+
+@media (max-width: 768px) {
+    .supplier-add-form {
+        flex-direction: column;
+    }
+
+    .supplier-add-form select,
+    .supplier-add-form input[type="text"],
+    .supplier-add-form .btn-add {
+        width: 100%;
     }
 }

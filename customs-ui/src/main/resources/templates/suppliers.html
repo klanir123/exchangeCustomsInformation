@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Lieferanten</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/lle-tasks">LLE-Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}" class="active">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Benachrichtigungen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/notifications/outgoing">Ausgehend</a></li>
+                <li><a href="/notifications/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+<div class="main">
+    <h1 th:text="#{supplier_overview_header}">Lieferanten</h1>
+    <div class="text-center mb-3">
+        <button onclick="location.href='/suppliers/create'" th:text="#{supplier_overview_action_create}">Lieferant anlegen</button>
+        <button onclick="deleteSelected()" th:text="#{supplier_overview_action_delete}" class="btn-danger">Löschen</button>
+    </div>
+
+    <div class="search-bar" style="margin-bottom: 16px;">
+        <input type="text" id="searchInput" placeholder="Suche nach BPNL oder Name..." onkeyup="filterTable()" style="width: 100%; max-width: 400px; padding: 8px;" />
+    </div>
+
+    <div class="table-container">
+    <table id="supplierTable">
+    <thead>
+    <tr>
+        <th th:text="#{supplier_overview_select}">Select</th>
+        <th th:text="#{supplier_overview_bpnl}">BPNL</th>
+        <th th:text="#{supplier_overview_name}">Name</th>
+        <th th:text="#{supplier_overview_city}">Stadt</th>
+        <th th:text="#{supplier_overview_country}">Land</th>
+        <th th:text="#{supplier_overview_status}">Status</th>
+        <th th:text="#{supplier_overview_actions}">Aktionen</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="supplier : ${supplierList}" th:classappend="${supplier.status.name() == 'Blocked' ? 'row-blocked' : (supplier.status.name() == 'Inactive' ? 'row-inactive' : '')}">
+        <td>
+            <input type="checkbox" name="selectedIds" th:value="${supplier.bpnl}" onclick="highlightRow(this)"/>
+        </td>
+        <td>
+            <a th:href="@{/suppliers/view/{bpnl}(bpnl=${supplier.bpnl})}"
+               th:text="${supplier.bpnl}">BPNL123456789012</a>
+        </td>
+        <td th:text="${supplier.name}">Lieferant Name</td>
+        <td th:text="${supplier.city}">Stadt</td>
+        <td th:text="${supplier.country}">Land</td>
+        <td>
+            <span class="status-badge"
+                  th:classappend="${supplier.status.name() == 'Active' ? 'status-active' : (supplier.status.name() == 'Inactive' ? 'status-inactive' : 'status-blocked')}"
+                  th:text="${supplier.status.displayName}">Aktiv</span>
+        </td>
+        <td>
+            <a th:href="@{/suppliers/edit/{bpnl}(bpnl=${supplier.bpnl})}" class="btn-link" th:text="#{supplier_overview_action_edit}">Bearbeiten</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(supplierList)}" class="empty-message">
+        <p th:text="#{supplier_overview_empty}">Keine Lieferanten vorhanden.</p>
+    </div>
+</div>
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('nav-menu').classList.remove('active');
+        }
+    });
+});
+
+function highlightRow(checkbox) {
+    const row = checkbox.closest('tr');
+    if (checkbox.checked) {
+        row.classList.add('selected-row');
+    } else {
+        row.classList.remove('selected-row');
+    }
+}
+
+function deleteSelected() {
+    const selectedIds = Array.from(document.querySelectorAll('input[name="selectedIds"]:checked'))
+        .map(checkbox => checkbox.value);
+    if (selectedIds.length === 0) {
+        alert('Bitte wählen Sie mindestens einen Lieferanten aus.');
+        return;
+    }
+    const message = selectedIds.length === 1
+        ? 'Möchten Sie diesen Lieferanten wirklich löschen?'
+        : 'Möchten Sie diese ' + selectedIds.length + ' Lieferanten wirklich löschen?';
+    if (confirm(message)) {
+        window.location.href = '/suppliers/delete?ids=' + encodeURIComponent(selectedIds.join(','));
+    }
+}
+
+function filterTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById('supplierTable');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) {
+        const bpnlCell = rows[i].getElementsByTagName('td')[1];
+        const nameCell = rows[i].getElementsByTagName('td')[2];
+        if (bpnlCell && nameCell) {
+            const bpnl = bpnlCell.textContent || bpnlCell.innerText;
+            const name = nameCell.textContent || nameCell.innerText;
+            if (bpnl.toLowerCase().indexOf(filter) > -1 || name.toLowerCase().indexOf(filter) > -1) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+}
+</script>
+</body>
+</html>

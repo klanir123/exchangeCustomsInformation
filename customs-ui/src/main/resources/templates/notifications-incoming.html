@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Eingehende Benachrichtigungen</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/lle-tasks">LLE-Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="active">Benachrichtigungen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/notifications/outgoing">Ausgehend</a></li>
+                <li><a href="/notifications/incoming" class="active">Eingehend</a></li>
+            </ul>
+        </li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+<div class="main">
+    <h1>Eingehende Benachrichtigungen</h1>
+
+    <!-- Statistik-Kacheln -->
+    <div class="dashboard-tiles" style="margin-bottom: 20px;">
+        <div class="tile">
+            <span class="count" th:text="${stats?.incomingTotal ?: 0}">0</span>
+            <span class="label">Gesamt</span>
+        </div>
+        <div class="tile tile-warning" th:if="${stats?.incomingUnprocessed > 0}">
+            <span class="count" th:text="${stats.incomingUnprocessed}">0</span>
+            <span class="label">Unverarbeitet</span>
+        </div>
+        <div class="tile tile-info">
+            <span class="count" th:text="${stats?.incomingReceived ?: 0}">0</span>
+            <span class="label">Empfangen</span>
+        </div>
+        <div class="tile tile-success">
+            <span class="count" th:text="${stats?.incomingProcessed ?: 0}">0</span>
+            <span class="label">Verarbeitet</span>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar" style="margin-bottom: 16px;">
+        <select id="statusFilter" onchange="filterByStatus()" style="padding: 8px; margin-right: 10px;">
+            <option value="">Alle Status</option>
+            <option value="RECEIVED">Empfangen</option>
+            <option value="PROCESSED">Verarbeitet</option>
+        </select>
+        <label style="margin-left: 15px;">
+            <input type="checkbox" id="unprocessedOnly" onchange="filterUnprocessed()" />
+            Nur unverarbeitete
+        </label>
+    </div>
+
+    <!-- Tabelle -->
+    <div class="table-container">
+        <table id="notificationTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Absender</th>
+                <th>Items</th>
+                <th>Nicht übernommen</th>
+                <th>Status</th>
+                <th>Empfangen am</th>
+                <th>Aktionen</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="notification : ${notificationList}"
+                th:data-status="${notification.status}"
+                th:data-unprocessed="${notification.unadoptedItemCount > 0}"
+                th:classappend="${notification.unadoptedItemCount > 0 ? 'row-highlight' : (notification.status.name() == 'PROCESSED' ? 'row-success' : '')}">
+                <td>
+                    <a th:href="@{/notifications/view/{id}(id=${notification.id})}"
+                       th:text="${notification.id}">1</a>
+                </td>
+                <td>
+                    <span th:text="${notification.header?.senderBpnl}">BPNL...</span>
+                    <br/>
+                    <small th:if="${notification.supplierName}" th:text="${notification.supplierName}" class="text-muted"></small>
+                </td>
+                <td th:text="${notification.itemCount}">0</td>
+                <td>
+                    <span th:if="${notification.unadoptedItemCount > 0}"
+                          class="badge badge-warning"
+                          th:text="${notification.unadoptedItemCount}">0</span>
+                    <span th:if="${notification.unadoptedItemCount == 0}" class="text-success">Alle übernommen</span>
+                </td>
+                <td>
+                    <span class="status-badge"
+                          th:classappend="${notification.status.name() == 'RECEIVED' ? 'status-new' :
+                                           (notification.status.name() == 'PROCESSED' ? 'status-active' : '')}"
+                          th:text="${notification.statusDisplayName}">Status</span>
+                </td>
+                <td th:text="${#temporals.format(notification.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2024</td>
+                <td>
+                    <a th:href="@{/notifications/view/{id}(id=${notification.id})}"
+                       class="btn-small btn-primary">Details</a>
+                    <button th:if="${notification.unadoptedItemCount > 0}"
+                            th:data-id="${notification.id}"
+                            onclick="adoptAllItems(this.dataset.id)"
+                            class="btn-small btn-success">Alle übernehmen</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(notificationList)}" class="empty-message">
+        <p>Keine eingehenden Benachrichtigungen vorhanden.</p>
+    </div>
+
+    <div class="info-box" style="margin-top: 20px;">
+        <h4>Hinweise</h4>
+        <ul>
+            <li>Eingehende Benachrichtigungen enthalten LLE-Daten von Lieferanten.</li>
+            <li>Nicht übernommene Items können in eigene LLE-Datensätze überführt werden.</li>
+            <li>Nach Übernahme aller Items wird die Benachrichtigung als "Verarbeitet" markiert.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+function filterByStatus() {
+    applyFilters();
+}
+
+function filterUnprocessed() {
+    applyFilters();
+}
+
+function applyFilters() {
+    const status = document.getElementById('statusFilter').value;
+    const unprocessedOnly = document.getElementById('unprocessedOnly').checked;
+    const rows = document.querySelectorAll('#notificationTable tbody tr');
+
+    rows.forEach(row => {
+        let show = true;
+
+        if (status && row.dataset.status !== status) {
+            show = false;
+        }
+
+        if (unprocessedOnly && row.dataset.unprocessed !== 'true') {
+            show = false;
+        }
+
+        row.style.display = show ? '' : 'none';
+    });
+}
+
+function adoptAllItems(notificationId) {
+    if (!confirm('Möchten Sie alle Items dieser Benachrichtigung in eigene LLEs übernehmen?')) {
+        return;
+    }
+
+    fetch('/api/notifications/' + notificationId + '/adopt-all', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Alle Items wurden erfolgreich übernommen!');
+            location.reload();
+        } else {
+            alert('Fehler bei der Übernahme');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler bei der Übernahme');
+    });
+}
+</script>
+</body>
+</html>

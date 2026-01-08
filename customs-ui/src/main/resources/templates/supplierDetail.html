@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Lieferant Details</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+
+<div class="main">
+    <h1 th:text="#{supplier_detail_header}">Lieferant Details</h1>
+
+    <!-- Lieferant Informationen -->
+    <div class="detail-card">
+        <h2 th:text="#{supplier_detail_info}">Stammdaten</h2>
+
+        <div class="detail-grid">
+            <div class="detail-item">
+                <label th:text="#{supplier_detail_bpnl}">BPNL</label>
+                <span th:text="${supplier.bpnl}">BPNL000000000001</span>
+            </div>
+            <div class="detail-item">
+                <label th:text="#{supplier_detail_name}">Name</label>
+                <span th:text="${supplier.name}">Lieferant Name</span>
+            </div>
+            <div class="detail-item">
+                <label th:text="#{supplier_detail_street}">Straße</label>
+                <span th:text="${supplier.street ?: '-'}">Straße 1</span>
+            </div>
+            <div class="detail-item">
+                <label th:text="#{supplier_detail_postal_code}">PLZ</label>
+                <span th:text="${supplier.postalCode ?: '-'}">12345</span>
+            </div>
+            <div class="detail-item">
+                <label th:text="#{supplier_detail_city}">Stadt</label>
+                <span th:text="${supplier.city ?: '-'}">Stadt</span>
+            </div>
+            <div class="detail-item">
+                <label th:text="#{supplier_detail_country}">Land</label>
+                <span th:text="${supplier.country ?: '-'}">DE</span>
+            </div>
+            <div class="detail-item">
+                <label th:text="#{supplier_detail_status}">Status</label>
+                <span class="status-badge"
+                      th:classappend="${supplier.status.name() == 'Active' ? 'status-active' : (supplier.status.name() == 'Inactive' ? 'status-inactive' : 'status-blocked')}"
+                      th:text="${supplier.status.displayName}">Aktiv</span>
+            </div>
+            <div class="detail-item">
+                <label th:text="#{supplier_detail_created}">Erstellt am</label>
+                <span th:text="${supplier.createdAt != null ? #temporals.format(supplier.createdAt, 'dd.MM.yyyy HH:mm') : '-'}">01.01.2024</span>
+            </div>
+            <div class="detail-item">
+                <label th:text="#{supplier_detail_updated}">Aktualisiert am</label>
+                <span th:text="${supplier.updatedAt != null ? #temporals.format(supplier.updatedAt, 'dd.MM.yyyy HH:mm') : '-'}">01.01.2024</span>
+            </div>
+        </div>
+
+        <div class="form-actions" style="margin-top: 16px;">
+            <a th:href="@{/suppliers/edit/{bpnl}(bpnl=${supplier.bpnl})}" class="btn" th:text="#{supplier_detail_action_edit}">Bearbeiten</a>
+            <a href="/suppliers" class="btn btn-secondary" th:text="#{supplier_detail_action_back}">Zurück</a>
+        </div>
+    </div>
+
+    <!-- Kontakte -->
+    <div class="detail-card" style="margin-top: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 th:text="#{supplier_detail_contacts}">Ansprechpartner</h2>
+            <a th:href="@{/suppliers/{bpnl}/contacts/add(bpnl=${supplier.bpnl})}" class="btn" th:text="#{supplier_detail_contact_add}">Kontakt hinzufügen</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(supplier.contacts)}" class="empty-message">
+            <p th:text="#{supplier_detail_contacts_empty}">Keine Kontakte vorhanden.</p>
+        </div>
+
+        <div class="table-container" th:unless="${#lists.isEmpty(supplier.contacts)}">
+            <table>
+                <thead>
+                <tr>
+                    <th th:text="#{supplier_detail_contact_name}">Name</th>
+                    <th th:text="#{supplier_detail_contact_email}">E-Mail</th>
+                    <th th:text="#{supplier_detail_contact_phone}">Telefon</th>
+                    <th th:text="#{supplier_detail_contact_jobtitle}">Position</th>
+                    <th th:text="#{supplier_detail_contact_primary}">Primär</th>
+                    <th th:text="#{supplier_detail_contact_notifications}">Benachrichtigungen</th>
+                    <th th:text="#{supplier_detail_contact_actions}">Aktionen</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="contact : ${supplier.contacts}" th:classappend="${contact.primary ? 'row-primary' : ''}">
+                    <td th:text="${contact.contactPerson}">Max Mustermann</td>
+                    <td>
+                        <a th:href="'mailto:' + ${contact.email}" th:text="${contact.email}">email@example.com</a>
+                    </td>
+                    <td th:text="${contact.phoneNumber ?: '-'}">+49 123 456789</td>
+                    <td th:text="${contact.jobTitle ?: '-'}">Einkauf</td>
+                    <td>
+                        <span th:if="${contact.primary}" class="badge badge-primary">Ja</span>
+                        <span th:unless="${contact.primary}">-</span>
+                    </td>
+                    <td>
+                        <span th:if="${contact.preferredForNotifications}" class="badge badge-info">Ja</span>
+                        <span th:unless="${contact.preferredForNotifications}">-</span>
+                    </td>
+                    <td class="action-cell">
+                        <a th:href="@{/suppliers/{bpnl}/contacts/edit/{id}(bpnl=${supplier.bpnl}, id=${contact.id})}"
+                           class="btn-link" th:text="#{supplier_detail_contact_edit}">Bearbeiten</a>
+                        <form th:unless="${contact.primary}"
+                              th:action="@{/suppliers/{bpnl}/contacts/{id}/primary(bpnl=${supplier.bpnl}, id=${contact.id})}"
+                              method="post" style="display: inline;">
+                            <button type="submit" class="btn-link" th:text="#{supplier_detail_contact_set_primary}">Als Primär</button>
+                        </form>
+                        <a th:href="@{/suppliers/{bpnl}/contacts/delete/{id}(bpnl=${supplier.bpnl}, id=${contact.id})}"
+                           class="btn-link btn-danger"
+                           onclick="return confirm('Kontakt wirklich löschen?')"
+                           th:text="#{supplier_detail_contact_delete}">Löschen</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('nav-menu').classList.remove('active');
+        }
+    });
+});
+</script>
+</body>
+</html>

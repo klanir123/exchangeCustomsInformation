@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <!-- Testdaten für eingehende Anfragen (RequestCustomsInformation) -->
+
+    <!-- 1. Produkt/Sachnummer für Testfall 1 anlegen -->
+    <changeSet id="0.0.9-001" author="claude">
+        <comment>Testdaten: MasterPart für Anfrage mit existierendem Produkt</comment>
+        <insert tableName="masterpart">
+            <column name="catenax_id" value="urn:uuid:test-part-001-existing"/>
+            <column name="customer_part_name" value="Getriebe-Zahnrad Z42"/>
+            <column name="customer_part_number" value="SNR-2024-001"/>
+            <column name="manufacturer_part_name" value="Stirnrad Modul 2"/>
+            <column name="manufacturer_part_number" value="MPN-GEAR-42"/>
+        </insert>
+    </changeSet>
+
+    <!-- 2. Notification Headers für die 3 Anfragen -->
+    <changeSet id="0.0.9-002" author="claude">
+        <comment>Testdaten: Notification Headers für eingehende Anfragen</comment>
+
+        <!-- Header für Anfrage 1: Produkt existiert -->
+        <insert tableName="notification_header">
+            <column name="message_id" value="req-header-001-with-product"/>
+            <column name="context" value="CX-IndustryCore-RequestCustomsInformation:1.0.0"/>
+            <column name="sent_date_time" valueDate="2026-01-07T10:00:00"/>
+            <column name="sender_bpnl" value="BPNL00000KUNDE01"/>
+            <column name="receiver_bpnl" value="BPNL00000MEINE01"/>
+            <column name="expected_response_by" valueDate="2026-01-21T18:00:00"/>
+            <column name="version" value="1.0.0"/>
+            <column name="created_at" valueDate="2026-01-07T10:00:00"/>
+        </insert>
+
+        <!-- Header für Anfrage 2: Produkt existiert NICHT -->
+        <insert tableName="notification_header">
+            <column name="message_id" value="req-header-002-no-product"/>
+            <column name="context" value="CX-IndustryCore-RequestCustomsInformation:1.0.0"/>
+            <column name="sent_date_time" valueDate="2026-01-06T14:30:00"/>
+            <column name="sender_bpnl" value="BPNL00000KUNDE02"/>
+            <column name="receiver_bpnl" value="BPNL00000MEINE01"/>
+            <column name="expected_response_by" valueDate="2026-01-20T18:00:00"/>
+            <column name="version" value="1.0.0"/>
+            <column name="created_at" valueDate="2026-01-06T14:30:00"/>
+        </insert>
+
+        <!-- Header für Anfrage 3: Zum Ablehnen -->
+        <insert tableName="notification_header">
+            <column name="message_id" value="req-header-003-to-reject"/>
+            <column name="context" value="CX-IndustryCore-RequestCustomsInformation:1.0.0"/>
+            <column name="sent_date_time" valueDate="2026-01-05T09:15:00"/>
+            <column name="sender_bpnl" value="BPNL00000KUNDE03"/>
+            <column name="receiver_bpnl" value="BPNL00000MEINE01"/>
+            <column name="expected_response_by" valueDate="2026-01-19T18:00:00"/>
+            <column name="version" value="1.0.0"/>
+            <column name="created_at" valueDate="2026-01-05T09:15:00"/>
+        </insert>
+    </changeSet>
+
+    <!-- 3. Eingehende Anfragen (CustomsRequest) -->
+    <changeSet id="0.0.9-003" author="claude">
+        <comment>Testdaten: 3 eingehende Kundenanfragen</comment>
+
+        <!-- Anfrage 1: Produkt SNR-2024-001 existiert bereits -->
+        <insert tableName="customs_request">
+            <column name="header_id" value="req-header-001-with-product"/>
+            <column name="customer_part_id" value="SNR-2024-001"/>
+            <column name="trade_relation" value="EU-MX"/>
+            <column name="requested_valid_from" valueDate="2026-01-01"/>
+            <column name="requested_valid_until" valueDate="2026-12-31"/>
+            <column name="status" value="RECEIVED"/>
+            <column name="direction" value="INCOMING"/>
+            <column name="remarks" value="Bitte LLE fuer Handelsabkommen EU-Mexiko bereitstellen. Produkt ist bereits im System vorhanden."/>
+            <column name="created_at" valueDate="2026-01-07T10:00:00"/>
+            <column name="updated_at" valueDate="2026-01-07T10:00:00"/>
+        </insert>
+
+        <!-- Anfrage 2: Produkt SNR-2024-NEW existiert NICHT -->
+        <insert tableName="customs_request">
+            <column name="header_id" value="req-header-002-no-product"/>
+            <column name="customer_part_id" value="SNR-2024-NEW"/>
+            <column name="trade_relation" value="EU-CA"/>
+            <column name="requested_valid_from" valueDate="2026-02-01"/>
+            <column name="requested_valid_until" valueDate="2027-01-31"/>
+            <column name="status" value="RECEIVED"/>
+            <column name="direction" value="INCOMING"/>
+            <column name="remarks" value="Anfrage fuer neues Produkt - LLE fuer Handelsabkommen EU-Kanada erforderlich. Produkt muss zuerst angelegt werden."/>
+            <column name="created_at" valueDate="2026-01-06T14:30:00"/>
+            <column name="updated_at" valueDate="2026-01-06T14:30:00"/>
+        </insert>
+
+        <!-- Anfrage 3: Zum Ablehnen (ungueltige Sachnummer) -->
+        <insert tableName="customs_request">
+            <column name="header_id" value="req-header-003-to-reject"/>
+            <column name="customer_part_id" value="SNR-INVALID-999"/>
+            <column name="trade_relation" value="EU-JP"/>
+            <column name="requested_valid_from" valueDate="2026-01-01"/>
+            <column name="requested_valid_until" valueDate="2026-06-30"/>
+            <column name="status" value="RECEIVED"/>
+            <column name="direction" value="INCOMING"/>
+            <column name="remarks" value="Anfrage fuer unbekanntes Produkt - Diese Sachnummer ist nicht in unserem Sortiment."/>
+            <column name="created_at" valueDate="2026-01-05T09:15:00"/>
+            <column name="updated_at" valueDate="2026-01-05T09:15:00"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

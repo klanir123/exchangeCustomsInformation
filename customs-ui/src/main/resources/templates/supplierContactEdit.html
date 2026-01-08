@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Kontakt bearbeiten</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+
+<div class="main">
+    <h1 th:text="${isNew} ? #{supplier_contact_edit_header_create} : #{supplier_contact_edit_header_edit}">Kontakt bearbeiten</h1>
+
+    <form action="#" th:action="@{/suppliers/{bpnl}/contacts/save(bpnl=${bpnl})}" th:object="${contact}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" name="isNew" th:value="${isNew}" />
+
+        <div class="form-grid">
+            <!-- Name -->
+            <div class="form-group">
+                <label for="contactPerson" th:text="#{supplier_contact_edit_name}">Name *</label>
+                <input type="text" id="contactPerson" th:field="*{contactPerson}" required />
+            </div>
+
+            <!-- E-Mail -->
+            <div class="form-group">
+                <label for="email" th:text="#{supplier_contact_edit_email}">E-Mail *</label>
+                <input type="email" id="email" th:field="*{email}" required />
+            </div>
+
+            <!-- Telefon -->
+            <div class="form-group">
+                <label for="phoneNumber" th:text="#{supplier_contact_edit_phone}">Telefon</label>
+                <input type="text" id="phoneNumber" th:field="*{phoneNumber}" />
+            </div>
+
+            <!-- Position -->
+            <div class="form-group">
+                <label for="jobTitle" th:text="#{supplier_contact_edit_jobtitle}">Position</label>
+                <input type="text" id="jobTitle" th:field="*{jobTitle}" />
+            </div>
+
+            <!-- Primärer Kontakt -->
+            <div class="form-group">
+                <label th:text="#{supplier_contact_edit_primary}">Primärer Ansprechpartner</label>
+                <input type="checkbox" th:field="*{primary}" style="width: auto;" />
+            </div>
+
+            <!-- Benachrichtigungen -->
+            <div class="form-group">
+                <label th:text="#{supplier_contact_edit_notifications}">Bevorzugt für Benachrichtigungen</label>
+                <input type="checkbox" th:field="*{preferredForNotifications}" style="width: auto;" />
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" th:text="${isNew} ? #{supplier_contact_edit_action_create} : #{supplier_contact_edit_action_update}">Speichern</button>
+            <a th:href="@{/suppliers/view/{bpnl}(bpnl=${bpnl})}" th:text="#{supplier_contact_edit_action_cancel}" class="btn-secondary">Abbrechen</a>
+        </div>
+    </form>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('nav-menu').classList.remove('active');
+        }
+    });
+});
+</script>
+</body>
+</html>

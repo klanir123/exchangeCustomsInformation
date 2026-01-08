@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <!-- Phase 5: RequestCustomsInformation -->
+    <!-- User Stories 5.1, 5.2, 5.3, 5.4 -->
+
+    <!-- NotificationHeader Table (Phase 4 Abhängigkeit) -->
+    <changeSet id="007-01-notification-header" author="customs-kit">
+        <createTable tableName="notification_header">
+            <column name="message_id" type="varchar(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="context" type="varchar(255)"/>
+            <column name="sent_date_time" type="timestamp"/>
+            <column name="sender_bpnl" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiver_bpnl" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expected_response_by" type="timestamp"/>
+            <column name="version" type="varchar(20)"/>
+            <column name="created_at" type="timestamp"/>
+            <column name="updated_at" type="timestamp"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="notification_header"/>
+        </rollback>
+    </changeSet>
+
+    <!-- CustomsRequest Table (5.1: Request Entity) -->
+    <changeSet id="007-02-customs-request" author="customs-kit">
+        <createTable tableName="customs_request">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="header_id" type="varchar(36)">
+                <constraints foreignKeyName="fk_request_header"
+                             references="notification_header(message_id)"/>
+            </column>
+            <column name="customer_part_id" type="varchar(100)"/>
+            <column name="supplier_bpnl" type="varchar(16)">
+                <constraints foreignKeyName="fk_request_supplier"
+                             references="supplier(bpnl)"/>
+            </column>
+            <column name="trade_relation" type="varchar(50)"/>
+            <column name="requested_valid_from" type="date"/>
+            <column name="requested_valid_until" type="date"/>
+            <column name="status" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="direction" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sent_at" type="timestamp"/>
+            <column name="answered_at" type="timestamp"/>
+            <column name="rejection_reason" type="varchar(1000)"/>
+            <column name="remarks" type="varchar(2000)"/>
+            <column name="response_notification_id" type="bigint"/>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="customs_request"/>
+        </rollback>
+    </changeSet>
+
+    <!-- Indexes für Performance -->
+    <changeSet id="007-03-request-indexes" author="customs-kit">
+        <createIndex tableName="customs_request" indexName="idx_request_status">
+            <column name="status"/>
+        </createIndex>
+        <createIndex tableName="customs_request" indexName="idx_request_direction">
+            <column name="direction"/>
+        </createIndex>
+        <createIndex tableName="customs_request" indexName="idx_request_supplier">
+            <column name="supplier_bpnl"/>
+        </createIndex>
+        <createIndex tableName="customs_request" indexName="idx_request_created">
+            <column name="created_at"/>
+        </createIndex>
+        <createIndex tableName="notification_header" indexName="idx_header_sender">
+            <column name="sender_bpnl"/>
+        </createIndex>
+        <createIndex tableName="notification_header" indexName="idx_header_receiver">
+            <column name="receiver_bpnl"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="customs_request" indexName="idx_request_status"/>
+            <dropIndex tableName="customs_request" indexName="idx_request_direction"/>
+            <dropIndex tableName="customs_request" indexName="idx_request_supplier"/>
+            <dropIndex tableName="customs_request" indexName="idx_request_created"/>
+            <dropIndex tableName="notification_header" indexName="idx_header_sender"/>
+            <dropIndex tableName="notification_header" indexName="idx_header_receiver"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

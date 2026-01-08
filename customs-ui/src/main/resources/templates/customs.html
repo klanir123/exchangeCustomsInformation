@@ -38,8 +38,24 @@
     <ul id="nav-menu">
         <li><a href="/" th:text="#{menu_home}">Home</a></li>
         <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/lle-tasks">LLE-Aufgaben</a></li>
         <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
-        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}" class="active">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Benachrichtigungen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/notifications/outgoing">Ausgehend</a></li>
+                <li><a href="/notifications/incoming">Eingehend</a></li>
+            </ul>
+        </li>
         <li><a href="#" th:text="#{menu_user}">User</a></li>
         <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
     </ul>

@@ -3,9 +3,16 @@ package com.msg.customs.controller;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.msg.customs.adapter.in.web.model.CustomsRequestDto;
+import com.msg.customs.adapter.in.web.model.SnrSupplierLinkDto;
+import com.msg.customs.adapter.in.web.model.SupplierDto;
 import com.msg.customs.domain.UiCustomsReducedData;
 import com.msg.customs.domain.UiMasterPart;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 import com.msg.customs.domain.NotifyRequest;
 import com.msg.customs.domain.UiCustomsData;
@@ -29,10 +37,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-@Controller	
+@Controller
 public class CustomsController {
-	
+
+	private static final String BACKEND_URL = "http://localhost:8080";
+
 	private final CustomsService customsService;
+	private final RestTemplate restTemplate;
 	
 	
 	@GetMapping("/customs")
@@ -49,8 +60,35 @@ public class CustomsController {
 
 	@GetMapping("/tasks")
 	public String listTasks(Model model) {
-		model.addAttribute("taskList", customsService.getTasks());
+		// Eingehende Anfragen laden (RequestCustomsInformation)
+		try {
+			ResponseEntity<List<CustomsRequestDto>> incomingRequests = restTemplate.exchange(
+				BACKEND_URL + "/requests/incoming",
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<CustomsRequestDto>>() {}
+			);
+			List<CustomsRequestDto> requests = incomingRequests.getBody();
+			model.addAttribute("incomingRequests", requests != null ? requests : List.of());
+
+			// Überfällige Anfragen zählen
+			long overdueCount = requests != null ? requests.stream()
+				.filter(r -> r.isOverdue())
+				.count() : 0;
+			model.addAttribute("overdueCount", overdueCount);
+		} catch (Exception e) {
+			log.warn("Fehler beim Laden der eingehenden Anfragen: {}", e.getMessage());
+			model.addAttribute("incomingRequests", List.of());
+			model.addAttribute("overdueCount", 0);
+		}
+
 		return "tasks";
+	}
+
+	@GetMapping("/lle-tasks")
+	public String listLleTasks(Model model) {
+		model.addAttribute("taskList", customsService.getTasks());
+		return "lleTasks";
 	}
 	
 	
@@ -142,6 +180,56 @@ public class CustomsController {
 	private void prepareModelForEditOrCreate(Model model, UiMasterPart masterPart) {
 		model.addAttribute("masterPart", masterPart);
 		model.addAttribute("masterpartList", customsService.getMasterParts());
+
+		// Lieferanten-Verknüpfungen laden (nur bei bestehendem Produkt)
+		if (masterPart.getId() != null) {
+			loadSuppliersForMasterPart(model, masterPart.getId());
+		}
+	}
+
+	/**
+	 * Lädt die verknüpften und verfügbaren Lieferanten für ein Produkt.
+	 * Implementiert FR-2.3: Zuordnung SNR zu Lieferant.
+	 */
+	private void loadSuppliersForMasterPart(Model model, Long masterpartId) {
+		try {
+			// Verknüpfte Lieferanten laden
+			ResponseEntity<List<SnrSupplierLinkDto>> linkedResponse = restTemplate.exchange(
+				BACKEND_URL + "/customs/parts/" + masterpartId + "/suppliers",
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<SnrSupplierLinkDto>>() {}
+			);
+			List<SnrSupplierLinkDto> linkedSuppliers = linkedResponse.getBody();
+			model.addAttribute("linkedSuppliers", linkedSuppliers);
+
+			// Alle aktiven Lieferanten laden
+			ResponseEntity<List<SupplierDto>> allSuppliersResponse = restTemplate.exchange(
+				BACKEND_URL + "/suppliers/active",
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<SupplierDto>>() {}
+			);
+			List<SupplierDto> allActiveSuppliers = allSuppliersResponse.getBody();
+
+			// Bereits verknüpfte Lieferanten herausfiltern
+			Set<String> linkedBpnls = linkedSuppliers != null
+				? linkedSuppliers.stream().map(SnrSupplierLinkDto::getSupplierBpnl).collect(Collectors.toSet())
+				: Set.of();
+
+			List<SupplierDto> availableSuppliers = allActiveSuppliers != null
+				? allActiveSuppliers.stream()
+					.filter(s -> !linkedBpnls.contains(s.getBpnl()))
+					.collect(Collectors.toList())
+				: List.of();
+
+			model.addAttribute("availableSuppliers", availableSuppliers);
+
+		} catch (Exception e) {
+			log.warn("Fehler beim Laden der Lieferanten für Masterpart {}: {}", masterpartId, e.getMessage());
+			model.addAttribute("linkedSuppliers", List.of());
+			model.addAttribute("availableSuppliers", List.of());
+		}
 	}
 
 }

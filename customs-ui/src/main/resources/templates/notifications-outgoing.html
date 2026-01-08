@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Ausgehende Benachrichtigungen</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/lle-tasks">LLE-Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="active">Benachrichtigungen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/notifications/outgoing" class="active">Ausgehend</a></li>
+                <li><a href="/notifications/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+<div class="main">
+    <h1>Ausgehende Benachrichtigungen</h1>
+
+    <!-- Statistik-Kacheln -->
+    <div class="dashboard-tiles" style="margin-bottom: 20px;">
+        <div class="tile">
+            <span class="count" th:text="${stats?.outgoingTotal ?: 0}">0</span>
+            <span class="label">Gesamt</span>
+        </div>
+        <div class="tile tile-info">
+            <span class="count" th:text="${stats?.outgoingDraft ?: 0}">0</span>
+            <span class="label">Entwürfe</span>
+        </div>
+        <div class="tile tile-success">
+            <span class="count" th:text="${stats?.outgoingSent ?: 0}">0</span>
+            <span class="label">Versendet</span>
+        </div>
+    </div>
+
+    <!-- Aktionen -->
+    <div class="action-bar" style="margin-bottom: 16px;">
+        <a href="/notifications/create" class="btn-primary">Neue Benachrichtigung erstellen</a>
+    </div>
+
+    <!-- Tabelle -->
+    <div class="table-container">
+        <table id="notificationTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Empfänger</th>
+                <th>Items</th>
+                <th>Status</th>
+                <th>Erstellt am</th>
+                <th>Versendet am</th>
+                <th>Aktionen</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="notification : ${notificationList}"
+                th:classappend="${notification.status.name() == 'SENT' ? 'row-success' : (notification.status.name() == 'DRAFT' ? '' : '')}">
+                <td>
+                    <a th:href="@{/notifications/view/{id}(id=${notification.id})}"
+                       th:text="${notification.id}">1</a>
+                </td>
+                <td>
+                    <span th:text="${notification.header?.receiverBpnl}">BPNL...</span>
+                </td>
+                <td th:text="${notification.itemCount}">0</td>
+                <td>
+                    <span class="status-badge"
+                          th:classappend="${notification.status.name() == 'DRAFT' ? 'status-draft' :
+                                           (notification.status.name() == 'SENT' ? 'status-active' : '')}"
+                          th:text="${notification.statusDisplayName}">Status</span>
+                </td>
+                <td th:text="${#temporals.format(notification.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2024</td>
+                <td>
+                    <span th:if="${notification.header?.sentDateTime != null}"
+                          th:text="${#temporals.format(notification.header.sentDateTime, 'dd.MM.yyyy HH:mm')}">01.01.2024</span>
+                    <span th:if="${notification.header?.sentDateTime == null}">-</span>
+                </td>
+                <td>
+                    <a th:href="@{/notifications/view/{id}(id=${notification.id})}"
+                       class="btn-small btn-secondary">Details</a>
+                    <button th:if="${notification.canBeSent}"
+                            th:data-id="${notification.id}"
+                            onclick="sendNotification(this.dataset.id)"
+                            class="btn-small btn-success">Senden</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(notificationList)}" class="empty-message">
+        <p>Keine ausgehenden Benachrichtigungen vorhanden.</p>
+        <a href="/notifications/create" class="btn-primary">Erste Benachrichtigung erstellen</a>
+    </div>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+function sendNotification(notificationId) {
+    if (!confirm('Möchten Sie diese Benachrichtigung wirklich versenden?')) {
+        return;
+    }
+
+    fetch('/api/notifications/' + notificationId + '/send', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Fehler beim Versenden der Benachrichtigung');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler beim Versenden der Benachrichtigung');
+    });
+}
+</script>
+</body>
+</html>

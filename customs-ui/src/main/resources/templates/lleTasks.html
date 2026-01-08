@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>LLE-Aufgaben</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/lle-tasks" class="active">LLE-Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Benachrichtigungen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/notifications/outgoing">Ausgehend</a></li>
+                <li><a href="/notifications/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+<div class="main">
+    <h1>LLE-Aufgaben</h1>
+
+    <!-- Statistik-Kacheln -->
+    <div class="dashboard-tiles" style="margin-bottom: 20px;">
+        <div class="tile" th:classappend="${#lists.size(taskList) > 0 ? 'tile-warning' : ''}">
+            <span class="count" th:text="${#lists.size(taskList)}">0</span>
+            <span class="label">Offene LLE-Aufgaben</span>
+        </div>
+    </div>
+
+    <p class="text-muted" style="margin-bottom: 20px;">
+        Hier sehen Sie alle offenen LLE-Aufgaben (Lieferantenerklärungen), die bearbeitet werden müssen.
+    </p>
+
+    <!-- Aktions-Buttons -->
+    <div class="text-center mb-3" th:if="${!#lists.isEmpty(taskList)}">
+        <button onclick="workOnSelected()" th:text="#{task_overview_action_work}">Aufgabe beantworten</button>
+        <button onclick="declineSelected()" th:text="#{task_overview_action_decline}" class="btn-secondary">Aufgabe verwerfen</button>
+    </div>
+
+    <!-- LLE-Aufgaben Tabelle -->
+    <div class="table-container" th:if="${!#lists.isEmpty(taskList)}">
+        <table id="taskTable">
+            <thead>
+                <tr>
+                    <th th:text="#{task_overview_select}">Select</th>
+                    <th th:text="#{task_overview_catenax_id}">Catena-X ID</th>
+                    <th th:text="#{task_overview_customer_part_number}">Kundensachnummer</th>
+                    <th th:text="#{task_overview_customer_part_name}">Bezeichnung Kundensachnummer</th>
+                    <th th:text="#{task_overview_part_number}">Sachnummer</th>
+                    <th th:text="#{task_overview_part_name}">Bezeichnung Sachnummer</th>
+                    <th th:text="#{task_overview_request_date}">Anfragedatum</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="task : ${taskList}">
+                    <td><input type="checkbox" name="selectedIds" th:value="${task.catenaxID}" onclick="highlightRow(this)" /></td>
+                    <td th:text="${task.catenaxID}"></td>
+                    <td th:text="${task.customerPartNumber}"></td>
+                    <td th:text="${task.customerPartName}"></td>
+                    <td th:text="${task.manufacturerPartNumber}"></td>
+                    <td th:text="${task.manufacturerPartName}"></td>
+                    <td th:text="${task.requestDate}"></td>
+                    <td>
+                        <a th:href="@{/customs/part/edit/{id}(id=${task.catenaxID})}" class="btn-small btn-primary">Bearbeiten</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Leere Nachricht -->
+    <div th:if="${#lists.isEmpty(taskList)}" class="empty-message">
+        <p>Keine offenen LLE-Aufgaben vorhanden.</p>
+    </div>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+// Close menu when clicking on a link (mobile)
+document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('nav-menu').classList.remove('active');
+        }
+    });
+});
+
+function highlightRow(checkbox) {
+    const row = checkbox.closest('tr');
+    if (checkbox.checked) {
+        row.classList.add('selected-row');
+    } else {
+        row.classList.remove('selected-row');
+    }
+}
+
+function getSelectedIds() {
+    const checkboxes = document.querySelectorAll('input[name="selectedIds"]:checked');
+    return Array.from(checkboxes).map(cb => cb.value);
+}
+
+function workOnSelected() {
+    const selectedIds = getSelectedIds();
+    if (selectedIds.length === 0) {
+        alert('Bitte wählen Sie mindestens eine Aufgabe aus.');
+        return;
+    }
+    // Navigiere zur Bearbeitungsseite (erste ausgewählte Aufgabe)
+    location.href = '/customs/part/edit/' + selectedIds[0];
+}
+
+function declineSelected() {
+    const selectedIds = getSelectedIds();
+    if (selectedIds.length === 0) {
+        alert('Bitte wählen Sie mindestens eine Aufgabe aus.');
+        return;
+    }
+    if (confirm('Möchten Sie die ausgewählten ' + selectedIds.length + ' Aufgabe(n) wirklich verwerfen?')) {
+        // TODO: Backend-Aufruf zum Verwerfen der Aufgaben
+        alert('Funktion noch nicht implementiert.');
+    }
+}
+</script>
+</body>
+</html>

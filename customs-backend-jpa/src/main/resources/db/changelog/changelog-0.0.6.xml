@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
+
+	<!-- Phase 3: LLE-Erweiterungen -->
+	<!-- Implementiert FR-3.x aus dem Lastenheft -->
+
+	<!-- Neue Spalten für customs Tabelle -->
+	<changeSet id="addLleExtensionColumns" author="klanir123">
+		<!-- Lieferanten-Verknüpfung -->
+		<addColumn tableName="customs">
+			<column name="supplier_bpnl" type="varchar(16)"/>
+		</addColumn>
+
+		<!-- Gültigkeitsdatum (berechnet: validFrom + 365 Tage) -->
+		<addColumn tableName="customs">
+			<column name="valid_until" type="date"/>
+		</addColumn>
+
+		<!-- LLE-Status -->
+		<addColumn tableName="customs">
+			<column name="lle_status" type="varchar(20)" defaultValue="Draft"/>
+		</addColumn>
+
+		<!-- Vorgänger-LLE bei Erneuerung -->
+		<addColumn tableName="customs">
+			<column name="predecessor_id" type="bigint"/>
+		</addColumn>
+
+		<!-- PDF-Dokument -->
+		<addColumn tableName="customs">
+			<column name="pdf_document" type="blob"/>
+		</addColumn>
+
+		<addColumn tableName="customs">
+			<column name="pdf_file_name" type="varchar(255)"/>
+		</addColumn>
+
+		<addColumn tableName="customs">
+			<column name="pdf_uploaded_at" type="timestamp"/>
+		</addColumn>
+	</changeSet>
+
+	<!-- Foreign Keys -->
+	<changeSet id="addLleForeignKeys" author="klanir123">
+		<!-- FK zu Supplier -->
+		<addForeignKeyConstraint
+			baseTableName="customs"
+			baseColumnNames="supplier_bpnl"
+			constraintName="fk_customs_supplier"
+			referencedTableName="supplier"
+			referencedColumnNames="bpnl"
+			onDelete="SET NULL"/>
+
+		<!-- FK zu Vorgänger-LLE -->
+		<addForeignKeyConstraint
+			baseTableName="customs"
+			baseColumnNames="predecessor_id"
+			constraintName="fk_customs_predecessor"
+			referencedTableName="customs"
+			referencedColumnNames="id"
+			onDelete="SET NULL"/>
+	</changeSet>
+
+	<!-- Indizes für Performance -->
+	<changeSet id="createLleIndexes" author="klanir123">
+		<createIndex indexName="idx_customs_supplier" tableName="customs">
+			<column name="supplier_bpnl"/>
+		</createIndex>
+		<createIndex indexName="idx_customs_valid_until" tableName="customs">
+			<column name="valid_until"/>
+		</createIndex>
+		<createIndex indexName="idx_customs_lle_status" tableName="customs">
+			<column name="lle_status"/>
+		</createIndex>
+		<createIndex indexName="idx_customs_predecessor" tableName="customs">
+			<column name="predecessor_id"/>
+		</createIndex>
+	</changeSet>
+
+</databaseChangeLog>

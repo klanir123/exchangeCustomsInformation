@@ -18,6 +18,7 @@
         <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
         <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
         <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
         <li><a href="#" th:text="#{menu_user}">User</a></li>
         <li><img src="../../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
     </ul>
@@ -62,9 +63,74 @@
             <button type="button" onclick="location.href='/parts'" th:text="#{masterPart.edit_action_cancel}" class="btn-secondary">Abbrechen</button>
         </div>
     </form>
+
+    <!-- Lieferanten-Verknüpfung (nur bei bestehendem Produkt) -->
+    <div th:if="${masterPart.id != null}" class="suppliers-section">
+        <h2 th:text="#{masterpart_suppliers_header}">Zugeordnete Lieferanten</h2>
+
+        <!-- Lieferant hinzufügen -->
+        <div class="supplier-add-form" th:if="${availableSuppliers != null && !availableSuppliers.isEmpty()}">
+            <select id="supplierSelect">
+                <option value="" th:text="#{masterpart_suppliers_select}">-- Lieferant auswählen --</option>
+                <option th:each="supplier : ${availableSuppliers}"
+                        th:value="${supplier.bpnl}"
+                        th:text="${supplier.name + ' (' + supplier.bpnl + ')'}">
+                </option>
+            </select>
+            <input type="text" id="supplierNote" placeholder="Bemerkung (optional)" maxlength="500">
+            <label class="checkbox-label">
+                <input type="checkbox" id="supplierPrimary">
+                <span th:text="#{masterpart_suppliers_primary}">Primär</span>
+            </label>
+            <button type="button" onclick="addSupplier()" th:text="#{masterpart_suppliers_add}" class="btn-add">Hinzufügen</button>
+        </div>
+
+        <!-- Liste der verknüpften Lieferanten -->
+        <table class="data-table" th:if="${linkedSuppliers != null && !linkedSuppliers.isEmpty()}">
+            <thead>
+                <tr>
+                    <th th:text="#{masterpart_suppliers_bpnl}">BPNL</th>
+                    <th th:text="#{masterpart_suppliers_name}">Name</th>
+                    <th th:text="#{masterpart_suppliers_primary}">Primär</th>
+                    <th th:text="#{masterpart_suppliers_note}">Bemerkung</th>
+                    <th th:text="#{masterpart_suppliers_actions}">Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="link : ${linkedSuppliers}">
+                    <td th:text="${link.supplierBpnl}">BPNL</td>
+                    <td th:text="${link.supplierName}">Name</td>
+                    <td>
+                        <span th:if="${link.primary}" class="badge badge-primary">Ja</span>
+                        <span th:unless="${link.primary}">-</span>
+                    </td>
+                    <td th:text="${link.note}">-</td>
+                    <td class="action-buttons">
+                        <button type="button"
+                                th:unless="${link.primary}"
+                                th:data-bpnl="${link.supplierBpnl}"
+                                onclick="setPrimarySupplier(this.dataset.bpnl)"
+                                th:text="#{masterpart_suppliers_set_primary}"
+                                class="btn-small">Primär</button>
+                        <button type="button"
+                                th:data-bpnl="${link.supplierBpnl}"
+                                onclick="removeSupplier(this.dataset.bpnl)"
+                                th:text="#{masterpart_suppliers_remove}"
+                                class="btn-small btn-danger">Entfernen</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p th:if="${linkedSuppliers == null || linkedSuppliers.isEmpty()}" th:text="#{masterpart_suppliers_empty}">
+            Keine Lieferanten zugeordnet.
+        </p>
+    </div>
 </div>
 
-<script>
+<script th:inline="javascript">
+const masterpartId = /*[[${masterPart.id}]]*/ null;
+const backendUrl = 'http://localhost:8080';
+
 function toggleMenu() {
     const menu = document.getElementById('nav-menu');
     menu.classList.toggle('active');
@@ -78,6 +144,78 @@ document.querySelectorAll('#nav-menu a').forEach(link => {
         }
     });
 });
+
+// Lieferanten-Verknüpfung Funktionen
+function addSupplier() {
+    const supplierBpnl = document.getElementById('supplierSelect').value;
+    const note = document.getElementById('supplierNote').value;
+    const isPrimary = document.getElementById('supplierPrimary').checked;
+
+    if (!supplierBpnl) {
+        alert('Bitte wählen Sie einen Lieferanten aus.');
+        return;
+    }
+
+    fetch(backendUrl + '/customs/parts/' + masterpartId + '/suppliers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            supplierBpnl: supplierBpnl,
+            primary: isPrimary,
+            note: note
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            return response.text().then(text => {
+                throw new Error(text || 'Fehler beim Hinzufügen des Lieferanten');
+            });
+        }
+    })
+    .catch(error => {
+        alert('Fehler: ' + error.message);
+    });
+}
+
+function removeSupplier(supplierBpnl) {
+    if (!confirm('Möchten Sie diesen Lieferanten wirklich entfernen?')) {
+        return;
+    }
+
+    fetch(backendUrl + '/customs/parts/' + masterpartId + '/suppliers/' + supplierBpnl, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            throw new Error('Fehler beim Entfernen des Lieferanten');
+        }
+    })
+    .catch(error => {
+        alert('Fehler: ' + error.message);
+    });
+}
+
+function setPrimarySupplier(supplierBpnl) {
+    fetch(backendUrl + '/customs/parts/' + masterpartId + '/suppliers/' + supplierBpnl + '/primary', {
+        method: 'PATCH'
+    })
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            throw new Error('Fehler beim Setzen des Hauptlieferanten');
+        }
+    })
+    .catch(error => {
+        alert('Fehler: ' + error.message);
+    });
+}
 </script>
 </body>
 </html>

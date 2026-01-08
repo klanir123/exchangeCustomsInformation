@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Eingehende Anfragen</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/lle-tasks">LLE-Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#" class="active">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing">Ausgehend</a></li>
+                <li><a href="/requests/incoming" class="active">Eingehend</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Benachrichtigungen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/notifications/outgoing">Ausgehend</a></li>
+                <li><a href="/notifications/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+<div class="main">
+    <h1>Eingehende Anfragen</h1>
+
+    <!-- Statistik-Kacheln -->
+    <div class="dashboard-tiles" style="margin-bottom: 20px;">
+        <div class="tile">
+            <span class="count" th:text="${stats?.incomingTotal ?: 0}">0</span>
+            <span class="label">Gesamt</span>
+        </div>
+        <div class="tile tile-warning" th:if="${stats?.incomingRequiresAction > 0}">
+            <span class="count" th:text="${stats.incomingRequiresAction}">0</span>
+            <span class="label">Aktion erforderlich</span>
+        </div>
+        <div class="tile tile-info">
+            <span class="count" th:text="${stats?.incomingOpen ?: 0}">0</span>
+            <span class="label">Offen</span>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar" style="margin-bottom: 16px;">
+        <select id="statusFilter" onchange="filterByStatus()" style="padding: 8px; margin-right: 10px;">
+            <option value="">Alle Status</option>
+            <option value="RECEIVED">Empfangen</option>
+            <option value="IN_PROGRESS">In Bearbeitung</option>
+            <option value="ANSWERED">Beantwortet</option>
+            <option value="REJECTED">Abgelehnt</option>
+        </select>
+        <label style="margin-left: 15px;">
+            <input type="checkbox" id="actionRequired" onchange="filterActionRequired()" />
+            Nur Aktion erforderlich
+        </label>
+        <input type="text" id="searchInput" placeholder="Suche nach Absender oder Sachnummer..."
+               onkeyup="filterTable()" style="width: 100%; max-width: 400px; padding: 8px; margin-left: 15px;" />
+    </div>
+
+    <div class="table-container">
+        <table id="requestTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Absender</th>
+                <th>Sachnummer</th>
+                <th>Handelsabkommen</th>
+                <th>Status</th>
+                <th>Empfangen am</th>
+                <th>Antwortfrist</th>
+                <th>Aktionen</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${requestList}"
+                th:data-status="${request.status}"
+                th:data-action="${request.requiresAction}"
+                th:classappend="${request.requiresAction ? 'row-highlight' : (request.status.name() == 'ANSWERED' ? 'row-success' : (request.status.name() == 'REJECTED' ? 'row-muted' : ''))}">
+                <td>
+                    <a th:href="@{/requests/view/{id}(id=${request.id})}"
+                       th:text="${request.id}">1</a>
+                </td>
+                <td>
+                    <span th:text="${request.header?.senderBpnl}">BPNL...</span>
+                </td>
+                <td th:text="${request.customerPartId}">SNR-12345</td>
+                <td th:text="${request.tradeRelation ?: '-'}">EU-MX</td>
+                <td>
+                    <span class="status-badge"
+                          th:classappend="${request.status.name() == 'RECEIVED' ? 'status-new' :
+                                           (request.status.name() == 'IN_PROGRESS' ? 'status-sent' :
+                                           (request.status.name() == 'ANSWERED' ? 'status-active' :
+                                           (request.status.name() == 'REJECTED' ? 'status-blocked' : '')))}"
+                          th:text="${request.statusDisplayName}">Status</span>
+                    <span th:if="${request.requiresAction}" class="badge badge-warning" title="Aktion erforderlich">!</span>
+                </td>
+                <td th:text="${#temporals.format(request.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2024</td>
+                <td>
+                    <span th:if="${request.header?.expectedResponseBy != null}"
+                          th:text="${#temporals.format(request.header.expectedResponseBy, 'dd.MM.yyyy')}"
+                          th:classappend="${request.overdue ? 'text-danger' : (request.daysUntilDeadline < 3 ? 'text-warning' : '')}">01.01.2024</span>
+                    <span th:if="${request.header?.expectedResponseBy == null}">-</span>
+                    <small th:if="${request.daysUntilDeadline >= 0}"
+                           class="text-muted" th:text="'(' + ${request.daysUntilDeadline} + ' Tage)'">(14 Tage)</small>
+                </td>
+                <td>
+                    <button th:if="${request.status.name() == 'RECEIVED'}"
+                            th:data-id="${request.id}"
+                            onclick="acceptRequest(this.dataset.id)"
+                            class="btn-small btn-primary">Annehmen</button>
+                    <a th:if="${request.requiresAction}"
+                       th:href="@{/requests/{id}/answer(id=${request.id})}"
+                       class="btn-small btn-success">Beantworten</a>
+                    <button th:if="${request.requiresAction}"
+                            th:data-id="${request.id}"
+                            onclick="showRejectDialog(this.dataset.id)"
+                            class="btn-small btn-danger">Ablehnen</button>
+                    <span th:if="${request.status.name() == 'ANSWERED'}" class="text-success">Beantwortet</span>
+                    <span th:if="${request.status.name() == 'REJECTED'}" class="text-danger"
+                          th:title="${request.rejectionReason}">Abgelehnt</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(requestList)}" class="empty-message">
+        <p>Keine eingehenden Anfragen vorhanden.</p>
+    </div>
+</div>
+
+<!-- Ablehnen-Dialog -->
+<div id="rejectDialog" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h3>Anfrage ablehnen</h3>
+        <form id="rejectForm">
+            <input type="hidden" id="rejectRequestId" />
+            <div class="form-group">
+                <label for="rejectReason">Grund der Ablehnung:</label>
+                <textarea id="rejectReason" rows="4" required
+                          placeholder="Bitte geben Sie einen Grund an..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="button" onclick="closeRejectDialog()">Abbrechen</button>
+                <button type="submit" class="btn-danger">Ablehnen</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+function filterByStatus() {
+    applyFilters();
+}
+
+function filterActionRequired() {
+    applyFilters();
+}
+
+function filterTable() {
+    applyFilters();
+}
+
+function applyFilters() {
+    const status = document.getElementById('statusFilter').value;
+    const actionRequired = document.getElementById('actionRequired').checked;
+    const searchFilter = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#requestTable tbody tr');
+
+    rows.forEach(row => {
+        let show = true;
+
+        // Status filter
+        if (status && row.dataset.status !== status) {
+            show = false;
+        }
+
+        // Action required filter
+        if (actionRequired && row.dataset.action !== 'true') {
+            show = false;
+        }
+
+        // Search filter
+        if (searchFilter) {
+            const text = row.textContent.toLowerCase();
+            if (text.indexOf(searchFilter) === -1) {
+                show = false;
+            }
+        }
+
+        row.style.display = show ? '' : 'none';
+    });
+}
+
+function acceptRequest(requestId) {
+    fetch('/api/requests/' + requestId + '/accept', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Fehler beim Annehmen der Anfrage');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler beim Annehmen der Anfrage');
+    });
+}
+
+function showRejectDialog(requestId) {
+    document.getElementById('rejectRequestId').value = requestId;
+    document.getElementById('rejectReason').value = '';
+    document.getElementById('rejectDialog').style.display = 'flex';
+}
+
+function closeRejectDialog() {
+    document.getElementById('rejectDialog').style.display = 'none';
+}
+
+document.getElementById('rejectForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const requestId = document.getElementById('rejectRequestId').value;
+    const reason = document.getElementById('rejectReason').value;
+
+    fetch('/api/requests/' + requestId + '/reject?reason=' + encodeURIComponent(reason), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Fehler beim Ablehnen der Anfrage');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Fehler beim Ablehnen der Anfrage');
+    });
+});
+
+// Close modal when clicking outside
+document.getElementById('rejectDialog').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeRejectDialog();
+    }
+});
+</script>
+</body>
+</html>

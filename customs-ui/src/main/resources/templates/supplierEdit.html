@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Lieferant bearbeiten</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+    <script>
+        function validateBpnl() {
+            const bpnlInput = document.getElementById('bpnl');
+            const bpnl = bpnlInput.value.toUpperCase().trim();
+            const pattern = /^BPNL[A-Z0-9]{12}$/;
+
+            if (!pattern.test(bpnl)) {
+                alert('Ungültiges BPNL-Format. Erwartet: BPNL + 12 alphanumerische Zeichen (z.B. BPNL000000000001)');
+                bpnlInput.focus();
+                return false;
+            }
+            bpnlInput.value = bpnl;
+            return true;
+        }
+
+        function formatBpnl() {
+            const bpnlInput = document.getElementById('bpnl');
+            bpnlInput.value = bpnlInput.value.toUpperCase();
+        }
+    </script>
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+
+<div class="main">
+    <h1 th:text="${isNew} ? #{supplier_edit_header_create} : #{supplier_edit_header_edit}">Lieferant bearbeiten</h1>
+
+    <form action="#" th:action="@{/suppliers/save}" th:object="${supplier}" method="post" onsubmit="return validateBpnl()">
+        <input type="hidden" name="isNew" th:value="${isNew}" />
+
+        <div class="form-grid">
+            <!-- BPNL -->
+            <div class="form-group">
+                <label for="bpnl" th:text="#{supplier_edit_bpnl}">BPNL *</label>
+                <div class="input-with-hint">
+                    <input type="text" id="bpnl" th:field="*{bpnl}"
+                           th:readonly="${!isNew}"
+                           maxlength="16"
+                           placeholder="BPNL000000000001"
+                           oninput="formatBpnl()"
+                           required />
+                    <small th:if="${isNew}" class="form-hint">Format: BPNL + 12 alphanumerische Zeichen</small>
+                </div>
+            </div>
+
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name" th:text="#{supplier_edit_name}">Name *</label>
+                <input type="text" id="name" th:field="*{name}" required />
+            </div>
+
+            <!-- Straße -->
+            <div class="form-group">
+                <label for="street" th:text="#{supplier_edit_street}">Straße</label>
+                <input type="text" id="street" th:field="*{street}" />
+            </div>
+
+            <!-- PLZ -->
+            <div class="form-group">
+                <label for="postalCode" th:text="#{supplier_edit_postal_code}">PLZ</label>
+                <input type="text" id="postalCode" th:field="*{postalCode}" />
+            </div>
+
+            <!-- Stadt -->
+            <div class="form-group">
+                <label for="city" th:text="#{supplier_edit_city}">Stadt</label>
+                <input type="text" id="city" th:field="*{city}" />
+            </div>
+
+            <!-- Land -->
+            <div class="form-group">
+                <label for="country" th:text="#{supplier_edit_country}">Land</label>
+                <input type="text" id="country" th:field="*{country}" placeholder="DE" maxlength="2" />
+            </div>
+
+            <!-- Status -->
+            <div class="form-group">
+                <label for="status" th:text="#{supplier_edit_status}">Status</label>
+                <select id="status" th:field="*{status}">
+                    <option th:each="status : ${statuses}"
+                            th:value="${status}"
+                            th:text="${status.displayName}">Status</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" th:text="${isNew} ? #{supplier_edit_action_create} : #{supplier_edit_action_update}">Speichern</button>
+            <button type="button" onclick="location.href='/suppliers'" th:text="#{supplier_edit_action_cancel}" class="btn-secondary">Abbrechen</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+document.querySelectorAll('#nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            document.getElementById('nav-menu').classList.remove('active');
+        }
+    });
+});
+</script>
+</body>
+</html>

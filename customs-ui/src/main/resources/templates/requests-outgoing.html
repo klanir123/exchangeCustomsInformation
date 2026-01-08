@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <title>Ausgehende Anfragen</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="header">
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-menu">
+        <li><a href="/" th:text="#{menu_home}">Home</a></li>
+        <li><a href="/tasks" th:text="#{menu_tasks}">Aufgaben</a></li>
+        <li><a href="/lle-tasks">LLE-Aufgaben</a></li>
+        <li><a href="/parts" th:text="#{menu_parts}">Produkte</a></li>
+        <li><a href="/customs" th:text="#{menu_lle}">LLE</a></li>
+        <li><a href="/suppliers" th:text="#{menu_suppliers}">Lieferanten</a></li>
+        <li class="dropdown">
+            <a href="#" class="active">Anfragen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/requests/outgoing" class="active">Ausgehend</a></li>
+                <li><a href="/requests/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#">Benachrichtigungen</a>
+            <ul class="dropdown-menu">
+                <li><a href="/notifications/outgoing">Ausgehend</a></li>
+                <li><a href="/notifications/incoming">Eingehend</a></li>
+            </ul>
+        </li>
+        <li><a href="#" th:text="#{menu_user}">User</a></li>
+        <li><img src="../icon/msg_systems_logo_RGB.svg" alt="msg Logo" class="logo"></li>
+    </ul>
+</div>
+<div class="main">
+    <h1>Ausgehende Anfragen</h1>
+
+    <!-- Statistik-Kacheln -->
+    <div class="dashboard-tiles" style="margin-bottom: 20px;">
+        <div class="tile">
+            <span class="count" th:text="${stats?.outgoingTotal ?: 0}">0</span>
+            <span class="label">Gesamt</span>
+        </div>
+        <div class="tile tile-info">
+            <span class="count" th:text="${stats?.outgoingOpen ?: 0}">0</span>
+            <span class="label">Offen</span>
+        </div>
+        <div class="tile tile-success">
+            <span class="count" th:text="${stats?.outgoingAnswered ?: 0}">0</span>
+            <span class="label">Beantwortet</span>
+        </div>
+        <div class="tile tile-warning" th:if="${stats?.outgoingOverdue > 0}">
+            <span class="count" th:text="${stats.outgoingOverdue}">0</span>
+            <span class="label">Überfällig</span>
+        </div>
+    </div>
+
+    <div class="text-center mb-3">
+        <button onclick="location.href='/requests/create'" class="btn-primary">Neue Anfrage erstellen</button>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar" style="margin-bottom: 16px;">
+        <select id="statusFilter" onchange="filterByStatus()" style="padding: 8px; margin-right: 10px;">
+            <option value="">Alle Status</option>
+            <option value="DRAFT">Entwurf</option>
+            <option value="SENT">Versendet</option>
+            <option value="ANSWERED">Beantwortet</option>
+            <option value="OVERDUE">Überfällig</option>
+            <option value="REJECTED">Abgelehnt</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Suche nach Lieferant oder Sachnummer..."
+               onkeyup="filterTable()" style="width: 100%; max-width: 400px; padding: 8px;" />
+    </div>
+
+    <div class="table-container">
+        <table id="requestTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Lieferant</th>
+                <th>Sachnummer</th>
+                <th>Status</th>
+                <th>Erstellt am</th>
+                <th>Versendet am</th>
+                <th>Antwortfrist</th>
+                <th>Aktionen</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${requestList}"
+                th:data-status="${request.status}"
+                th:classappend="${request.overdue ? 'row-warning' : (request.status.name() == 'ANSWERED' ? 'row-success' : (request.status.name() == 'REJECTED' ? 'row-danger' : ''))}">
+                <td>
+                    <a th:href="@{/requests/view/{id}(id=${request.id})}"
+                       th:text="${request.id}">1</a>
+                </td>
+                <td>
+                    <span th:text="${request.supplierName}">Lieferant GmbH</span>
+                    <br/>
+                    <small class="text-muted" th:text="${request.supplierBpnl}">BPNL...</small>
+                </td>
+                <td th:text="${request.customerPartId}">SNR-12345</td>
+                <td>
+                    <span class="status-badge"
+                          th:classappend="${request.status.name() == 'DRAFT' ? 'status-draft' :
+                                           (request.status.name() == 'SENT' ? 'status-sent' :
+                                           (request.status.name() == 'ANSWERED' ? 'status-active' :
+                                           (request.status.name() == 'OVERDUE' ? 'status-warning' :
+                                           (request.status.name() == 'REJECTED' ? 'status-blocked' : ''))))}"
+                          th:text="${request.statusDisplayName}">Status</span>
+                </td>
+                <td th:text="${#temporals.format(request.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2024</td>
+                <td th:text="${request.sentAt != null ? #temporals.format(request.sentAt, 'dd.MM.yyyy HH:mm') : '-'}">-</td>
+                <td>
+                    <span th:if="${request.header?.expectedResponseBy != null}"
+                          th:text="${#temporals.format(request.header.expectedResponseBy, 'dd.MM.yyyy')}"
+                          th:classappend="${request.overdue ? 'text-danger' : (request.daysUntilDeadline < 3 ? 'text-warning' : '')}">01.01.2024</span>
+                    <span th:if="${request.header?.expectedResponseBy == null}">-</span>
+                    <small th:if="${request.daysUntilDeadline >= 0 and !request.overdue}"
+                           class="text-muted" th:text="'(' + ${request.daysUntilDeadline} + ' Tage)'">(14 Tage)</small>
+                </td>
+                <td>
+                    <a th:if="${request.status.name() == 'DRAFT'}"
+                       th:href="@{/requests/edit/{id}(id=${request.id})}"
+                       class="btn-link">Bearbeiten</a>
+                    <button th:if="${request.status.name() == 'DRAFT'}"
+                            th:data-id="${request.id}"
+                            onclick="sendRequest(this.dataset.id)"
+                            class="btn-small btn-primary">Senden</button>
+                    <a th:if="${request.status.name() == 'ANSWERED' and request.responseNotificationId != null}"
+                       th:href="@{/notifications/view/{id}(id=${request.responseNotificationId})}"
+                       class="btn-link">Antwort ansehen</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${#lists.isEmpty(requestList)}" class="empty-message">
+        <p>Keine ausgehenden Anfragen vorhanden.</p>
+        <button onclick="location.href='/requests/create'" class="btn-primary">Erste Anfrage erstellen</button>
+    </div>
+</div>
+
+<script>
+function toggleMenu() {
+    const menu = document.getElementById('nav-menu');
+    menu.classList.toggle('active');
+}
+
+function filterByStatus() {
+    const status = document.getElementById('statusFilter').value;
+    const rows = document.querySelectorAll('#requestTable tbody tr');
+
+    rows.forEach(row => {
+        if (!status || row.dataset.status === status) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function filterTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById('requestTable');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) {
+        const supplierCell = rows[i].getElementsByTagName('td')[1];
+        const partCell = rows[i].getElementsByTagName('td')[2];
+        if (supplierCell && partCell) {
+            const supplier = supplierCell.textContent || supplierCell.innerText;
+            const part = partCell.textContent || partCell.innerText;
+            if (supplier.toLowerCase().indexOf(filter) > -1 || part.toLowerCase().indexOf(filter) > -1) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+}
+
+function sendRequest(requestId) {
+    if (confirm('Möchten Sie diese Anfrage wirklich versenden?')) {
+        fetch('/api/requests/' + requestId + '/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Fehler beim Versenden der Anfrage');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Fehler beim Versenden der Anfrage');
+        });
+    }
+}
+</script>
+</body>
+</html>

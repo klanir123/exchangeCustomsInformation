@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- Epic 4: CustomsNotification Tabellen -->
+
+    <!-- 4.1 Customs Notification Tabelle -->
+    <changeSet id="008-01-customs-notification" author="customs-kit">
+        <createTable tableName="customs_notification">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="header_id" type="varchar(36)"/>
+            <column name="direction" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="supplier_bpnl" type="varchar(16)"/>
+            <column name="request_id" type="bigint"/>
+            <column name="remarks" type="varchar(2000)"/>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- 4.2 Notification Item Tabelle -->
+    <changeSet id="008-02-notification-item" author="customs-kit">
+        <createTable tableName="notification_item">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="notification_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- customsInformation -->
+            <column name="catena_x_id" type="varchar(100)"/>
+            <column name="type" type="varchar(50)"/>
+            <column name="confirmation_date" type="date"/>
+            <column name="valid_from" type="date"/>
+            <column name="valid_until" type="date"/>
+            <column name="commercial_country_of_origin" type="varchar(100)"/>
+            <column name="federal_state" type="varchar(100)"/>
+            <column name="preferred_status" type="varchar(50)"/>
+            <column name="completion_status" type="varchar(20)"/>
+
+            <!-- tracedWorth -->
+            <column name="traced_worth_value" type="varchar(50)"/>
+            <column name="traced_worth_currency" type="varchar(3)"/>
+
+            <!-- contactInformation -->
+            <column name="contact_person" type="varchar(255)"/>
+            <column name="phone_number" type="varchar(50)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="job_title" type="varchar(100)"/>
+
+            <!-- originInformation -->
+            <column name="trade_relations" type="varchar(500)"/>
+
+            <!-- partData -->
+            <column name="customer_part_id" type="varchar(100)"/>
+            <column name="manufacturer_part_id" type="varchar(100)"/>
+            <column name="name_at_customer" type="varchar(255)"/>
+            <column name="name_at_manufacturer" type="varchar(255)"/>
+
+            <!-- Metadaten -->
+            <column name="source_lle_id" type="bigint"/>
+            <column name="adopted" type="boolean" defaultValueBoolean="false"/>
+            <column name="adopted_lle_id" type="bigint"/>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- 4.3 Indizes für Performance -->
+    <changeSet id="008-03-notification-indexes" author="customs-kit">
+        <createIndex tableName="customs_notification" indexName="idx_notification_direction">
+            <column name="direction"/>
+        </createIndex>
+        <createIndex tableName="customs_notification" indexName="idx_notification_status">
+            <column name="status"/>
+        </createIndex>
+        <createIndex tableName="customs_notification" indexName="idx_notification_supplier">
+            <column name="supplier_bpnl"/>
+        </createIndex>
+        <createIndex tableName="customs_notification" indexName="idx_notification_created">
+            <column name="created_at"/>
+        </createIndex>
+        <createIndex tableName="notification_item" indexName="idx_item_notification">
+            <column name="notification_id"/>
+        </createIndex>
+        <createIndex tableName="notification_item" indexName="idx_item_catena_x_id">
+            <column name="catena_x_id"/>
+        </createIndex>
+        <createIndex tableName="notification_item" indexName="idx_item_customer_part">
+            <column name="customer_part_id"/>
+        </createIndex>
+        <createIndex tableName="notification_item" indexName="idx_item_adopted">
+            <column name="adopted"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
